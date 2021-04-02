@@ -49,7 +49,7 @@ namespace SivUI
         }
 
         /// <summary>
-        /// valida que el nombre de la categoria no este en blanco, ya este en la lista o exista en la base de datos.
+        /// valida que el nombre de la categoria no este en blanco, no este en la lista y no exista en la base de datos.
         /// </summary>
         /// <returns></returns>
         private bool CategoriaEsValida()

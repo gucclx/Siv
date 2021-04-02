@@ -21,22 +21,30 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns></returns>
         public bool CategoriaExiste(string nombreCategoria)
         {
+            bool resultado = false;
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 nombreCategoria = nombreCategoria.Trim();
                 var q = "select exists (select 1 from Categorias where Nombre = @Nombre collate nocase)";
-                var resultado = conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
-                return resultado;
+                resultado = conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
             }
+            return resultado;
         }
 
         /// <summary>
         /// carga y retorna todas las categorias existentes en la base de datos
         /// </summary>
         /// <returns></returns>
-        public List<CategoriaModelo> Categoria_Todas()
+        public List<CategoriaModelo> CargarCategorias()
         {
-            throw new NotImplementedException();
+            var categorias = new List<CategoriaModelo>();
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                categorias = conexion.Query<CategoriaModelo>("select Id, Nombre from Categorias").ToList();                
+            }
+            return categorias;
         }
 
         /// <summary>
@@ -59,6 +67,17 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
-
+        /// <summary>
+        /// elimina de la base de datos una lista de categorias
+        /// </summary>
+        /// <param name="categorias"> las categorias a eliminar </param>
+        public void EliminarCategorias(List<CategoriaModelo> categorias)
+        {
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = "delete from Categorias where Nombre = @Nombre collate nocase";
+                conexion.Execute(q, categorias);               
+            }
+        }
     }
 }

@@ -10,7 +10,9 @@ namespace SivBiblioteca.AccesoDatos
     public interface IConexionDatos
     {
         void GuardarCategorias(List<CategoriaModelo> categoria);
-        List<CategoriaModelo> Categoria_Todas();
+        List<CategoriaModelo> CargarCategorias();
         bool CategoriaExiste(string nombreCategoria);
+
+        void EliminarCategorias(List<CategoriaModelo> categorias);
     }
 }

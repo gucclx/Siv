@@ -38,19 +38,22 @@
             // 
             this.eliminar_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.eliminar_categoria_button.ForeColor = System.Drawing.Color.Crimson;
-            this.eliminar_categoria_button.Location = new System.Drawing.Point(12, 320);
+            this.eliminar_categoria_button.Location = new System.Drawing.Point(12, 327);
             this.eliminar_categoria_button.Name = "eliminar_categoria_button";
             this.eliminar_categoria_button.Size = new System.Drawing.Size(225, 37);
             this.eliminar_categoria_button.TabIndex = 18;
-            this.eliminar_categoria_button.Text = "Eliminar seleccionada";
+            this.eliminar_categoria_button.Text = "Eliminar selección";
             this.eliminar_categoria_button.UseVisualStyleBackColor = true;
+            this.eliminar_categoria_button.Click += new System.EventHandler(this.eliminar_categoria_button_Click);
             // 
             // categorias_existentes_listbox
             // 
             this.categorias_existentes_listbox.FormattingEnabled = true;
+            this.categorias_existentes_listbox.HorizontalScrollbar = true;
             this.categorias_existentes_listbox.ItemHeight = 25;
             this.categorias_existentes_listbox.Location = new System.Drawing.Point(12, 60);
             this.categorias_existentes_listbox.Name = "categorias_existentes_listbox";
+            this.categorias_existentes_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.categorias_existentes_listbox.Size = new System.Drawing.Size(500, 254);
             this.categorias_existentes_listbox.TabIndex = 17;
             // 
@@ -67,19 +70,20 @@
             // cerrar_button
             // 
             this.cerrar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cerrar_button.Location = new System.Drawing.Point(379, 415);
+            this.cerrar_button.Location = new System.Drawing.Point(379, 327);
             this.cerrar_button.Name = "cerrar_button";
             this.cerrar_button.Size = new System.Drawing.Size(133, 37);
             this.cerrar_button.TabIndex = 19;
             this.cerrar_button.Text = "Cerrar";
             this.cerrar_button.UseVisualStyleBackColor = true;
+            this.cerrar_button.Click += new System.EventHandler(this.cerrar_button_Click);
             // 
             // EliminarCategoriaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(524, 464);
+            this.ClientSize = new System.Drawing.Size(524, 376);
             this.Controls.Add(this.cerrar_button);
             this.Controls.Add(this.eliminar_categoria_button);
             this.Controls.Add(this.categorias_existentes_listbox);
