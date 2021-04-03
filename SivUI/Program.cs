@@ -17,7 +17,7 @@ namespace SivUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConfigGlobal.inicializarConexion();
-            Application.Run(new EliminarCategoriaForm());
+            Application.Run(new InventarioAgregarForm());
         }
     }
 }

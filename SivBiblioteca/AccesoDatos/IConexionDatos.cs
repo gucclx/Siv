@@ -14,5 +14,9 @@ namespace SivBiblioteca.AccesoDatos
         bool CategoriaExiste(string nombreCategoria);
 
         void EliminarCategorias(List<CategoriaModelo> categorias);
+
+        void GuardarProducto(ProductoModelo producto);
+
+        int CargarUltimoProductoId();
     }
 }

@@ -36,16 +36,18 @@
             this.inversion_unidad_tb = new System.Windows.Forms.TextBox();
             this.seleccionar_categoria_label = new System.Windows.Forms.Label();
             this.categorias_listbox = new System.Windows.Forms.ListBox();
-            this.categoria_dropdown = new System.Windows.Forms.ComboBox();
+            this.categorias_dropdown = new System.Windows.Forms.ComboBox();
             this.agregar_categoria_button = new System.Windows.Forms.Button();
             this.descripcion_unidad_label = new System.Windows.Forms.Label();
             this.descripcion_unidad_tb = new System.Windows.Forms.TextBox();
-            this.precio_venta_defecto = new System.Windows.Forms.TextBox();
+            this.precio_venta_defecto_tb = new System.Windows.Forms.TextBox();
             this.precio_venta_defecto_label = new System.Windows.Forms.Label();
             this.remover_categoria_button = new System.Windows.Forms.Button();
-            this.continuar_button = new System.Windows.Forms.Button();
+            this.agregar_al_inventario_button = new System.Windows.Forms.Button();
             this.nueva_categoria_linklabel = new System.Windows.Forms.LinkLabel();
             this.categorias_label = new System.Windows.Forms.Label();
+            this.ultimo_producto_id_tb = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // unidades_label
@@ -63,6 +65,8 @@
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(125, 33);
             this.unidades_tb.TabIndex = 2;
+            this.unidades_tb.Text = "0";
+            this.unidades_tb.TextChanged += new System.EventHandler(this.unidades_tb_TextChanged);
             // 
             // inversion_total_label
             // 
@@ -79,6 +83,8 @@
             this.inversion_total_tb.Name = "inversion_total_tb";
             this.inversion_total_tb.Size = new System.Drawing.Size(127, 33);
             this.inversion_total_tb.TabIndex = 4;
+            this.inversion_total_tb.Text = "0";
+            this.inversion_total_tb.TextChanged += new System.EventHandler(this.inversion_total_tb_TextChanged);
             // 
             // inversion_unidad_label
             // 
@@ -96,6 +102,7 @@
             this.inversion_unidad_tb.ReadOnly = true;
             this.inversion_unidad_tb.Size = new System.Drawing.Size(182, 33);
             this.inversion_unidad_tb.TabIndex = 6;
+            this.inversion_unidad_tb.Text = "N/A";
             // 
             // seleccionar_categoria_label
             // 
@@ -109,19 +116,21 @@
             // categorias_listbox
             // 
             this.categorias_listbox.FormattingEnabled = true;
+            this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 25;
             this.categorias_listbox.Location = new System.Drawing.Point(47, 199);
             this.categorias_listbox.Name = "categorias_listbox";
+            this.categorias_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.categorias_listbox.Size = new System.Drawing.Size(534, 129);
             this.categorias_listbox.TabIndex = 8;
             // 
-            // categoria_dropdown
+            // categorias_dropdown
             // 
-            this.categoria_dropdown.FormattingEnabled = true;
-            this.categoria_dropdown.Location = new System.Drawing.Point(47, 137);
-            this.categoria_dropdown.Name = "categoria_dropdown";
-            this.categoria_dropdown.Size = new System.Drawing.Size(534, 33);
-            this.categoria_dropdown.TabIndex = 9;
+            this.categorias_dropdown.FormattingEnabled = true;
+            this.categorias_dropdown.Location = new System.Drawing.Point(47, 137);
+            this.categorias_dropdown.Name = "categorias_dropdown";
+            this.categorias_dropdown.Size = new System.Drawing.Size(534, 33);
+            this.categorias_dropdown.TabIndex = 9;
             // 
             // agregar_categoria_button
             // 
@@ -132,15 +141,16 @@
             this.agregar_categoria_button.TabIndex = 10;
             this.agregar_categoria_button.Text = "Agregar categoria";
             this.agregar_categoria_button.UseVisualStyleBackColor = true;
+            this.agregar_categoria_button.Click += new System.EventHandler(this.agregar_categoria_button_Click);
             // 
             // descripcion_unidad_label
             // 
             this.descripcion_unidad_label.AutoSize = true;
             this.descripcion_unidad_label.Location = new System.Drawing.Point(42, 331);
             this.descripcion_unidad_label.Name = "descripcion_unidad_label";
-            this.descripcion_unidad_label.Size = new System.Drawing.Size(263, 25);
+            this.descripcion_unidad_label.Size = new System.Drawing.Size(356, 25);
             this.descripcion_unidad_label.TabIndex = 11;
-            this.descripcion_unidad_label.Text = "Descripción para cada unidad";
+            this.descripcion_unidad_label.Text = "Descripción para cada unidad (Opcional)";
             // 
             // descripcion_unidad_tb
             // 
@@ -150,12 +160,13 @@
             this.descripcion_unidad_tb.Size = new System.Drawing.Size(534, 77);
             this.descripcion_unidad_tb.TabIndex = 12;
             // 
-            // precio_venta_defecto
+            // precio_venta_defecto_tb
             // 
-            this.precio_venta_defecto.Location = new System.Drawing.Point(526, 56);
-            this.precio_venta_defecto.Name = "precio_venta_defecto";
-            this.precio_venta_defecto.Size = new System.Drawing.Size(217, 33);
-            this.precio_venta_defecto.TabIndex = 14;
+            this.precio_venta_defecto_tb.Location = new System.Drawing.Point(526, 56);
+            this.precio_venta_defecto_tb.Name = "precio_venta_defecto_tb";
+            this.precio_venta_defecto_tb.Size = new System.Drawing.Size(217, 33);
+            this.precio_venta_defecto_tb.TabIndex = 14;
+            this.precio_venta_defecto_tb.Text = "0";
             // 
             // precio_venta_defecto_label
             // 
@@ -176,16 +187,18 @@
             this.remover_categoria_button.TabIndex = 15;
             this.remover_categoria_button.Text = "Remover selección";
             this.remover_categoria_button.UseVisualStyleBackColor = true;
+            this.remover_categoria_button.Click += new System.EventHandler(this.remover_categoria_button_Click);
             // 
-            // continuar_button
+            // agregar_al_inventario_button
             // 
-            this.continuar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.continuar_button.Location = new System.Drawing.Point(587, 512);
-            this.continuar_button.Name = "continuar_button";
-            this.continuar_button.Size = new System.Drawing.Size(156, 37);
-            this.continuar_button.TabIndex = 16;
-            this.continuar_button.Text = "Agregar";
-            this.continuar_button.UseVisualStyleBackColor = true;
+            this.agregar_al_inventario_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.agregar_al_inventario_button.Location = new System.Drawing.Point(565, 512);
+            this.agregar_al_inventario_button.Name = "agregar_al_inventario_button";
+            this.agregar_al_inventario_button.Size = new System.Drawing.Size(207, 37);
+            this.agregar_al_inventario_button.TabIndex = 16;
+            this.agregar_al_inventario_button.Text = "Agregar al inventario";
+            this.agregar_al_inventario_button.UseVisualStyleBackColor = true;
+            this.agregar_al_inventario_button.Click += new System.EventHandler(this.agregar_al_inventario_button_Click);
             // 
             // nueva_categoria_linklabel
             // 
@@ -197,15 +210,33 @@
             this.nueva_categoria_linklabel.TabIndex = 17;
             this.nueva_categoria_linklabel.TabStop = true;
             this.nueva_categoria_linklabel.Text = "Nueva categoria";
+            this.nueva_categoria_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.nueva_categoria_linklabel_LinkClicked);
             // 
             // categorias_label
             // 
             this.categorias_label.AutoSize = true;
             this.categorias_label.Location = new System.Drawing.Point(42, 173);
             this.categorias_label.Name = "categorias_label";
-            this.categorias_label.Size = new System.Drawing.Size(215, 25);
+            this.categorias_label.Size = new System.Drawing.Size(308, 25);
             this.categorias_label.TabIndex = 18;
-            this.categorias_label.Text = "Categorias del producto";
+            this.categorias_label.Text = "Categorias del producto (Opcional)";
+            // 
+            // ultimo_producto_id_tb
+            // 
+            this.ultimo_producto_id_tb.Location = new System.Drawing.Point(47, 516);
+            this.ultimo_producto_id_tb.Name = "ultimo_producto_id_tb";
+            this.ultimo_producto_id_tb.ReadOnly = true;
+            this.ultimo_producto_id_tb.Size = new System.Drawing.Size(197, 33);
+            this.ultimo_producto_id_tb.TabIndex = 20;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 488);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(202, 25);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "ID del último producto";
             // 
             // InventarioAgregarForm
             // 
@@ -213,16 +244,18 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.ultimo_producto_id_tb);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.categorias_label);
             this.Controls.Add(this.nueva_categoria_linklabel);
-            this.Controls.Add(this.continuar_button);
+            this.Controls.Add(this.agregar_al_inventario_button);
             this.Controls.Add(this.remover_categoria_button);
-            this.Controls.Add(this.precio_venta_defecto);
+            this.Controls.Add(this.precio_venta_defecto_tb);
             this.Controls.Add(this.precio_venta_defecto_label);
             this.Controls.Add(this.descripcion_unidad_tb);
             this.Controls.Add(this.descripcion_unidad_label);
             this.Controls.Add(this.agregar_categoria_button);
-            this.Controls.Add(this.categoria_dropdown);
+            this.Controls.Add(this.categorias_dropdown);
             this.Controls.Add(this.categorias_listbox);
             this.Controls.Add(this.seleccionar_categoria_label);
             this.Controls.Add(this.inversion_unidad_tb);
@@ -252,16 +285,18 @@
         private System.Windows.Forms.TextBox inversion_unidad_tb;
         private System.Windows.Forms.Label seleccionar_categoria_label;
         private System.Windows.Forms.ListBox categorias_listbox;
-        private System.Windows.Forms.ComboBox categoria_dropdown;
+        private System.Windows.Forms.ComboBox categorias_dropdown;
         private System.Windows.Forms.Button agregar_categoria_button;
         private System.Windows.Forms.Label descripcion_unidad_label;
         private System.Windows.Forms.TextBox descripcion_unidad_tb;
-        private System.Windows.Forms.TextBox precio_venta_defecto;
+        private System.Windows.Forms.TextBox precio_venta_defecto_tb;
         private System.Windows.Forms.Label precio_venta_defecto_label;
         private System.Windows.Forms.Button remover_categoria_button;
-        private System.Windows.Forms.Button continuar_button;
+        private System.Windows.Forms.Button agregar_al_inventario_button;
         private System.Windows.Forms.LinkLabel nueva_categoria_linklabel;
         private System.Windows.Forms.Label categorias_label;
+        private System.Windows.Forms.TextBox ultimo_producto_id_tb;
+        private System.Windows.Forms.Label label1;
     }
 }
 

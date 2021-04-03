@@ -14,9 +14,11 @@ namespace SivUI
     public partial class CrearCategoriaForm : Form
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-        public CrearCategoriaForm()
+        ISolicitudCategoria formSolicitante;
+        public CrearCategoriaForm(ISolicitudCategoria solicitante)
         {
             InitializeComponent();
+            formSolicitante = solicitante;
         }
 
         private void ActualizarListaCategorias()
@@ -80,6 +82,8 @@ namespace SivUI
         private void crear_categorias_button_Click(object sender, EventArgs e)
         {
             ConfigGlobal.conexion.GuardarCategorias(categoriasSeleccionadas);
+            formSolicitante.CategoriaCreada(categoriasSeleccionadas);
+            this.Close();
         }
 
         private void remover_categoria_button_Click(object sender, EventArgs e)

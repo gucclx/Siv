@@ -11,8 +11,10 @@ namespace SivBiblioteca.Modelos
         public int Id { get; set; }
         public List<CategoriaModelo> Categorias { get; set; }
         public decimal PrecioInversion { get; set; }
-        public decimal? PrecioVenta { get; set; }
+        public decimal PrecioVenta { get; set; }
         public string FechaCreacion { get; set; }
-        public bool Vendido { get; set; }
+        public int Unidades { get; set; }
+        public string Descripcion { get; set; }
+
     }
 }
