@@ -18,5 +18,7 @@ namespace SivBiblioteca.AccesoDatos
         void GuardarProducto(ProductoModelo producto);
 
         int CargarUltimoProductoId();
+
+        ProductoModelo CargarProducto_PorId(int id);
     }
 }

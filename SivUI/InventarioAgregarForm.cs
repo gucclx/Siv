@@ -54,7 +54,7 @@ namespace SivUI
             if (ValidarUnidades() == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Cantidad de unidades inválida", "cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
+                MessageBox.Show("Cantidad de unidades inválida", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
             }
 
             if (ValidarInversionTotal() == false)
@@ -206,7 +206,7 @@ namespace SivUI
             ConfigGlobal.conexion.GuardarProducto(producto);
             LimpiarForm();
             ActualizarUltimoProductoId();
-            MessageBox.Show($"ID del producto {producto.Id}");
+            MessageBox.Show($"ID del producto: {producto.Id}", "Producto agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void nueva_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

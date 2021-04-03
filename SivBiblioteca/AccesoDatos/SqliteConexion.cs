@@ -139,5 +139,24 @@ namespace SivBiblioteca.AccesoDatos
             }
             return id;
         }
+
+        public ProductoModelo CargarProducto_PorId(int id)
+        {
+            ProductoModelo p;
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"select Id, PrecioVenta, PrecioInversion, Descripcion, Unidades, datetime(FechaCreacion, 'unixepoch') as FechaCreacion  
+                        from Productos 
+                        where Id = @Id";
+                p = conexion.QuerySingle<ProductoModelo>(q, new { Id = id });
+            }
+
+            // representacion original de los precios
+            decimal diezALaP = Convert.ToDecimal(Math.Pow(10, MonedaPrecision));
+            p.PrecioVenta = p.PrecioVenta / diezALaP;
+            p.PrecioInversion = p.PrecioInversion / diezALaP;
+
+            return p;
+        }
     }         
 }
