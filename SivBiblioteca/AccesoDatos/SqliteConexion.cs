@@ -91,6 +91,7 @@ namespace SivBiblioteca.AccesoDatos
                 {
                     categoria.Nombre = categoria.Nombre.Trim();
                     conexion.Execute(q, categoria);
+                    categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
                 }
             }
         }
@@ -198,7 +199,7 @@ namespace SivBiblioteca.AccesoDatos
             return p;
         }
 
-        /// TODO - validar venta
+        /// TODO - Restar unidades del producto
         /// <summary>
         /// Guarda una lista de ventas a la base de datos.
         /// </summary>
@@ -244,6 +245,9 @@ namespace SivBiblioteca.AccesoDatos
                                 Comentario = venta.Comentario,
                                 ClienteId = venta.ClienteId
                             }
+                        );
+                        conexion.Execute("update Productos set Unidades = Unidades - @UnidadesVendidas", 
+                            new { UnidadesVendidas = venta.Unidades }
                         );
                     }
                     transaccion.Commit();
