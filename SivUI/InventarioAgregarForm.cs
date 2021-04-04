@@ -63,7 +63,7 @@ namespace SivUI
                 MessageBox.Show("Inversión total inválida", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (validarPrecioVenta() == false)
+            if (ValidarPrecioVenta() == false)
             {
                 esFormValido = false;
                 MessageBox.Show("Precio de venta inválido", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -113,7 +113,7 @@ namespace SivUI
             }
         }
 
-        private bool validarPrecioVenta()
+        private bool ValidarPrecioVenta()
         {
             string stringPrecioVenta = precio_venta_defecto_tb.Text.Trim();
             if (string.IsNullOrEmpty(stringPrecioVenta))

@@ -35,10 +35,8 @@
             this.total_tb = new System.Windows.Forms.TextBox();
             this.total_label = new System.Windows.Forms.Label();
             this.vender_button = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pago_label = new System.Windows.Forms.Label();
-            this.unidades_tb = new System.Windows.Forms.TextBox();
             this.unidades_label = new System.Windows.Forms.Label();
+            this.unidades_tb = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,7 +45,7 @@
             this.producto_id_tb.Location = new System.Drawing.Point(10, 37);
             this.producto_id_tb.Name = "producto_id_tb";
             this.producto_id_tb.Size = new System.Drawing.Size(167, 33);
-            this.producto_id_tb.TabIndex = 4;
+            this.producto_id_tb.TabIndex = 1;
             this.producto_id_tb.Text = "0";
             // 
             // id_producto_label
@@ -56,16 +54,16 @@
             this.id_producto_label.Location = new System.Drawing.Point(5, 9);
             this.id_producto_label.Name = "id_producto_label";
             this.id_producto_label.Size = new System.Drawing.Size(112, 25);
-            this.id_producto_label.TabIndex = 3;
+            this.id_producto_label.TabIndex = 0;
             this.id_producto_label.Text = "ID producto";
             // 
             // agregar_producto_button
             // 
             this.agregar_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_producto_button.Location = new System.Drawing.Point(314, 34);
+            this.agregar_producto_button.Location = new System.Drawing.Point(275, 34);
             this.agregar_producto_button.Name = "agregar_producto_button";
             this.agregar_producto_button.Size = new System.Drawing.Size(100, 37);
-            this.agregar_producto_button.TabIndex = 11;
+            this.agregar_producto_button.TabIndex = 4;
             this.agregar_producto_button.Text = "Agregar";
             this.agregar_producto_button.UseVisualStyleBackColor = true;
             this.agregar_producto_button.Click += new System.EventHandler(this.agregar_producto_button_Click);
@@ -73,19 +71,18 @@
             // ventas_dtgv
             // 
             this.ventas_dtgv.AllowUserToAddRows = false;
-            this.ventas_dtgv.AllowUserToResizeRows = false;
             this.ventas_dtgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ventas_dtgv.BackgroundColor = System.Drawing.Color.CornflowerBlue;
             this.ventas_dtgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ventas_dtgv.Location = new System.Drawing.Point(10, 77);
             this.ventas_dtgv.Name = "ventas_dtgv";
-            this.ventas_dtgv.Size = new System.Drawing.Size(792, 200);
+            this.ventas_dtgv.Size = new System.Drawing.Size(792, 328);
             this.ventas_dtgv.TabIndex = 12;
-            this.ventas_dtgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.ventas_dtgv_CellValueChanged);
+            this.ventas_dtgv.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ventas_dtgv_CellValidating);
             // 
             // total_tb
             // 
-            this.total_tb.Location = new System.Drawing.Point(652, 283);
+            this.total_tb.Location = new System.Drawing.Point(652, 411);
             this.total_tb.Name = "total_tb";
             this.total_tb.ReadOnly = true;
             this.total_tb.Size = new System.Drawing.Size(150, 33);
@@ -95,7 +92,7 @@
             // total_label
             // 
             this.total_label.AutoSize = true;
-            this.total_label.Location = new System.Drawing.Point(594, 286);
+            this.total_label.Location = new System.Drawing.Point(594, 414);
             this.total_label.Name = "total_label";
             this.total_label.Size = new System.Drawing.Size(52, 25);
             this.total_label.TabIndex = 13;
@@ -104,36 +101,13 @@
             // vender_button
             // 
             this.vender_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.vender_button.Location = new System.Drawing.Point(647, 512);
+            this.vender_button.Location = new System.Drawing.Point(677, 512);
             this.vender_button.Name = "vender_button";
             this.vender_button.Size = new System.Drawing.Size(125, 37);
-            this.vender_button.TabIndex = 17;
+            this.vender_button.TabIndex = 5;
             this.vender_button.Text = "Vender";
             this.vender_button.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(75, 366);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(150, 33);
-            this.textBox1.TabIndex = 19;
-            // 
-            // pago_label
-            // 
-            this.pago_label.AutoSize = true;
-            this.pago_label.Location = new System.Drawing.Point(15, 369);
-            this.pago_label.Name = "pago_label";
-            this.pago_label.Size = new System.Drawing.Size(54, 25);
-            this.pago_label.TabIndex = 18;
-            this.pago_label.Text = "Pago";
-            // 
-            // unidades_tb
-            // 
-            this.unidades_tb.Location = new System.Drawing.Point(183, 37);
-            this.unidades_tb.Name = "unidades_tb";
-            this.unidades_tb.Size = new System.Drawing.Size(125, 33);
-            this.unidades_tb.TabIndex = 21;
-            this.unidades_tb.Text = "0";
+            this.vender_button.Click += new System.EventHandler(this.vender_button_Click);
             // 
             // unidades_label
             // 
@@ -141,8 +115,16 @@
             this.unidades_label.Location = new System.Drawing.Point(178, 9);
             this.unidades_label.Name = "unidades_label";
             this.unidades_label.Size = new System.Drawing.Size(91, 25);
-            this.unidades_label.TabIndex = 20;
+            this.unidades_label.TabIndex = 2;
             this.unidades_label.Text = "Unidades";
+            // 
+            // unidades_tb
+            // 
+            this.unidades_tb.Location = new System.Drawing.Point(183, 37);
+            this.unidades_tb.Name = "unidades_tb";
+            this.unidades_tb.Size = new System.Drawing.Size(86, 33);
+            this.unidades_tb.TabIndex = 3;
+            this.unidades_tb.Text = "0";
             // 
             // VenderForm
             // 
@@ -152,8 +134,6 @@
             this.ClientSize = new System.Drawing.Size(814, 561);
             this.Controls.Add(this.unidades_tb);
             this.Controls.Add(this.unidades_label);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.pago_label);
             this.Controls.Add(this.vender_button);
             this.Controls.Add(this.total_tb);
             this.Controls.Add(this.total_label);
@@ -182,9 +162,7 @@
         private System.Windows.Forms.TextBox total_tb;
         private System.Windows.Forms.Label total_label;
         private System.Windows.Forms.Button vender_button;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label pago_label;
-        private System.Windows.Forms.TextBox unidades_tb;
         private System.Windows.Forms.Label unidades_label;
+        private System.Windows.Forms.TextBox unidades_tb;
     }
 }

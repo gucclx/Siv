@@ -10,6 +10,7 @@ using Dapper;
 
 namespace SivBiblioteca.AccesoDatos
 {
+    // TODO - validar que todos los datos esten correctos.
     public class SqliteConexion : IConexionDatos
     {
         string stringConexion = ConfigGlobal.ConseguirStringConexion("SqliteBd");
@@ -66,7 +67,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// guarda una lista de categorias en la base de datos
+        /// Guarda una lista de categorias en la base de datos.
         /// </summary>
         /// <param name="categorias">
         ///     Lista de categorias a guardar.
@@ -98,8 +99,9 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
+        // TODO - Asignar categorias a los productos en la base de datos
         /// <summary>
-        /// Guarda un producto en la base de datos
+        /// Guarda un producto en la base de datos.
         /// </summary>
         /// <param name="productos"> Lista de productos a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
@@ -129,6 +131,10 @@ namespace SivBiblioteca.AccesoDatos
             return Convert.ToInt32(decimal.Truncate(x * diezAlaP));
         }
 
+        /// <summary>
+        /// Retorna el id del ultimo producto almacenado en la base de datos.
+        /// </summary>
+        /// <returns></returns>
         public int CargarUltimoProductoId()
         {
             int id = -1;
@@ -140,6 +146,11 @@ namespace SivBiblioteca.AccesoDatos
             return id;
         }
 
+        /// <summary>
+        /// Carga y retorna un producto de la base de datos.
+        /// </summary>
+        /// <param name="id"> Id del producto. </param>
+        /// <returns> El producto. Si no se encontro se retorna un producto null. </returns>
         public ProductoModelo CargarProducto_PorId(int id)
         {
             ProductoModelo p;
@@ -148,8 +159,10 @@ namespace SivBiblioteca.AccesoDatos
                 var q = @"select Id, PrecioVenta, PrecioInversion, Descripcion, Unidades, datetime(FechaCreacion, 'unixepoch') as FechaCreacion  
                         from Productos 
                         where Id = @Id";
-                p = conexion.QuerySingle<ProductoModelo>(q, new { Id = id });
+                p = conexion.QuerySingleOrDefault<ProductoModelo>(q, new { Id = id });
             }
+
+            if (p == null) { return p; }
 
             // representacion original de los precios
             decimal diezALaP = Convert.ToDecimal(Math.Pow(10, MonedaPrecision));
@@ -157,6 +170,39 @@ namespace SivBiblioteca.AccesoDatos
             p.PrecioInversion = p.PrecioInversion / diezALaP;
 
             return p;
+        }
+
+        /// TODO - validar venta
+        /// <summary>
+        /// Guarda una lista de ventas a la base de datos.
+        /// </summary>
+        /// <param name="ventas"> Lisa de ventas a guardar. </param>
+        public void GuardarVentas(List<VentaModelo> ventas)
+        {
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"insert into Ventas (ProductoId, Unidades, Total, Comentario, ClienteId, Fecha)
+                          values (@ProductoId, @Unidades, @Total, @Comentario, @ClienteId, strftime('%s', 'now', 'localtime'))";
+
+                conexion.Open();
+                using (var transaccion = conexion.BeginTransaction())
+                {
+                    foreach (var venta in ventas)
+                    {
+                        conexion.Execute(q,
+                            new
+                            {
+                                ProductoId = venta.Producto.Id,
+                                Unidades = venta.Unidades,
+                                Total = ConvertirMonedaARepresentacionInterna(venta.Total),
+                                Comentario = venta.Comentario,
+                                ClienteId = venta.ClienteId
+                            }
+                        );
+                    }
+                    transaccion.Commit();
+                }                 
+            }
         }
     }         
 }
