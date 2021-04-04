@@ -37,6 +37,8 @@
             this.vender_button = new System.Windows.Forms.Button();
             this.unidades_label = new System.Windows.Forms.Label();
             this.unidades_tb = new System.Windows.Forms.TextBox();
+            this.limpiar_button = new System.Windows.Forms.Button();
+            this.remover_venta_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +48,6 @@
             this.producto_id_tb.Name = "producto_id_tb";
             this.producto_id_tb.Size = new System.Drawing.Size(167, 33);
             this.producto_id_tb.TabIndex = 1;
-            this.producto_id_tb.Text = "0";
             // 
             // id_producto_label
             // 
@@ -124,7 +125,28 @@
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(86, 33);
             this.unidades_tb.TabIndex = 3;
-            this.unidades_tb.Text = "0";
+            // 
+            // limpiar_button
+            // 
+            this.limpiar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.limpiar_button.Location = new System.Drawing.Point(10, 512);
+            this.limpiar_button.Name = "limpiar_button";
+            this.limpiar_button.Size = new System.Drawing.Size(125, 37);
+            this.limpiar_button.TabIndex = 15;
+            this.limpiar_button.Text = "Limpiar";
+            this.limpiar_button.UseVisualStyleBackColor = true;
+            this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
+            // 
+            // remover_venta_button
+            // 
+            this.remover_venta_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.remover_venta_button.Location = new System.Drawing.Point(12, 414);
+            this.remover_venta_button.Name = "remover_venta_button";
+            this.remover_venta_button.Size = new System.Drawing.Size(203, 37);
+            this.remover_venta_button.TabIndex = 16;
+            this.remover_venta_button.Text = "Remover selección";
+            this.remover_venta_button.UseVisualStyleBackColor = true;
+            this.remover_venta_button.Click += new System.EventHandler(this.remover_venta_button_Click);
             // 
             // VenderForm
             // 
@@ -132,6 +154,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(814, 561);
+            this.Controls.Add(this.remover_venta_button);
+            this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.unidades_tb);
             this.Controls.Add(this.unidades_label);
             this.Controls.Add(this.vender_button);
@@ -146,6 +170,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "VenderForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vender";
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).EndInit();
             this.ResumeLayout(false);
@@ -164,5 +189,7 @@
         private System.Windows.Forms.Button vender_button;
         private System.Windows.Forms.Label unidades_label;
         private System.Windows.Forms.TextBox unidades_tb;
+        private System.Windows.Forms.Button limpiar_button;
+        private System.Windows.Forms.Button remover_venta_button;
     }
 }

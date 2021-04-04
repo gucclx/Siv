@@ -40,6 +40,8 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns></returns>
         public bool CategoriaExiste(string nombreCategoria)
         {
+            if (string.IsNullOrEmpty(nombreCategoria.Trim())) { return false; }
+
             bool resultado = false;
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
@@ -74,6 +76,13 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void GuardarCategorias(List<CategoriaModelo> categorias)
         {
+            foreach (var categoria in categorias)
+            {
+                if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
+                {
+                    throw new Exception("Categoria sin nombre.");
+                }
+            }
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "insert into Categorias (Nombre) values (@Nombre)";
@@ -94,18 +103,29 @@ namespace SivBiblioteca.AccesoDatos
         {
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = "delete from Categorias where Nombre = @Nombre collate nocase";
+                var q = "delete from Categorias where Id = @Id";
                 conexion.Execute(q, categorias);               
             }
         }
 
-        // TODO - Asignar categorias a los productos en la base de datos
         /// <summary>
         /// Guarda un producto en la base de datos.
         /// </summary>
         /// <param name="productos"> Lista de productos a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
         {
+            if (Ayudantes.EsProductoValido(producto) == false)
+            {
+                throw new Exception("Producto con campos invalidos.");
+            }
+            foreach (var categoria in producto.Categorias)
+            {
+                if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
+                {
+                    throw new Exception("Categoria sin nombre.");
+                }
+            }
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into Productos 
@@ -122,6 +142,12 @@ namespace SivBiblioteca.AccesoDatos
                     }
                 );
                 producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
+
+                q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
+                foreach (var categoria in producto.Categorias)
+                {
+                    conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
+                }
             }
         }
 
@@ -179,6 +205,26 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="ventas"> Lisa de ventas a guardar. </param>
         public void GuardarVentas(List<VentaModelo> ventas)
         {
+            foreach (var venta in ventas)
+            {
+                if (Ayudantes.EsProductoValido(venta.Producto) == false)
+                {
+                    throw new Exception("Producto con campos invalidos.");
+                }
+                else if (venta.Unidades < 1)
+                {
+                    throw new Exception($"Unidades solicitadas invalidas. Solicitud = {venta.Unidades}");
+                }
+                else if (venta.Total < 0)
+                {
+                    throw new Exception("Total de la venta no puede ser negativo");
+                }
+                else if (venta.Unidades > UnidadesExistentesProducto(venta.Producto.Id))
+                {
+                    throw new Exception($"Se han solicitado mas unidades del producto que hay en existencia.");
+                }                    
+            }
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into Ventas (ProductoId, Unidades, Total, Comentario, ClienteId, Fecha)
@@ -204,5 +250,18 @@ namespace SivBiblioteca.AccesoDatos
                 }                 
             }
         }
+
+        public int UnidadesExistentesProducto(int productoId)
+        {
+            int unidades = -1;
+            if (productoId < 1) { return unidades; }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = "select Unidades from Productos where Id = @Id";
+                unidades = conexion.ExecuteScalar<int>(q, new { Id = productoId });
+            }
+            return unidades;
+        }   
     }         
 }

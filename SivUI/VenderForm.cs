@@ -14,7 +14,6 @@ namespace SivUI
     public partial class VenderForm : Form
     {
         BindingSource ventas = new BindingSource();
-        // TODO - agregar habilidad de borrar producto del carrito
         public VenderForm()
         {
             InitializeComponent();
@@ -55,52 +54,7 @@ namespace SivUI
             ventas_dtgv.Columns.Add(unidadesColumna);
             ventas_dtgv.Columns.Add(totalVentaColumna);
 
-        }
-
-        // TODO - refactorizar codigo, implementar EsEnteroPositivo(), EsDecimalPositivo() ya que el mismo patron ocurre en multiples forms
-        private bool ValidarUnidades()
-        {
-            var stringUnidades = unidades_tb.Text.Trim();
-
-            if (string.IsNullOrEmpty(stringUnidades))
-            {
-                return false;
-            }
-
-            int unidades = 0;
-            bool unidadesSonEnteras = int.TryParse(stringUnidades, out unidades);
-
-            if (unidadesSonEnteras)
-            {
-                return (unidades > 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        private bool ValidarIdProducto()
-        {
-            var stringId = producto_id_tb.Text.Trim();
-
-            if (string.IsNullOrEmpty(stringId))
-            {
-                return false;
-            }
-
-            int id = 0;
-            bool idEsEntero = int.TryParse(stringId, out id);
-
-            if (idEsEntero)
-            {
-                return (id > 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        }     
         private void CalcularTotal()
         {
             decimal total = 0;
@@ -113,20 +67,20 @@ namespace SivUI
         private void agregar_producto_button_Click(object sender, EventArgs e)
         {
             // validar campos
-            if (ValidarIdProducto() == false)
+            if (Ayudantes.EsEnteroPositivo(producto_id_tb.Text) == false)
             {
                 MessageBox.Show("ID del producto inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            if (ValidarUnidades() == false)
+            if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false)
             {
                 MessageBox.Show("Cantidad de unidades inválida", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             // cargar producto y verificar que el producto se haya encontrado
-            var productoId = int.Parse(producto_id_tb.Text);
+            var productoId = int.Parse(producto_id_tb.Text.Trim());
             var producto = ConfigGlobal.conexion.CargarProducto_PorId(productoId);
 
             if (producto == null)
@@ -139,7 +93,6 @@ namespace SivUI
             var productoExistente = ventas.List.OfType<VentaModelo>().ToList().Find(x => x.ProductoId == productoId);
             if (productoExistente != null)
             {
-
                 MessageBox.Show("El producto ya existe en la lista.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -180,26 +133,21 @@ namespace SivUI
             // columna precio de venta
             if (e.ColumnIndex == 1)
             {
-                decimal precioVenta = 0;
-                bool precioVentaEsDecimal = decimal.TryParse(e.FormattedValue.ToString(), out precioVenta);
-
-                if (!precioVentaEsDecimal || precioVenta < 0)
+                if (Ayudantes.EsDecimalNoNegativo(e.FormattedValue.ToString()) == false)
                 {
                     MessageBox.Show("Precio de venta inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     e.Cancel = true;
                     return;
                 }
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
-                venta.Producto.PrecioVenta = precioVenta;
+                venta.Producto.PrecioVenta = decimal.Parse(e.FormattedValue.ToString().Trim());
                 CalcularTotal();
             }
             // columna unidades
             else if (e.ColumnIndex == 3)
             {
-                int unidadesAVender = 0;
-                bool unidadesAVenderEsDecimal = int.TryParse(e.FormattedValue.ToString(), out unidadesAVender);
-
-                if (!unidadesAVenderEsDecimal || unidadesAVender < 1)
+                var stringUnidadesAVender = e.FormattedValue.ToString().Trim();
+                if (Ayudantes.EsEnteroPositivo(stringUnidadesAVender) == false)
                 {
                     e.Cancel = true;
                     MessageBox.Show($"Cantidad solicitada de unidades inválida.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -207,15 +155,33 @@ namespace SivUI
                 }
 
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
+                var intUnidadesAVender = int.Parse(stringUnidadesAVender);
 
-                if (unidadesAVender > venta.Producto.Unidades)
+                if (intUnidadesAVender > venta.Producto.Unidades)
                 {
                     e.Cancel = true;
                     MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { venta.Producto.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                venta.Unidades = unidadesAVender;
+                venta.Unidades = intUnidadesAVender;
                 CalcularTotal();          
+            }
+        }
+
+        private void limpiar_button_Click(object sender, EventArgs e)
+        {
+            producto_id_tb.Text = "";
+            producto_id_tb.Focus();
+            unidades_tb.Text = "";
+            ventas.DataSource = null;
+            ventas.DataSource = typeof(VentaModelo);
+        }
+
+        private void remover_venta_button_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow r in ventas_dtgv.SelectedRows)
+            {
+                ventas_dtgv.Rows.RemoveAt(r.Index);
             }
         }
     }

@@ -17,5 +17,6 @@ namespace SivBiblioteca.AccesoDatos
         int CargarUltimoProductoId();
         ProductoModelo CargarProducto_PorId(int id);
         void GuardarVentas(List<VentaModelo> ventas);
+        int UnidadesExistentesProducto(int productoId);
     }
 }

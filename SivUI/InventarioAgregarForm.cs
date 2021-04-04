@@ -33,10 +33,10 @@ namespace SivUI
         private void LimpiarForm()
         {
             unidades_tb.Focus();
-            unidades_tb.Text = "0";
-            inversion_total_tb.Text = "0";
+            unidades_tb.Text = "";
+            inversion_total_tb.Text = "";
             inversion_unidad_tb.Text = "N/A";
-            precio_venta_defecto_tb.Text = "0";
+            precio_venta_defecto_tb.Text = "";
             descripcion_unidad_tb.Text = "";
 
             foreach (var categoria in categoriasSeleccionadas)
@@ -51,87 +51,24 @@ namespace SivUI
         {
             bool esFormValido = true;
 
-            if (ValidarUnidades() == false)
+            if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false)
             {
                 esFormValido = false;
                 MessageBox.Show("Cantidad de unidades inválida", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
             }
 
-            if (ValidarInversionTotal() == false)
+            if (Ayudantes.EsDecimalNoNegativo(inversion_total_tb.Text) == false)
             {
                 esFormValido = false;
                 MessageBox.Show("Inversión total inválida", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (ValidarPrecioVenta() == false)
+            if (Ayudantes.EsDecimalNoNegativo(precio_venta_defecto_tb.Text) == false)
             {
                 esFormValido = false;
                 MessageBox.Show("Precio de venta inválido", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             return esFormValido;
-        }
-
-        private bool ValidarUnidades()
-        {
-            var stringUnidades = unidades_tb.Text.Trim();
-
-            if (string.IsNullOrEmpty(stringUnidades))
-            {
-                return false;
-            }
-
-            int unidades = 0;
-            bool unidadesSonEnteras = int.TryParse(stringUnidades, out unidades);
-
-            if (unidadesSonEnteras)
-            {
-                return (unidades > 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool ValidarInversionTotal()
-        {
-            string stringInversion = inversion_total_tb.Text.Trim();
-            if (string.IsNullOrEmpty(stringInversion))
-            {
-                return false;
-            }
-            decimal inversion = 0;
-            bool inversionEsDecimal = decimal.TryParse(stringInversion, out inversion);
-
-            if (inversionEsDecimal)
-            {
-                return (inversion >= 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool ValidarPrecioVenta()
-        {
-            string stringPrecioVenta = precio_venta_defecto_tb.Text.Trim();
-            if (string.IsNullOrEmpty(stringPrecioVenta))
-            {
-                return false;
-            }
-
-            decimal precioVenta = 0;
-            bool precioVentaEsDecimal = decimal.TryParse(stringPrecioVenta, out precioVenta);
-
-            if (precioVentaEsDecimal)
-            {
-                return (precioVenta >= 0);
-            }
-            else
-            {
-                return false;
-            }
         }
         private void ActualizarListaCategorias()
         {
@@ -177,13 +114,14 @@ namespace SivUI
         private void CalcularInversionPorUnidad()
         {
             inversion_unidad_tb.Text = "N/A";
-            if (ValidarUnidades() == false) return;
-            if (ValidarInversionTotal() == false) return;
-            int unidades = int.Parse(unidades_tb.Text);
+
+            if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false) return;
+            if (Ayudantes.EsDecimalNoNegativo(inversion_total_tb.Text) == false) return;
+
+            int unidades = int.Parse(unidades_tb.Text.Trim());
             if (unidades == 0) return;
 
-            decimal inversion = decimal.Parse(inversion_total_tb.Text);
-
+            decimal inversion = decimal.Parse(inversion_total_tb.Text.Trim());
             inversion_unidad_tb.Text = (inversion / unidades).ToString();
         }
 
@@ -202,6 +140,7 @@ namespace SivUI
             producto.PrecioInversion = decimal.Parse(inversion_unidad_tb.Text);
             producto.PrecioVenta = decimal.Parse(precio_venta_defecto_tb.Text);
             producto.Descripcion = descripcion_unidad_tb.Text.Trim();
+            producto.Categorias = categoriasSeleccionadas;
       
             ConfigGlobal.conexion.GuardarProducto(producto);
             LimpiarForm();

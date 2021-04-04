@@ -65,7 +65,6 @@
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(125, 33);
             this.unidades_tb.TabIndex = 2;
-            this.unidades_tb.Text = "0";
             this.unidades_tb.TextChanged += new System.EventHandler(this.unidades_tb_TextChanged);
             // 
             // inversion_total_label
@@ -83,7 +82,6 @@
             this.inversion_total_tb.Name = "inversion_total_tb";
             this.inversion_total_tb.Size = new System.Drawing.Size(127, 33);
             this.inversion_total_tb.TabIndex = 4;
-            this.inversion_total_tb.Text = "0";
             this.inversion_total_tb.TextChanged += new System.EventHandler(this.inversion_total_tb_TextChanged);
             // 
             // inversion_unidad_label
@@ -166,7 +164,6 @@
             this.precio_venta_defecto_tb.Name = "precio_venta_defecto_tb";
             this.precio_venta_defecto_tb.Size = new System.Drawing.Size(217, 33);
             this.precio_venta_defecto_tb.TabIndex = 8;
-            this.precio_venta_defecto_tb.Text = "0";
             // 
             // precio_venta_defecto_label
             // 
