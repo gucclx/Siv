@@ -18,5 +18,7 @@ namespace SivBiblioteca.AccesoDatos
         ProductoModelo CargarProducto_PorId(int id);
         void GuardarVentas(List<VentaModelo> ventas);
         int UnidadesExistentesProducto(int productoId);
+        void GuardarCliente(ClienteModelo cliente);
+        List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
     }
 }

@@ -81,7 +81,15 @@ namespace SivUI
 
         private void crear_categorias_button_Click(object sender, EventArgs e)
         {
-            ConfigGlobal.conexion.GuardarCategorias(categoriasSeleccionadas);
+            try
+            {
+                ConfigGlobal.conexion.GuardarCategorias(categoriasSeleccionadas);              
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             formSolicitante.CategoriaCreada(categoriasSeleccionadas);
             this.Close();
         }

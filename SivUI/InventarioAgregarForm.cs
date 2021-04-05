@@ -141,8 +141,17 @@ namespace SivUI
             producto.PrecioVenta = decimal.Parse(precio_venta_defecto_tb.Text);
             producto.Descripcion = descripcion_unidad_tb.Text.Trim();
             producto.Categorias = categoriasSeleccionadas;
-      
-            ConfigGlobal.conexion.GuardarProducto(producto);
+                  
+            try
+            {
+                ConfigGlobal.conexion.GuardarProducto(producto);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             LimpiarForm();
             ActualizarUltimoProductoId();
             MessageBox.Show($"ID del producto: {producto.Id}", "Producto agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -11,9 +11,10 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class VenderForm : Form
+    public partial class VenderForm : Form, ISolicitudCliente
     {
         BindingSource ventas = new BindingSource();
+        ClienteModelo cliente;
         public VenderForm()
         {
             InitializeComponent();
@@ -49,8 +50,8 @@ namespace SivUI
             totalVentaColumna.ReadOnly = true;
 
             ventas_dtgv.Columns.Add(idProductoColumna);
-            ventas_dtgv.Columns.Add(precioVentaProductoColumna);
             ventas_dtgv.Columns.Add(descripcionProductoColumna);
+            ventas_dtgv.Columns.Add(precioVentaProductoColumna);            
             ventas_dtgv.Columns.Add(unidadesColumna);
             ventas_dtgv.Columns.Add(totalVentaColumna);
 
@@ -124,8 +125,24 @@ namespace SivUI
                 return;
             }
 
-            ConfigGlobal.conexion.GuardarVentas(listaVentas);
+            foreach (VentaModelo venta in ventas)
+            {
+                venta.Comentario = comentario_tb.Text.Trim();
+                venta.Cliente = cliente;
+            }
+
+            try
+            {
+                ConfigGlobal.conexion.GuardarVentas(listaVentas);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             MessageBox.Show("Acción completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            LimpiarForm();
         }
 
         private void ventas_dtgv_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -167,16 +184,7 @@ namespace SivUI
                 CalcularTotal();          
             }
         }
-
-        private void limpiar_button_Click(object sender, EventArgs e)
-        {
-            producto_id_tb.Text = "";
-            producto_id_tb.Focus();
-            unidades_tb.Text = "";
-            ventas.DataSource = null;
-            ventas.DataSource = typeof(VentaModelo);
-        }
-
+      
         private void remover_venta_button_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow r in ventas_dtgv.SelectedRows)
@@ -184,5 +192,29 @@ namespace SivUI
                 ventas_dtgv.Rows.RemoveAt(r.Index);
             }
         }
+
+        private void buscar_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new BuscarCliente(this);
+            frm.Show();
+        }
+
+        private void LimpiarForm()
+        {
+            producto_id_tb.Text = "";
+            producto_id_tb.Focus();
+            unidades_tb.Text = "";
+            ventas.DataSource = null;
+            ventas.DataSource = typeof(VentaModelo);
+            cliente = null;
+            cliente_tb.Clear();
+        }
+
+        public void BusquedaClienteLista(ClienteModelo cliente)
+        {
+            this.cliente = cliente;
+            cliente_tb.Text = this.cliente.NombreCompleto;            
+        }
+      
     }
 }

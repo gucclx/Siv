@@ -37,8 +37,12 @@
             this.vender_button = new System.Windows.Forms.Button();
             this.unidades_label = new System.Windows.Forms.Label();
             this.unidades_tb = new System.Windows.Forms.TextBox();
-            this.limpiar_button = new System.Windows.Forms.Button();
             this.remover_venta_button = new System.Windows.Forms.Button();
+            this.cliente_tb = new System.Windows.Forms.TextBox();
+            this.cliente_label = new System.Windows.Forms.Label();
+            this.buscar_linklabel = new System.Windows.Forms.LinkLabel();
+            this.comentario_tb = new System.Windows.Forms.TextBox();
+            this.comentario_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,13 +81,13 @@
             this.ventas_dtgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ventas_dtgv.Location = new System.Drawing.Point(10, 77);
             this.ventas_dtgv.Name = "ventas_dtgv";
-            this.ventas_dtgv.Size = new System.Drawing.Size(792, 328);
+            this.ventas_dtgv.Size = new System.Drawing.Size(762, 289);
             this.ventas_dtgv.TabIndex = 12;
             this.ventas_dtgv.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ventas_dtgv_CellValidating);
             // 
             // total_tb
             // 
-            this.total_tb.Location = new System.Drawing.Point(652, 411);
+            this.total_tb.Location = new System.Drawing.Point(622, 372);
             this.total_tb.Name = "total_tb";
             this.total_tb.ReadOnly = true;
             this.total_tb.Size = new System.Drawing.Size(150, 33);
@@ -93,7 +97,7 @@
             // total_label
             // 
             this.total_label.AutoSize = true;
-            this.total_label.Location = new System.Drawing.Point(594, 414);
+            this.total_label.Location = new System.Drawing.Point(564, 375);
             this.total_label.Name = "total_label";
             this.total_label.Size = new System.Drawing.Size(52, 25);
             this.total_label.TabIndex = 13;
@@ -102,7 +106,7 @@
             // vender_button
             // 
             this.vender_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.vender_button.Location = new System.Drawing.Point(677, 512);
+            this.vender_button.Location = new System.Drawing.Point(647, 512);
             this.vender_button.Name = "vender_button";
             this.vender_button.Size = new System.Drawing.Size(125, 37);
             this.vender_button.TabIndex = 5;
@@ -126,36 +130,75 @@
             this.unidades_tb.Size = new System.Drawing.Size(86, 33);
             this.unidades_tb.TabIndex = 3;
             // 
-            // limpiar_button
-            // 
-            this.limpiar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.limpiar_button.Location = new System.Drawing.Point(10, 512);
-            this.limpiar_button.Name = "limpiar_button";
-            this.limpiar_button.Size = new System.Drawing.Size(125, 37);
-            this.limpiar_button.TabIndex = 15;
-            this.limpiar_button.Text = "Limpiar";
-            this.limpiar_button.UseVisualStyleBackColor = true;
-            this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
-            // 
             // remover_venta_button
             // 
             this.remover_venta_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.remover_venta_button.Location = new System.Drawing.Point(12, 414);
+            this.remover_venta_button.Location = new System.Drawing.Point(588, 34);
             this.remover_venta_button.Name = "remover_venta_button";
-            this.remover_venta_button.Size = new System.Drawing.Size(203, 37);
+            this.remover_venta_button.Size = new System.Drawing.Size(184, 37);
             this.remover_venta_button.TabIndex = 16;
             this.remover_venta_button.Text = "Remover selección";
             this.remover_venta_button.UseVisualStyleBackColor = true;
             this.remover_venta_button.Click += new System.EventHandler(this.remover_venta_button_Click);
+            // 
+            // cliente_tb
+            // 
+            this.cliente_tb.Location = new System.Drawing.Point(87, 372);
+            this.cliente_tb.Name = "cliente_tb";
+            this.cliente_tb.ReadOnly = true;
+            this.cliente_tb.Size = new System.Drawing.Size(182, 33);
+            this.cliente_tb.TabIndex = 18;
+            this.cliente_tb.TabStop = false;
+            // 
+            // cliente_label
+            // 
+            this.cliente_label.AutoSize = true;
+            this.cliente_label.Location = new System.Drawing.Point(10, 375);
+            this.cliente_label.Name = "cliente_label";
+            this.cliente_label.Size = new System.Drawing.Size(71, 25);
+            this.cliente_label.TabIndex = 17;
+            this.cliente_label.Text = "Cliente";
+            // 
+            // buscar_linklabel
+            // 
+            this.buscar_linklabel.AutoSize = true;
+            this.buscar_linklabel.Location = new System.Drawing.Point(270, 375);
+            this.buscar_linklabel.Name = "buscar_linklabel";
+            this.buscar_linklabel.Size = new System.Drawing.Size(68, 25);
+            this.buscar_linklabel.TabIndex = 19;
+            this.buscar_linklabel.TabStop = true;
+            this.buscar_linklabel.Text = "Buscar";
+            this.buscar_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_linklabel_LinkClicked);
+            // 
+            // comentario_tb
+            // 
+            this.comentario_tb.Location = new System.Drawing.Point(15, 474);
+            this.comentario_tb.Multiline = true;
+            this.comentario_tb.Name = "comentario_tb";
+            this.comentario_tb.Size = new System.Drawing.Size(323, 75);
+            this.comentario_tb.TabIndex = 21;
+            // 
+            // comentario_label
+            // 
+            this.comentario_label.AutoSize = true;
+            this.comentario_label.Location = new System.Drawing.Point(12, 446);
+            this.comentario_label.Name = "comentario_label";
+            this.comentario_label.Size = new System.Drawing.Size(111, 25);
+            this.comentario_label.TabIndex = 20;
+            this.comentario_label.Text = "Comentario";
             // 
             // VenderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(814, 561);
+            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.comentario_tb);
+            this.Controls.Add(this.comentario_label);
+            this.Controls.Add(this.buscar_linklabel);
+            this.Controls.Add(this.cliente_tb);
+            this.Controls.Add(this.cliente_label);
             this.Controls.Add(this.remover_venta_button);
-            this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.unidades_tb);
             this.Controls.Add(this.unidades_label);
             this.Controls.Add(this.vender_button);
@@ -189,7 +232,11 @@
         private System.Windows.Forms.Button vender_button;
         private System.Windows.Forms.Label unidades_label;
         private System.Windows.Forms.TextBox unidades_tb;
-        private System.Windows.Forms.Button limpiar_button;
         private System.Windows.Forms.Button remover_venta_button;
+        private System.Windows.Forms.TextBox cliente_tb;
+        private System.Windows.Forms.Label cliente_label;
+        private System.Windows.Forms.LinkLabel buscar_linklabel;
+        private System.Windows.Forms.TextBox comentario_tb;
+        private System.Windows.Forms.Label comentario_label;
     }
 }

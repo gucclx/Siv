@@ -80,7 +80,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
                 {
-                    throw new Exception("Categoria sin nombre.");
+                    throw new ArgumentException("Categoria sin nombre.");
                 }
             }
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
@@ -117,13 +117,13 @@ namespace SivBiblioteca.AccesoDatos
         {
             if (Ayudantes.EsProductoValido(producto) == false)
             {
-                throw new Exception("Producto con campos invalidos.");
+                throw new ArgumentException("Producto con campos invalidos.");
             }
             foreach (var categoria in producto.Categorias)
             {
                 if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
                 {
-                    throw new Exception("Categoria sin nombre.");
+                    throw new ArgumentException("Categoria sin nombre.");
                 }
             }
 
@@ -180,7 +180,10 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> El producto. Si no se encontro se retorna un producto null. </returns>
         public ProductoModelo CargarProducto_PorId(int id)
         {
-            ProductoModelo p;
+            ProductoModelo p = null;
+
+            if (id < 1) { return p; }
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"select Id, PrecioVenta, PrecioInversion, Descripcion, Unidades, datetime(FechaCreacion, 'unixepoch') as FechaCreacion  
@@ -199,7 +202,6 @@ namespace SivBiblioteca.AccesoDatos
             return p;
         }
 
-        /// TODO - Restar unidades del producto
         /// <summary>
         /// Guarda una lista de ventas a la base de datos.
         /// </summary>
@@ -246,8 +248,8 @@ namespace SivBiblioteca.AccesoDatos
                                 ClienteId = venta.ClienteId
                             }
                         );
-                        conexion.Execute("update Productos set Unidades = Unidades - @UnidadesVendidas", 
-                            new { UnidadesVendidas = venta.Unidades }
+                        conexion.Execute("update Productos set Unidades = Unidades - @UnidadesVendidas where Id = @Id", 
+                            new { UnidadesVendidas = venta.Unidades, Id = venta.Producto.Id }
                         );
                     }
                     transaccion.Commit();
@@ -257,7 +259,7 @@ namespace SivBiblioteca.AccesoDatos
 
         public int UnidadesExistentesProducto(int productoId)
         {
-            int unidades = -1;
+            int unidades = 0;
             if (productoId < 1) { return unidades; }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
@@ -266,6 +268,37 @@ namespace SivBiblioteca.AccesoDatos
                 unidades = conexion.ExecuteScalar<int>(q, new { Id = productoId });
             }
             return unidades;
-        }   
+        }
+
+        public void GuardarCliente(ClienteModelo cliente)
+        {
+            if (string.IsNullOrEmpty(cliente.Nombre))
+            {
+                throw new ArgumentException("Nombre del cliente vacio.");
+            }
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
+                conexion.Execute(q, cliente);
+            }
+        }
+
+        /// <summary>
+        /// Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
+        /// </summary>
+        /// <param name="nombre"> La string a buscar. </param>
+        /// <returns></returns>
+        public List<ClienteModelo> BuscarCliente_PorNombre(string nombre)
+        {
+            var clientes = new List<ClienteModelo>();
+            if (string.IsNullOrEmpty(nombre)) { return clientes; }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre";
+                clientes = conexion.Query<ClienteModelo>(q, new { Nombre = '%' + nombre + '%'}).ToList();
+            }
+            return clientes;
+        }
     }         
 }

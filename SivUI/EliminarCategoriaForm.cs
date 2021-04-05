@@ -44,7 +44,16 @@ namespace SivUI
                 return;
             }
 
-            ConfigGlobal.conexion.EliminarCategorias(categorias);
+            try
+            {
+                ConfigGlobal.conexion.EliminarCategorias(categorias);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             MessageBox.Show("Categorias eliminadas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             foreach (var categoria in categorias)

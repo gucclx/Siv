@@ -12,19 +12,19 @@ namespace SivBiblioteca
         public static bool EsEnteroPositivo(string x)
         {
             x = x.Trim();
-            if (string.IsNullOrEmpty(x)) { return false;  }
+            if (string.IsNullOrEmpty(x)) { return false; }
 
             int intX = 0;
             bool xEsEntero = int.TryParse(x, out intX);
 
             return xEsEntero && (intX > 0);
-            
+
         }
 
         public static bool EsDecimalNoNegativo(string x)
         {
             x = x.Trim();
-            if (string.IsNullOrEmpty(x)) { return false;  }
+            if (string.IsNullOrEmpty(x)) { return false; }
 
             decimal decimalX = 0;
             bool xEsDecimal = decimal.TryParse(x, out decimalX);
