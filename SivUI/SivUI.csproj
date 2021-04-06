@@ -51,11 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuscarCliente.cs">
+    <Compile Include="BuscarClienteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BuscarCliente.Designer.cs">
-      <DependentUpon>BuscarCliente.cs</DependentUpon>
+    <Compile Include="BuscarClienteForm.Designer.cs">
+      <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CrearCategoriaForm.cs">
       <SubType>Form</SubType>
@@ -75,6 +75,18 @@
     <Compile Include="EliminarCategoriaForm.Designer.cs">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GestionarVentasForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionarVentasForm.Designer.cs">
+      <DependentUpon>GestionarVentasForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InicioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InicioForm.Designer.cs">
+      <DependentUpon>InicioForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InventarioAgregarForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,8 +103,8 @@
     <Compile Include="VenderForm.Designer.cs">
       <DependentUpon>VenderForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="BuscarCliente.resx">
-      <DependentUpon>BuscarCliente.cs</DependentUpon>
+    <EmbeddedResource Include="BuscarClienteForm.resx">
+      <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrearCategoriaForm.resx">
       <DependentUpon>CrearCategoriaForm.cs</DependentUpon>
@@ -102,6 +114,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EliminarCategoriaForm.resx">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionarVentasForm.resx">
+      <DependentUpon>GestionarVentasForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InicioForm.resx">
+      <DependentUpon>InicioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InventarioAgregarForm.resx">
       <DependentUpon>InventarioAgregarForm.cs</DependentUpon>

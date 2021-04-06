@@ -57,7 +57,7 @@ namespace SivUI
         private void aceptar_button_Click(object sender, EventArgs e)
         {
             var clienteSeleccionado = (ClienteModelo)resultados_listbox.SelectedItem;
-            solicitante.BusquedaClienteLista(clienteSeleccionado);
+            solicitante.ClienteListo(clienteSeleccionado);
             this.Close();
         }
     }

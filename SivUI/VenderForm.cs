@@ -111,6 +111,7 @@ namespace SivUI
             var venta = new VentaModelo();
             venta.Unidades = unidadesAVender;
             venta.Producto = producto;
+            venta.PrecioVentaUnidad = producto.PrecioVenta;
          
             ventas.Add(venta);            
             CalcularTotal();
@@ -148,7 +149,7 @@ namespace SivUI
         private void ventas_dtgv_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             // columna precio de venta
-            if (e.ColumnIndex == 1)
+            if (e.ColumnIndex == 2)
             {
                 if (Ayudantes.EsDecimalNoNegativo(e.FormattedValue.ToString()) == false)
                 {
@@ -157,7 +158,7 @@ namespace SivUI
                     return;
                 }
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
-                venta.Producto.PrecioVenta = decimal.Parse(e.FormattedValue.ToString().Trim());
+                venta.PrecioVentaUnidad = decimal.Parse(e.FormattedValue.ToString().Trim());
                 CalcularTotal();
             }
             // columna unidades
@@ -195,7 +196,7 @@ namespace SivUI
 
         private void buscar_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var frm = new BuscarCliente(this);
+            var frm = new BuscarClienteForm(this);
             frm.Show();
         }
 
@@ -204,17 +205,29 @@ namespace SivUI
             producto_id_tb.Text = "";
             producto_id_tb.Focus();
             unidades_tb.Text = "";
+            comentario_tb.Clear();
             ventas.DataSource = null;
             ventas.DataSource = typeof(VentaModelo);
             cliente = null;
             cliente_tb.Clear();
         }
 
-        public void BusquedaClienteLista(ClienteModelo cliente)
+        public void ClienteListo(ClienteModelo cliente)
         {
             this.cliente = cliente;
             cliente_tb.Text = this.cliente.NombreCompleto;            
         }
-      
+
+        private void crear_nuevo_cliente_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new CrearClienteForm(this);
+            frm.Show();
+        }
+
+        private void limpiar_cliente_button_Click(object sender, EventArgs e)
+        {
+            cliente = null;
+            cliente_tb.Clear();
+        }
     }
 }

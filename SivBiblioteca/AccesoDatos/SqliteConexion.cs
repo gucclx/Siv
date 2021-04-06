@@ -131,7 +131,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 var q = @"insert into Productos 
                             (PrecioVenta, PrecioInversion, Unidades, Descripcion, FechaCreacion) 
-                            values (@PrecioVenta, @PrecioInversion, @Unidades, @Descripcion, strftime('%s', 'now', 'localtime'))";
+                            values (@PrecioVenta, @PrecioInversion, @Unidades, @Descripcion, strftime('%s', 'now'))";
 
                 conexion.Execute(q, 
                     new
@@ -186,18 +186,17 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"select Id, PrecioVenta, PrecioInversion, Descripcion, Unidades, datetime(FechaCreacion, 'unixepoch') as FechaCreacion  
+                // factor de conversion para obtener la representacion original de los precios
+                string fc = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
+                var q = $@"select Id, (PrecioVenta / {fc}) as 'PrecioVenta', PrecioInversion / {fc} as 'PrecioInversion', Descripcion, Unidades, datetime(FechaCreacion, 'unixepoch', 'localtime') as FechaCreacion  
                         from Productos 
                         where Id = @Id";
+
                 p = conexion.QuerySingleOrDefault<ProductoModelo>(q, new { Id = id });
+                
             }
 
             if (p == null) { return p; }
-
-            // representacion original de los precios
-            decimal diezALaP = Convert.ToDecimal(Math.Pow(10, MonedaPrecision));
-            p.PrecioVenta = p.PrecioVenta / diezALaP;
-            p.PrecioInversion = p.PrecioInversion / diezALaP;
 
             return p;
         }
@@ -230,8 +229,8 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"insert into Ventas (ProductoId, Unidades, Total, Comentario, ClienteId, Fecha)
-                          values (@ProductoId, @Unidades, @Total, @Comentario, @ClienteId, strftime('%s', 'now', 'localtime'))";
+                var q = @"insert into Ventas (ProductoId, Unidades, PrecioVentaUnidad, Comentario, ClienteId, Fecha)
+                          values (@ProductoId, @Unidades, @PrecioVentaUnidad, @Comentario, @ClienteId, strftime('%s', 'now'))";
 
                 conexion.Open();
                 using (var transaccion = conexion.BeginTransaction())
@@ -243,7 +242,7 @@ namespace SivBiblioteca.AccesoDatos
                             {
                                 ProductoId = venta.Producto.Id,
                                 Unidades = venta.Unidades,
-                                Total = ConvertirMonedaARepresentacionInterna(venta.Total),
+                                PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(venta.PrecioVentaUnidad),
                                 Comentario = venta.Comentario,
                                 ClienteId = venta.ClienteId
                             }
@@ -280,6 +279,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
                 conexion.Execute(q, cliente);
+                cliente.Id = conexion.ExecuteScalar<int>("select max(Id) from clientes;");
             }
         }
 
@@ -299,6 +299,53 @@ namespace SivBiblioteca.AccesoDatos
                 clientes = conexion.Query<ClienteModelo>(q, new { Nombre = '%' + nombre + '%'}).ToList();
             }
             return clientes;
+        }
+
+        public IEnumerable<dynamic> ReporteVentas(DateTime fechaInicial, DateTime fechaFinal, bool filtrarPorFechas)
+        {
+            var parametros = new DynamicParameters();
+            long f1 = 0;
+            long f2 = 0;
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                // factor de conversion para obtener la representacion original de los precios
+                string fc = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
+                parametros.Add("@FC", fc);
+
+                var q = @"SELECT   Productos.id AS 'ID lote', 
+                                    Productos.Descripcion AS 'Descripción Unidad', 
+                                    GROUP_CONCAT(Categorias.Nombre) AS 'Categorias', 
+                                    PrecioInversion / @FC  AS 'Inversión (C/U)', 
+                                    Ventas.PrecioVentaUnidad / @FC AS 'Precio Venta (C/U)', 
+                                    Ventas.Unidades AS 'Unidades Vendidas', 
+                                    (Productos.PrecioInversion * Ventas.Unidades) / @FC AS 'Inversión Venta', 
+                                    (Ventas.PrecioVentaUnidad * Ventas.Unidades) / @FC AS 'Ingreso Venta', 
+                                    ((Ventas.PrecioVentaUnidad * Ventas.Unidades) - (Productos.PrecioInversion * Ventas.Unidades)) / @FC as 'Ganancia Venta', 
+                                    DATETIME(Ventas.Fecha, 'unixepoch', 'localtime') AS 'Fecha venta', 
+                                    Ventas.Comentario as 'Comentario Venta', 
+                                    Clientes.Nombre || ' ' || COALESCE(clientes.apellido, '') AS 'Cliente',
+                                    Clientes.NumeroContacto AS 'Número Contacto Cliente'
+
+                            FROM Ventas
+                            JOIN productos on productos.id = ventas.ProductoId
+                            LEFT JOIN ProductoCategoria on ProductoCategoria.ProductoId = Productos.Id
+                            LEFT JOIN categorias on categorias.id = ProductoCategoria.CategoriaId
+                            LEFT JOIN Clientes on Clientes.Id = Ventas.ClienteId";
+
+                if (filtrarPorFechas)
+                {
+                    f1 = ((DateTimeOffset)fechaInicial).ToUnixTimeSeconds();
+                    f2 = ((DateTimeOffset)fechaFinal).ToUnixTimeSeconds();
+                    q += " WHERE fecha BETWEEN @F1 AND @F2";
+                    parametros.Add("@F1", f1);
+                    parametros.Add("@F2", f2);
+                }
+
+                q += " GROUP BY Ventas.Id";
+
+                return conexion.Query(q, parametros);
+            }
         }
     }         
 }

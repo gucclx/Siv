@@ -15,7 +15,8 @@ namespace SivBiblioteca.Modelos
         public decimal ProductoPrecioVenta { get { return Producto.PrecioVenta; } set { Producto.PrecioVenta = value; } }
         public string ProductoDescripcion { get { return Producto.Descripcion;  } }
         public int Unidades { get; set; }
-        public decimal Total { get { return Producto.PrecioVenta * Unidades;  } }
+        public decimal PrecioVentaUnidad { get; set; }
+        public decimal Total { get { return PrecioVentaUnidad * Unidades;  } }
         public ClienteModelo Cliente { get; set; }
         public string Comentario { get; set; }
         public int? ClienteId

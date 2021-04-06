@@ -9,6 +9,6 @@ namespace SivUI
 {
     public interface ISolicitudCliente
     {
-        void BusquedaClienteLista(ClienteModelo cliente);
+        void ClienteListo(ClienteModelo cliente);
     }
 }

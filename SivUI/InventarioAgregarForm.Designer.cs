@@ -189,7 +189,7 @@
             // agregar_al_inventario_button
             // 
             this.agregar_al_inventario_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_al_inventario_button.Location = new System.Drawing.Point(565, 512);
+            this.agregar_al_inventario_button.Location = new System.Drawing.Point(536, 512);
             this.agregar_al_inventario_button.Name = "agregar_al_inventario_button";
             this.agregar_al_inventario_button.Size = new System.Drawing.Size(207, 37);
             this.agregar_al_inventario_button.TabIndex = 17;

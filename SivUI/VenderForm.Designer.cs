@@ -43,6 +43,9 @@
             this.buscar_linklabel = new System.Windows.Forms.LinkLabel();
             this.comentario_tb = new System.Windows.Forms.TextBox();
             this.comentario_label = new System.Windows.Forms.Label();
+            this.o_label = new System.Windows.Forms.Label();
+            this.crear_nuevo_cliente_label = new System.Windows.Forms.LinkLabel();
+            this.limpiar_cliente_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +53,7 @@
             // 
             this.producto_id_tb.Location = new System.Drawing.Point(10, 37);
             this.producto_id_tb.Name = "producto_id_tb";
-            this.producto_id_tb.Size = new System.Drawing.Size(167, 33);
+            this.producto_id_tb.Size = new System.Drawing.Size(136, 33);
             this.producto_id_tb.TabIndex = 1;
             // 
             // id_producto_label
@@ -65,9 +68,9 @@
             // agregar_producto_button
             // 
             this.agregar_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_producto_button.Location = new System.Drawing.Point(275, 34);
+            this.agregar_producto_button.Location = new System.Drawing.Point(299, 34);
             this.agregar_producto_button.Name = "agregar_producto_button";
-            this.agregar_producto_button.Size = new System.Drawing.Size(100, 37);
+            this.agregar_producto_button.Size = new System.Drawing.Size(101, 37);
             this.agregar_producto_button.TabIndex = 4;
             this.agregar_producto_button.Text = "Agregar";
             this.agregar_producto_button.UseVisualStyleBackColor = true;
@@ -87,17 +90,17 @@
             // 
             // total_tb
             // 
-            this.total_tb.Location = new System.Drawing.Point(622, 372);
+            this.total_tb.Location = new System.Drawing.Point(588, 400);
             this.total_tb.Name = "total_tb";
             this.total_tb.ReadOnly = true;
-            this.total_tb.Size = new System.Drawing.Size(150, 33);
+            this.total_tb.Size = new System.Drawing.Size(184, 33);
             this.total_tb.TabIndex = 14;
             this.total_tb.Text = "0";
             // 
             // total_label
             // 
             this.total_label.AutoSize = true;
-            this.total_label.Location = new System.Drawing.Point(564, 375);
+            this.total_label.Location = new System.Drawing.Point(583, 375);
             this.total_label.Name = "total_label";
             this.total_label.Size = new System.Drawing.Size(52, 25);
             this.total_label.TabIndex = 13;
@@ -117,7 +120,7 @@
             // unidades_label
             // 
             this.unidades_label.AutoSize = true;
-            this.unidades_label.Location = new System.Drawing.Point(178, 9);
+            this.unidades_label.Location = new System.Drawing.Point(147, 9);
             this.unidades_label.Name = "unidades_label";
             this.unidades_label.Size = new System.Drawing.Size(91, 25);
             this.unidades_label.TabIndex = 2;
@@ -125,9 +128,9 @@
             // 
             // unidades_tb
             // 
-            this.unidades_tb.Location = new System.Drawing.Point(183, 37);
+            this.unidades_tb.Location = new System.Drawing.Point(152, 37);
             this.unidades_tb.Name = "unidades_tb";
-            this.unidades_tb.Size = new System.Drawing.Size(86, 33);
+            this.unidades_tb.Size = new System.Drawing.Size(141, 33);
             this.unidades_tb.TabIndex = 3;
             // 
             // remover_venta_button
@@ -143,10 +146,10 @@
             // 
             // cliente_tb
             // 
-            this.cliente_tb.Location = new System.Drawing.Point(87, 372);
+            this.cliente_tb.Location = new System.Drawing.Point(17, 403);
             this.cliente_tb.Name = "cliente_tb";
             this.cliente_tb.ReadOnly = true;
-            this.cliente_tb.Size = new System.Drawing.Size(182, 33);
+            this.cliente_tb.Size = new System.Drawing.Size(276, 33);
             this.cliente_tb.TabIndex = 18;
             this.cliente_tb.TabStop = false;
             // 
@@ -162,7 +165,7 @@
             // buscar_linklabel
             // 
             this.buscar_linklabel.AutoSize = true;
-            this.buscar_linklabel.Location = new System.Drawing.Point(270, 375);
+            this.buscar_linklabel.Location = new System.Drawing.Point(78, 375);
             this.buscar_linklabel.Name = "buscar_linklabel";
             this.buscar_linklabel.Size = new System.Drawing.Size(68, 25);
             this.buscar_linklabel.TabIndex = 19;
@@ -175,7 +178,7 @@
             this.comentario_tb.Location = new System.Drawing.Point(15, 474);
             this.comentario_tb.Multiline = true;
             this.comentario_tb.Name = "comentario_tb";
-            this.comentario_tb.Size = new System.Drawing.Size(323, 75);
+            this.comentario_tb.Size = new System.Drawing.Size(385, 75);
             this.comentario_tb.TabIndex = 21;
             // 
             // comentario_label
@@ -187,12 +190,46 @@
             this.comentario_label.TabIndex = 20;
             this.comentario_label.Text = "Comentario";
             // 
+            // o_label
+            // 
+            this.o_label.AutoSize = true;
+            this.o_label.Location = new System.Drawing.Point(152, 375);
+            this.o_label.Name = "o_label";
+            this.o_label.Size = new System.Drawing.Size(20, 25);
+            this.o_label.TabIndex = 22;
+            this.o_label.Text = "-";
+            // 
+            // crear_nuevo_cliente_label
+            // 
+            this.crear_nuevo_cliente_label.AutoSize = true;
+            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(178, 375);
+            this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
+            this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(115, 25);
+            this.crear_nuevo_cliente_label.TabIndex = 23;
+            this.crear_nuevo_cliente_label.TabStop = true;
+            this.crear_nuevo_cliente_label.Text = "Crear nuevo";
+            this.crear_nuevo_cliente_label.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.crear_nuevo_cliente_label_LinkClicked);
+            // 
+            // limpiar_cliente_button
+            // 
+            this.limpiar_cliente_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.limpiar_cliente_button.Location = new System.Drawing.Point(299, 400);
+            this.limpiar_cliente_button.Name = "limpiar_cliente_button";
+            this.limpiar_cliente_button.Size = new System.Drawing.Size(101, 37);
+            this.limpiar_cliente_button.TabIndex = 24;
+            this.limpiar_cliente_button.Text = "Limpiar";
+            this.limpiar_cliente_button.UseVisualStyleBackColor = true;
+            this.limpiar_cliente_button.Click += new System.EventHandler(this.limpiar_cliente_button_Click);
+            // 
             // VenderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.limpiar_cliente_button);
+            this.Controls.Add(this.crear_nuevo_cliente_label);
+            this.Controls.Add(this.o_label);
             this.Controls.Add(this.comentario_tb);
             this.Controls.Add(this.comentario_label);
             this.Controls.Add(this.buscar_linklabel);
@@ -238,5 +275,8 @@
         private System.Windows.Forms.LinkLabel buscar_linklabel;
         private System.Windows.Forms.TextBox comentario_tb;
         private System.Windows.Forms.Label comentario_label;
+        private System.Windows.Forms.Label o_label;
+        private System.Windows.Forms.LinkLabel crear_nuevo_cliente_label;
+        private System.Windows.Forms.Button limpiar_cliente_button;
     }
 }

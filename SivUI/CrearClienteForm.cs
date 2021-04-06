@@ -14,9 +14,11 @@ namespace SivUI
 {
     public partial class CrearClienteForm : Form
     {
-        public CrearClienteForm()
+        ISolicitudCliente solicitante;
+        public CrearClienteForm(ISolicitudCliente solicitante)
         {
             InitializeComponent();
+            this.solicitante = solicitante;
         }
 
         private bool ValidarForm()
@@ -52,7 +54,9 @@ namespace SivUI
             nombre_cliente_tb.Clear();
             nombre_cliente_tb.Focus();
             apellido_cliente_tb.Clear();
-            numero_contacto_cliente_tb.Clear();           
+            numero_contacto_cliente_tb.Clear();
+            solicitante.ClienteListo(cliente);
+            this.Close();
         }
     }
 }

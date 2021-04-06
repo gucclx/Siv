@@ -20,5 +20,6 @@ namespace SivBiblioteca.AccesoDatos
         int UnidadesExistentesProducto(int productoId);
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
+        IEnumerable<dynamic> ReporteVentas(DateTime fechaIncial, DateTime fechaFinal, bool filtrarPorFechas = false);
     }
 }
