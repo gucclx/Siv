@@ -14,12 +14,16 @@ namespace SivBiblioteca.AccesoDatos
         bool CategoriaExiste(string nombreCategoria);
         void EliminarCategorias(List<CategoriaModelo> categorias);
         void GuardarProducto(ProductoModelo producto);
-        int CargarUltimoProductoId();
-        ProductoModelo CargarProducto_PorId(int id);
+        int CargarUltimoLoteId();
+        LoteModelo CargarLote_PorId(int id);
         void GuardarVentas(List<VentaModelo> ventas);
-        int UnidadesExistentesProducto(int productoId);
+        int UnidadesExistentesLote(int productoId);
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
-        IEnumerable<dynamic> ReporteVentas(DateTime fechaIncial, DateTime fechaFinal, bool filtrarPorFechas = false);
+        List<ReporteVenta> ReporteVentas(ReporteFiltro filtro);
+        List<ProductoModelo> CargarProductos();
+        void GuardarLote(LoteModelo lote);
+        bool ProductoExiste(string nombre);
+        List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre);
     }
 }

@@ -11,21 +11,14 @@ using SivBiblioteca.Modelos;
 
 namespace SivUI
 {
-    public partial class InicioForm : Form, ISolicitudCategoria
+    public partial class InicioForm : Form, ISolicitudCategoria, ISolicitudProducto
     {
         public InicioForm()
         {
             InitializeComponent();
         }
 
-        private void agregarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var frm = new InventarioAgregarForm();
-            frm.MdiParent = this;
-            frm.Show();
-        }
-
-        private void agregarToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void agregar_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new InventarioAgregarForm();
             this.Hide();
@@ -49,17 +42,37 @@ namespace SivUI
             this.Show();
         }
 
-        public void CategoriaCreada(List<CategoriaModelo> categorias)
-        {
-            
-        }
-
-        private void gestionarToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void gestionar_ventas_ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var frm = new GestionarVentasForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
+        }
+
+        private void crear_producto_ToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var frm = new CrearProductoForm(this);
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void gestionar_ventas_ToolStripMenuItem1_Click_1(object sender, EventArgs e)
+        {
+            var frm = new GestionarVentasForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        public void ProductoListo(ProductoModelo producto)
+        {
+
+        }
+        public void TareaCompleta(List<CategoriaModelo> categorias)
+        {
+
         }
     }
 }

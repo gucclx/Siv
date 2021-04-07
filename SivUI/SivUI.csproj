@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuscarCategoriasForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuscarCategoriasForm.Designer.cs">
+      <DependentUpon>BuscarCategoriasForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BuscarClienteForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,18 @@
     </Compile>
     <Compile Include="CrearClienteForm.Designer.cs">
       <DependentUpon>CrearClienteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearFiltroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearFiltroForm.Designer.cs">
+      <DependentUpon>CrearFiltroForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearProductoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearProductoForm.Designer.cs">
+      <DependentUpon>CrearProductoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EliminarCategoriaForm.cs">
       <SubType>Form</SubType>
@@ -95,6 +113,8 @@
     </Compile>
     <Compile Include="ISolicitudCategoria.cs" />
     <Compile Include="ISolicitudCliente.cs" />
+    <Compile Include="ISolicitudFiltro.cs" />
+    <Compile Include="ISolicitudProducto.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VenderForm.cs">
@@ -103,6 +123,9 @@
     <Compile Include="VenderForm.Designer.cs">
       <DependentUpon>VenderForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BuscarCategoriasForm.resx">
+      <DependentUpon>BuscarCategoriasForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BuscarClienteForm.resx">
       <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -111,6 +134,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrearClienteForm.resx">
       <DependentUpon>CrearClienteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrearFiltroForm.resx">
+      <DependentUpon>CrearFiltroForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrearProductoForm.resx">
+      <DependentUpon>CrearProductoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EliminarCategoriaForm.resx">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>

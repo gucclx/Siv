@@ -90,18 +90,15 @@ namespace SivUI
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            formSolicitante.CategoriaCreada(categoriasSeleccionadas);
+
+            formSolicitante.TareaCompleta(categoriasSeleccionadas);
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
         private void remover_categoria_button_Click(object sender, EventArgs e)
         {
             var categorias = categorias_listbox.SelectedItems;
-
-            if (categorias.Count == 0)
-            {
-                return;
-            }
 
             foreach (var categoria in categorias)
             {

@@ -10,10 +10,10 @@ namespace SivBiblioteca.Modelos
     {
         public int Id { get; set; }
         public string Fecha { get; set; }
-        public ProductoModelo Producto { get; set; }
-        public int ProductoId { get { return Producto.Id;  } }
-        public decimal ProductoPrecioVenta { get { return Producto.PrecioVenta; } set { Producto.PrecioVenta = value; } }
-        public string ProductoDescripcion { get { return Producto.Descripcion;  } }
+        public LoteModelo Lote { get; set; }
+        public int LoteId { get { return Lote.Id; } }      
+        public string ProductoDescripcion { get { return Lote.Producto.Descripcion;  } }
+        public string ProductoNombre { get { return Lote.Producto.Nombre; } }
         public int Unidades { get; set; }
         public decimal PrecioVentaUnidad { get; set; }
         public decimal Total { get { return PrecioVentaUnidad * Unidades;  } }

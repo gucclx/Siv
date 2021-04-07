@@ -25,19 +25,24 @@ namespace SivUI
            
             // inicializar columnas
 
-            var idProductoColumna = new DataGridViewTextBoxColumn();
-            idProductoColumna.HeaderText = "ID Producto";
-            idProductoColumna.DataPropertyName = nameof(VentaModelo.ProductoId);
-            idProductoColumna.ReadOnly = true;
+            var idLoteColumna = new DataGridViewTextBoxColumn();
+            idLoteColumna.HeaderText = "ID Lote";
+            idLoteColumna.DataPropertyName = nameof(VentaModelo.LoteId);
+            idLoteColumna.ReadOnly = true;
+
+            var nombreProductoColumna = new DataGridViewTextBoxColumn();
+            nombreProductoColumna.HeaderText = "Producto";
+            nombreProductoColumna.DataPropertyName = nameof(VentaModelo.ProductoNombre);
+            nombreProductoColumna.ReadOnly = true;
 
             var descripcionProductoColumna = new DataGridViewTextBoxColumn();
-            descripcionProductoColumna.HeaderText = "Descripción";
+            descripcionProductoColumna.HeaderText = "Descripción Producto";
             descripcionProductoColumna.DataPropertyName = nameof(VentaModelo.ProductoDescripcion);
             descripcionProductoColumna.ReadOnly = true;
 
             var precioVentaProductoColumna = new DataGridViewTextBoxColumn();
             precioVentaProductoColumna.HeaderText = "Precio por unidad";
-            precioVentaProductoColumna.DataPropertyName = nameof(VentaModelo.ProductoPrecioVenta);
+            precioVentaProductoColumna.DataPropertyName = nameof(VentaModelo.PrecioVentaUnidad);
             precioVentaProductoColumna.ReadOnly = false;
 
             var unidadesColumna = new DataGridViewTextBoxColumn();
@@ -49,7 +54,8 @@ namespace SivUI
             totalVentaColumna.DataPropertyName = nameof(VentaModelo.Total);
             totalVentaColumna.ReadOnly = true;
 
-            ventas_dtgv.Columns.Add(idProductoColumna);
+            ventas_dtgv.Columns.Add(idLoteColumna);
+            ventas_dtgv.Columns.Add(nombreProductoColumna);
             ventas_dtgv.Columns.Add(descripcionProductoColumna);
             ventas_dtgv.Columns.Add(precioVentaProductoColumna);            
             ventas_dtgv.Columns.Add(unidadesColumna);
@@ -65,12 +71,12 @@ namespace SivUI
             }
             total_tb.Text = total.ToString();
         }
-        private void agregar_producto_button_Click(object sender, EventArgs e)
+        private void agregar_lote_button_Click(object sender, EventArgs e)
         {
             // validar campos
-            if (Ayudantes.EsEnteroPositivo(producto_id_tb.Text) == false)
+            if (Ayudantes.EsEnteroPositivo(lote_id_tb.Text) == false)
             {
-                MessageBox.Show("ID del producto inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("ID del lote inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -80,40 +86,44 @@ namespace SivUI
                 return;
             }
 
-            // cargar producto y verificar que el producto se haya encontrado
-            var productoId = int.Parse(producto_id_tb.Text.Trim());
-            var producto = ConfigGlobal.conexion.CargarProducto_PorId(productoId);
+            // cargar lote y verificar que el lote se haya encontrado
 
-            if (producto == null)
+            var loteId = int.Parse(lote_id_tb.Text.Trim());
+            var lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
+
+            if (lote == null)
             {
-                MessageBox.Show("El producto no existe.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("El lote no existe.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            // verificar que el producto no exista en la lista
-            var productoExistente = ventas.List.OfType<VentaModelo>().ToList().Find(x => x.ProductoId == productoId);
-            if (productoExistente != null)
+            // verificar que el lote no exista en la lista
+
+            var loteExistente = ventas.List.OfType<VentaModelo>().ToList().Find(x => x.LoteId == lote.Id);
+            if (loteExistente != null)
             {
-                MessageBox.Show("El producto ya existe en la lista.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El lote ya existe en la lista.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            // verificar que existan suficientes unidades del producto
+            // verificar que existan suficientes unidades en el lote
+
             var unidadesAVender = int.Parse(unidades_tb.Text);
 
-            if (unidadesAVender > producto.Unidades)
+            if (unidadesAVender > lote.Unidades)
             {
-                MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { producto.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { lote.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-           
+
             // crear venta
             var venta = new VentaModelo();
+
             venta.Unidades = unidadesAVender;
-            venta.Producto = producto;
-            venta.PrecioVentaUnidad = producto.PrecioVenta;
-         
-            ventas.Add(venta);            
+            venta.Lote = lote;
+            venta.PrecioVentaUnidad = lote.PrecioVentaUnidad;
+
+            ventas.Add(venta);
             CalcularTotal();
         }
 
@@ -142,14 +152,14 @@ namespace SivUI
                 return;
             }
             
-            MessageBox.Show("Acción completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LimpiarForm();
         }
 
         private void ventas_dtgv_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             // columna precio de venta
-            if (e.ColumnIndex == 2)
+            if (e.ColumnIndex == 3)
             {
                 if (Ayudantes.EsDecimalNoNegativo(e.FormattedValue.ToString()) == false)
                 {
@@ -161,8 +171,9 @@ namespace SivUI
                 venta.PrecioVentaUnidad = decimal.Parse(e.FormattedValue.ToString().Trim());
                 CalcularTotal();
             }
+
             // columna unidades
-            else if (e.ColumnIndex == 3)
+            else if (e.ColumnIndex == 4)
             {
                 var stringUnidadesAVender = e.FormattedValue.ToString().Trim();
                 if (Ayudantes.EsEnteroPositivo(stringUnidadesAVender) == false)
@@ -175,14 +186,14 @@ namespace SivUI
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
                 var intUnidadesAVender = int.Parse(stringUnidadesAVender);
 
-                if (intUnidadesAVender > venta.Producto.Unidades)
+                if (intUnidadesAVender > venta.Lote.Unidades)
                 {
                     e.Cancel = true;
-                    MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { venta.Producto.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { venta.Lote.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 venta.Unidades = intUnidadesAVender;
-                CalcularTotal();          
+                CalcularTotal();
             }
         }
       
@@ -202,8 +213,8 @@ namespace SivUI
 
         private void LimpiarForm()
         {
-            producto_id_tb.Text = "";
-            producto_id_tb.Focus();
+            lote_id_tb.Text = "";
+            lote_id_tb.Focus();
             unidades_tb.Text = "";
             comentario_tb.Clear();
             ventas.DataSource = null;

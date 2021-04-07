@@ -11,23 +11,23 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class InventarioAgregarForm : Form, ISolicitudCategoria
+    public partial class InventarioAgregarForm : Form, ISolicitudProducto
     {
-        List<CategoriaModelo> categoriasDisponibles = ConfigGlobal.conexion.CargarCategorias();
-        List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
+        List<ProductoModelo> productosDisponibles = ConfigGlobal.conexion.CargarProductos();
+        ProductoModelo producto;
         public InventarioAgregarForm()
         {
             InitializeComponent();
-            ActualizarListaCategorias();
-            ActualizarUltimoProductoId();
+            ActualizarListaProductos();
+            ActualizarUltimoLoteId();
         }
 
         /// <summary>
         /// Actualiza el textbox que expone el id del ultimo producto insertado en la base de datos
         /// </summary>
-        private void ActualizarUltimoProductoId()
+        private void ActualizarUltimoLoteId()
         {
-            ultimo_producto_id_tb.Text = ConfigGlobal.conexion.CargarUltimoProductoId().ToString();
+            ultimo_lote_id_label.Text = ConfigGlobal.conexion.CargarUltimoLoteId().ToString();
         }
 
         private void LimpiarForm()
@@ -37,15 +37,6 @@ namespace SivUI
             inversion_total_tb.Text = "";
             inversion_unidad_tb.Text = "N/A";
             precio_venta_defecto_tb.Text = "";
-            descripcion_unidad_tb.Text = "";
-
-            foreach (var categoria in categoriasSeleccionadas)
-            {
-                categoriasDisponibles.Add(categoria);
-            }
-
-            categoriasSeleccionadas = new List<CategoriaModelo>();
-            ActualizarListaCategorias();
         }
         private bool ValidarForm()
         {
@@ -70,40 +61,11 @@ namespace SivUI
             }
             return esFormValido;
         }
-        private void ActualizarListaCategorias()
+        private void ActualizarListaProductos()
         {
-            categorias_dropdown.DataSource = null;
-            categorias_dropdown.DataSource = categoriasDisponibles;
-            categorias_dropdown.DisplayMember = nameof(CategoriaModelo.Nombre);
-
-            categorias_listbox.DataSource = null;
-            categorias_listbox.DataSource = categoriasSeleccionadas;
-            categorias_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
-
-        }
-
-        private void agregar_categoria_button_Click(object sender, EventArgs e)
-        {
-            var categoria = (CategoriaModelo)categorias_dropdown.SelectedItem;
-            if (categoria == null) { return; }
-
-            categoriasSeleccionadas.Add(categoria);
-            categoriasDisponibles.Remove(categoria);
-            ActualizarListaCategorias();
-                     
-        }
-
-        private void remover_categoria_button_Click(object sender, EventArgs e)
-        {
-            var categorias = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
-            if (categorias.Count == 0) { return; }
-
-            foreach (var categoria in categorias)
-            {
-                categoriasSeleccionadas.Remove(categoria);
-                categoriasDisponibles.Add(categoria);
-            }
-            ActualizarListaCategorias();
+            productos_dropdown.DataSource = null;
+            productos_dropdown.DataSource = productosDisponibles;
+            productos_dropdown.DisplayMember = nameof(CategoriaModelo.Nombre);
         }
 
         private void inversion_total_tb_TextChanged(object sender, EventArgs e)
@@ -134,17 +96,16 @@ namespace SivUI
         {
             if (ValidarForm() == false) return;
 
-            ProductoModelo producto = new ProductoModelo();
+            LoteModelo lote = new LoteModelo();
 
-            producto.Unidades = int.Parse(unidades_tb.Text);
-            producto.PrecioInversion = decimal.Parse(inversion_unidad_tb.Text);
-            producto.PrecioVenta = decimal.Parse(precio_venta_defecto_tb.Text);
-            producto.Descripcion = descripcion_unidad_tb.Text.Trim();
-            producto.Categorias = categoriasSeleccionadas;
-                  
+            lote.Unidades = int.Parse(unidades_tb.Text);
+            lote.InversionUnidad = decimal.Parse(inversion_unidad_tb.Text);
+            lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
+            lote.Producto = (ProductoModelo)productos_dropdown.SelectedItem;
+            
             try
             {
-                ConfigGlobal.conexion.GuardarProducto(producto);
+                ConfigGlobal.conexion.GuardarLote(lote);
             }
             catch (Exception ex)
             {
@@ -153,23 +114,24 @@ namespace SivUI
             }
 
             LimpiarForm();
-            ActualizarUltimoProductoId();
-            MessageBox.Show($"ID del producto: {producto.Id}", "Producto agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ActualizarUltimoLoteId();
+            MessageBox.Show($"ID del lote: {lote.Id}", "Lote agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void nueva_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void nuevo_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CrearCategoriaForm frm = new CrearCategoriaForm(this);
-            frm.Show();
+            var frm = new CrearProductoForm(this);
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
         }
 
-        public void CategoriaCreada(List<CategoriaModelo> categorias)
+        public void ProductoListo(ProductoModelo producto)
         {
-            foreach (var categoria in categorias)
-            {
-                categoriasSeleccionadas.Add(categoria);
-            }
-            ActualizarListaCategorias();
+            productosDisponibles.Add(producto);
+            ActualizarListaProductos();
+            productos_dropdown.SelectedItem = producto;
+            
         }
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SivUI
 {
-    public interface ISolicitudCategoria
+    public interface ISolicitudProducto
     {
-        void TareaCompleta(List<CategoriaModelo> categorias);
+        void ProductoListo(ProductoModelo producto);
     }
 }

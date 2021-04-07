@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.producto_id_tb = new System.Windows.Forms.TextBox();
-            this.id_producto_label = new System.Windows.Forms.Label();
-            this.agregar_producto_button = new System.Windows.Forms.Button();
+            this.lote_id_tb = new System.Windows.Forms.TextBox();
+            this.lote_id_label = new System.Windows.Forms.Label();
+            this.agregar_lote_button = new System.Windows.Forms.Button();
             this.ventas_dtgv = new System.Windows.Forms.DataGridView();
             this.total_tb = new System.Windows.Forms.TextBox();
             this.total_label = new System.Windows.Forms.Label();
@@ -46,35 +46,37 @@
             this.o_label = new System.Windows.Forms.Label();
             this.crear_nuevo_cliente_label = new System.Windows.Forms.LinkLabel();
             this.limpiar_cliente_button = new System.Windows.Forms.Button();
+            this.panel_contenedor = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).BeginInit();
+            this.panel_contenedor.SuspendLayout();
             this.SuspendLayout();
             // 
-            // producto_id_tb
+            // lote_id_tb
             // 
-            this.producto_id_tb.Location = new System.Drawing.Point(10, 37);
-            this.producto_id_tb.Name = "producto_id_tb";
-            this.producto_id_tb.Size = new System.Drawing.Size(136, 33);
-            this.producto_id_tb.TabIndex = 1;
+            this.lote_id_tb.Location = new System.Drawing.Point(10, 37);
+            this.lote_id_tb.Name = "lote_id_tb";
+            this.lote_id_tb.Size = new System.Drawing.Size(136, 33);
+            this.lote_id_tb.TabIndex = 1;
             // 
-            // id_producto_label
+            // lote_id_label
             // 
-            this.id_producto_label.AutoSize = true;
-            this.id_producto_label.Location = new System.Drawing.Point(5, 9);
-            this.id_producto_label.Name = "id_producto_label";
-            this.id_producto_label.Size = new System.Drawing.Size(112, 25);
-            this.id_producto_label.TabIndex = 0;
-            this.id_producto_label.Text = "ID producto";
+            this.lote_id_label.AutoSize = true;
+            this.lote_id_label.Location = new System.Drawing.Point(5, 9);
+            this.lote_id_label.Name = "lote_id_label";
+            this.lote_id_label.Size = new System.Drawing.Size(67, 25);
+            this.lote_id_label.TabIndex = 0;
+            this.lote_id_label.Text = "ID lote";
             // 
-            // agregar_producto_button
+            // agregar_lote_button
             // 
-            this.agregar_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_producto_button.Location = new System.Drawing.Point(299, 34);
-            this.agregar_producto_button.Name = "agregar_producto_button";
-            this.agregar_producto_button.Size = new System.Drawing.Size(101, 37);
-            this.agregar_producto_button.TabIndex = 4;
-            this.agregar_producto_button.Text = "Agregar";
-            this.agregar_producto_button.UseVisualStyleBackColor = true;
-            this.agregar_producto_button.Click += new System.EventHandler(this.agregar_producto_button_Click);
+            this.agregar_lote_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.agregar_lote_button.Location = new System.Drawing.Point(299, 34);
+            this.agregar_lote_button.Name = "agregar_lote_button";
+            this.agregar_lote_button.Size = new System.Drawing.Size(101, 37);
+            this.agregar_lote_button.TabIndex = 4;
+            this.agregar_lote_button.Text = "Agregar";
+            this.agregar_lote_button.UseVisualStyleBackColor = true;
+            this.agregar_lote_button.Click += new System.EventHandler(this.agregar_lote_button_Click);
             // 
             // ventas_dtgv
             // 
@@ -82,9 +84,10 @@
             this.ventas_dtgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ventas_dtgv.BackgroundColor = System.Drawing.Color.CornflowerBlue;
             this.ventas_dtgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ventas_dtgv.Location = new System.Drawing.Point(10, 77);
+            this.ventas_dtgv.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ventas_dtgv.Location = new System.Drawing.Point(0, 0);
             this.ventas_dtgv.Name = "ventas_dtgv";
-            this.ventas_dtgv.Size = new System.Drawing.Size(762, 289);
+            this.ventas_dtgv.Size = new System.Drawing.Size(760, 296);
             this.ventas_dtgv.TabIndex = 12;
             this.ventas_dtgv.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ventas_dtgv_CellValidating);
             // 
@@ -221,12 +224,22 @@
             this.limpiar_cliente_button.UseVisualStyleBackColor = true;
             this.limpiar_cliente_button.Click += new System.EventHandler(this.limpiar_cliente_button_Click);
             // 
+            // panel_contenedor
+            // 
+            this.panel_contenedor.Controls.Add(this.ventas_dtgv);
+            this.panel_contenedor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel_contenedor.Location = new System.Drawing.Point(12, 76);
+            this.panel_contenedor.Name = "panel_contenedor";
+            this.panel_contenedor.Size = new System.Drawing.Size(760, 296);
+            this.panel_contenedor.TabIndex = 25;
+            // 
             // VenderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.panel_contenedor);
             this.Controls.Add(this.limpiar_cliente_button);
             this.Controls.Add(this.crear_nuevo_cliente_label);
             this.Controls.Add(this.o_label);
@@ -241,10 +254,9 @@
             this.Controls.Add(this.vender_button);
             this.Controls.Add(this.total_tb);
             this.Controls.Add(this.total_label);
-            this.Controls.Add(this.ventas_dtgv);
-            this.Controls.Add(this.agregar_producto_button);
-            this.Controls.Add(this.producto_id_tb);
-            this.Controls.Add(this.id_producto_label);
+            this.Controls.Add(this.agregar_lote_button);
+            this.Controls.Add(this.lote_id_tb);
+            this.Controls.Add(this.lote_id_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.Margin = new System.Windows.Forms.Padding(6);
@@ -253,6 +265,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vender";
             ((System.ComponentModel.ISupportInitialize)(this.ventas_dtgv)).EndInit();
+            this.panel_contenedor.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,9 +273,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox producto_id_tb;
-        private System.Windows.Forms.Label id_producto_label;
-        private System.Windows.Forms.Button agregar_producto_button;
+        private System.Windows.Forms.TextBox lote_id_tb;
+        private System.Windows.Forms.Label lote_id_label;
+        private System.Windows.Forms.Button agregar_lote_button;
         private System.Windows.Forms.DataGridView ventas_dtgv;
         private System.Windows.Forms.TextBox total_tb;
         private System.Windows.Forms.Label total_label;
@@ -278,5 +291,6 @@
         private System.Windows.Forms.Label o_label;
         private System.Windows.Forms.LinkLabel crear_nuevo_cliente_label;
         private System.Windows.Forms.Button limpiar_cliente_button;
+        private System.Windows.Forms.Panel panel_contenedor;
     }
 }

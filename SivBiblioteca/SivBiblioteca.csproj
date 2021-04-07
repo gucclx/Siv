@@ -57,7 +57,10 @@
     <Compile Include="ConfigGlobal.cs" />
     <Compile Include="Modelos\CategoriaModelo.cs" />
     <Compile Include="Modelos\ClienteModelo.cs" />
+    <Compile Include="Modelos\LoteModelo.cs" />
     <Compile Include="Modelos\ProductoModelo.cs" />
+    <Compile Include="Modelos\ReporteFiltro.cs" />
+    <Compile Include="Modelos\ReporteVenta.cs" />
     <Compile Include="Modelos\UsuarioModelo.cs" />
     <Compile Include="Modelos\VentaModelo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

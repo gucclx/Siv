@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SivUI
 {
-    public interface ISolicitudCategoria
+    public interface ISolicitudFiltro
     {
-        void TareaCompleta(List<CategoriaModelo> categorias);
+        void FiltroCreado(ReporteFiltro filtro);
     }
 }

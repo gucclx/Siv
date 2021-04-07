@@ -32,11 +32,6 @@ namespace SivBiblioteca
 
             return xEsDecimal && (decimalX >= 0);
         }
-
-        public static bool EsProductoValido(ProductoModelo producto)
-        {
-            return ((producto.Unidades > 0) && (producto.PrecioInversion >= 0)) && producto.PrecioVenta >= 0;
-        }
         public static DataTable ToDataTable(this IEnumerable<dynamic> items)
         {
             var data = items.ToArray();
