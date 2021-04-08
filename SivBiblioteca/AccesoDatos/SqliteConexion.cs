@@ -11,6 +11,8 @@ using Dapper;
 namespace SivBiblioteca.AccesoDatos
 {
     // TODO - validar que todos los datos esten correctos.
+    // todo - cargar_porNombre<type>(string nombre);
+
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
     {
@@ -113,7 +115,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <summary>
         /// Guarda un producto en la base de datos.
         /// </summary>
-        /// <param name="productos"> Lista de productos a guardar. </param>
+        /// <param name="producto"> Producto a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
         {
             if (string.IsNullOrEmpty(producto.Nombre.Trim()))
@@ -151,6 +153,7 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
+        // todo - int64?
         private int ConvertirMonedaARepresentacionInterna(decimal x)
         {
             int diezAlaP = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
@@ -284,7 +287,7 @@ namespace SivBiblioteca.AccesoDatos
             return clientes;
         }
 
-        public List<ReporteVenta> ReporteVentas(ReporteFiltro filtro)
+        public List<ReporteVenta> ReporteVentas(ReporteFiltro filtro = null, int? limiteFilas = null)
         {
             // factor de conversion para obtener la representacion original de los precios
             string FC = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
@@ -308,19 +311,33 @@ namespace SivBiblioteca.AccesoDatos
             if (filtro != null)
             {
 
-                if (filtro.Categorias.Count > 0)
+                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
                     condiciones.Add("ProductoCategoria.CategoriaId in @Ids");
                     parametros.Add("@Ids", filtro.Categorias.Select(c => c.Id).ToList());
                 }
 
-                if (filtro.FiltroPorFechas)
+                if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
                 {
                     condiciones.Add("fecha BETWEEN @F1 AND @F2");
                     parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
                     parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
                 }
+
+                if (filtro.Producto != null)
+                {
+                    condiciones.Add("productos.id = @ProductoId");
+                    parametros.Add("@ProductoId", filtro.Producto.Id);
+                }
+
+                if (filtro.Cliente != null)
+                {
+                    condiciones.Add("clientes.id = @ClienteId");
+                    parametros.Add("@ClienteId", filtro.Cliente.Id);
+                }
+
+
             }
 
             if (joins.Count > 0)
@@ -335,6 +352,12 @@ namespace SivBiblioteca.AccesoDatos
             }
 
             q += " order by ventas.id desc";
+
+            if (limiteFilas != null && limiteFilas > -1)
+            {
+                q += $" limit @Limite";
+                parametros.Add("@Limite", limiteFilas);
+            }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {

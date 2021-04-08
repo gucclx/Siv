@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SivBiblioteca.Modelos;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
 
 namespace SivUI
 {
@@ -16,9 +18,12 @@ namespace SivUI
     {
         BindingSource resultados;
         ReporteFiltro reporteFiltro;
+        const int LimiteFilasReporte = 1000;
+
         public GestionarVentasForm()
         {
             InitializeComponent();
+
             resultados_dtgv.AutoGenerateColumns = false;
 
             // inicializar columnas
@@ -79,7 +84,8 @@ namespace SivUI
         {
             try
             {
-                var reportes = ConfigGlobal.conexion.ReporteVentas(reporteFiltro);
+                // cargar reportes
+                var reportes = ConfigGlobal.conexion.ReporteVentas(reporteFiltro, limiteFilas: LimiteFilasReporte);
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
                 resultados_dtgv.DataSource = resultados;
@@ -99,6 +105,10 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
         }
+
+        /// <summary>
+        /// Calcula los campos inversion total, ingreso total y ganancia total.
+        /// </summary>
         private void CalcularResumenReporte()
         {
             decimal totalGanancia = 0;
@@ -120,6 +130,36 @@ namespace SivUI
         public void FiltroCreado(ReporteFiltro filtro)
         {
             reporteFiltro = filtro;
+        }
+
+        private void limpiar_button_Click(object sender, EventArgs e)
+        {
+            resultados.DataSource = null;
+        }
+
+        private void exportar_button_Click(object sender, EventArgs e)
+        {
+            if (resultados.DataSource == null) return;
+
+            using (var dialogGuardar = new SaveFileDialog())
+            {
+                dialogGuardar.Filter = "Excel |*.xlsx";
+                dialogGuardar.OverwritePrompt = true;
+                if (dialogGuardar.ShowDialog() == DialogResult.OK)
+                {
+                    FileInfo archivo = new FileInfo(dialogGuardar.FileName);
+
+                    try
+                    {
+                        Ayudantes.GuardarExcelReporteVentas(reportes: resultados.List.Cast<ReporteVenta>().ToList(), archivo: archivo);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    
+                }
+            }                  
         }
     }
 }

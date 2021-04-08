@@ -40,6 +40,7 @@
             this.total_inversion_tb = new System.Windows.Forms.TextBox();
             this.total_inversion_label = new System.Windows.Forms.Label();
             this.exportar_button = new System.Windows.Forms.Button();
+            this.limpiar_button = new System.Windows.Forms.Button();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +48,7 @@
             // cargar_reporte_button
             // 
             this.cargar_reporte_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cargar_reporte_button.Location = new System.Drawing.Point(12, 350);
+            this.cargar_reporte_button.Location = new System.Drawing.Point(13, 416);
             this.cargar_reporte_button.Name = "cargar_reporte_button";
             this.cargar_reporte_button.Size = new System.Drawing.Size(156, 37);
             this.cargar_reporte_button.TabIndex = 12;
@@ -61,7 +62,7 @@
             this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contenedor_panel.Location = new System.Drawing.Point(13, 63);
             this.contenedor_panel.Name = "contenedor_panel";
-            this.contenedor_panel.Size = new System.Drawing.Size(959, 281);
+            this.contenedor_panel.Size = new System.Drawing.Size(959, 322);
             this.contenedor_panel.TabIndex = 13;
             // 
             // resultados_dtgv
@@ -75,7 +76,7 @@
             this.resultados_dtgv.Location = new System.Drawing.Point(0, 0);
             this.resultados_dtgv.Name = "resultados_dtgv";
             this.resultados_dtgv.ReadOnly = true;
-            this.resultados_dtgv.Size = new System.Drawing.Size(959, 281);
+            this.resultados_dtgv.Size = new System.Drawing.Size(959, 322);
             this.resultados_dtgv.TabIndex = 0;
             // 
             // filtros_button
@@ -162,6 +163,18 @@
             this.exportar_button.TabIndex = 22;
             this.exportar_button.Text = "Exportar";
             this.exportar_button.UseVisualStyleBackColor = true;
+            this.exportar_button.Click += new System.EventHandler(this.exportar_button_Click);
+            // 
+            // limpiar_button
+            // 
+            this.limpiar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.limpiar_button.Location = new System.Drawing.Point(175, 416);
+            this.limpiar_button.Name = "limpiar_button";
+            this.limpiar_button.Size = new System.Drawing.Size(156, 37);
+            this.limpiar_button.TabIndex = 23;
+            this.limpiar_button.Text = "Limpiar";
+            this.limpiar_button.UseVisualStyleBackColor = true;
+            this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
             // 
             // GestionarVentasForm
             // 
@@ -169,6 +182,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
+            this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.total_inversion_tb);
             this.Controls.Add(this.total_inversion_label);
@@ -208,5 +222,6 @@
         private System.Windows.Forms.TextBox total_inversion_tb;
         private System.Windows.Forms.Label total_inversion_label;
         private System.Windows.Forms.Button exportar_button;
+        private System.Windows.Forms.Button limpiar_button;
     }
 }

@@ -20,7 +20,7 @@ namespace SivBiblioteca.AccesoDatos
         int UnidadesExistentesLote(int productoId);
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
-        List<ReporteVenta> ReporteVentas(ReporteFiltro filtro);
+        List<ReporteVenta> ReporteVentas(ReporteFiltro filtro, int? limiteFilas);
         List<ProductoModelo> CargarProductos();
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);

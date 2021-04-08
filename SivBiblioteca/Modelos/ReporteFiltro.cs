@@ -12,13 +12,15 @@ namespace SivBiblioteca.Modelos
     /// </summary>
     public class ReporteFiltro
     {
-        public List<int> ProductoIds { get; set; } = new List<int>();
-        public List<int> LoteIds { get; set; } = new List<int>();
-        public List<CategoriaModelo> Categorias { get; set; } = new List<CategoriaModelo>();
-        public int ClienteId { get; set; }
-        public DateTime FechaInicial { get; set; } = new DateTime();
-        public DateTime FechaFinal { get; set; } = new DateTime();
+        public ProductoModelo Producto { get; set; }
+        public int? LoteId { get; set; }
+        public List<CategoriaModelo> Categorias { get; set; }
+        public ClienteModelo Cliente { get; set; }
+        public DateTime FechaInicial { get; set; }
+        public DateTime FechaFinal { get; set; }
         public bool FiltroPorFechas { get; set; } = false;
+        public bool FiltroPorCliente { get; set; } = false;
+        public bool FiltroPorProducto { get; set; } = false;
 
     }
 }
