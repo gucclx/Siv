@@ -102,6 +102,12 @@
     <Compile Include="EliminarCategoriaForm.Designer.cs">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GestionarInventarioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionarInventarioForm.Designer.cs">
+      <DependentUpon>GestionarInventarioForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionarVentasForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EliminarCategoriaForm.resx">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionarInventarioForm.resx">
+      <DependentUpon>GestionarInventarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionarVentasForm.resx">
       <DependentUpon>GestionarVentasForm.cs</DependentUpon>

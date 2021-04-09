@@ -72,15 +72,16 @@
             // agregar_inventario_ToolStripMenuItem
             // 
             this.agregar_inventario_ToolStripMenuItem.Name = "agregar_inventario_ToolStripMenuItem";
-            this.agregar_inventario_ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.agregar_inventario_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.agregar_inventario_ToolStripMenuItem.Text = "Agregar";
             this.agregar_inventario_ToolStripMenuItem.Click += new System.EventHandler(this.agregar_inventario_ToolStripMenuItem_Click);
             // 
             // gestionarToolStripMenuItem
             // 
             this.gestionarToolStripMenuItem.Name = "gestionarToolStripMenuItem";
-            this.gestionarToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.gestionarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.gestionarToolStripMenuItem.Text = "Gestionar";
+            this.gestionarToolStripMenuItem.Click += new System.EventHandler(this.gestionarToolStripMenuItem_Click);
             // 
             // productosToolStripMenuItem
             // 
@@ -109,14 +110,14 @@
             // venderToolStripMenuItem
             // 
             this.venderToolStripMenuItem.Name = "venderToolStripMenuItem";
-            this.venderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.venderToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.venderToolStripMenuItem.Text = "Vender";
             this.venderToolStripMenuItem.Click += new System.EventHandler(this.venderToolStripMenuItem_Click);
             // 
             // gestionar_ventas_ToolStripMenuItem1
             // 
             this.gestionar_ventas_ToolStripMenuItem1.Name = "gestionar_ventas_ToolStripMenuItem1";
-            this.gestionar_ventas_ToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.gestionar_ventas_ToolStripMenuItem1.Size = new System.Drawing.Size(124, 22);
             this.gestionar_ventas_ToolStripMenuItem1.Text = "Gestionar";
             this.gestionar_ventas_ToolStripMenuItem1.Click += new System.EventHandler(this.gestionar_ventas_ToolStripMenuItem1_Click_1);
             // 

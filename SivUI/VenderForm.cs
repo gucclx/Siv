@@ -110,9 +110,13 @@ namespace SivUI
 
             var unidadesAVender = int.Parse(unidades_tb.Text);
 
-            if (unidadesAVender > lote.Unidades)
+            if (unidadesAVender > lote.UnidadesDisponibles)
             {
-                MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { lote.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (lote.UnidadesDisponibles == 0)
+                {
+                    MessageBox.Show($"El lote no contiene unidades.", "Lote vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { lote.UnidadesDisponibles } unidades disponibles.", "Cantidad disponible insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -186,10 +190,10 @@ namespace SivUI
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
                 var intUnidadesAVender = int.Parse(stringUnidadesAVender);
 
-                if (intUnidadesAVender > venta.Lote.Unidades)
+                if (intUnidadesAVender > venta.Lote.UnidadesDisponibles)
                 {
                     e.Cancel = true;
-                    MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { venta.Lote.Unidades } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { venta.Lote.UnidadesDisponibles } unidades disponibles.", "Cantidad insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 venta.Unidades = intUnidadesAVender;
@@ -217,6 +221,7 @@ namespace SivUI
             lote_id_tb.Focus();
             unidades_tb.Text = "";
             comentario_tb.Clear();
+            total_tb.Clear();
             ventas.DataSource = null;
             ventas.DataSource = typeof(VentaModelo);
             cliente = null;

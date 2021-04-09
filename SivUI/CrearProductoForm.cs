@@ -13,6 +13,7 @@ using System.Windows.Forms;
 namespace SivUI
 {
     // TODO - si no se cierrra el formulario quiza exista un bug potencial donde el frm llamante recibe multiples productos
+    // TODO - seleccionar categorias deberia abrir buscar categorias form
     public partial class CrearProductoForm : Form, ISolicitudCategoria
     {
         List<CategoriaModelo> categoriasDisponibles = ConfigGlobal.conexion.CargarCategorias();

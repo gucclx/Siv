@@ -10,7 +10,7 @@ namespace SivBiblioteca.Modelos
     /// Representa un filtro para el reporte de ventas o inventario.
     /// El filtro luego se utiliza para determinar las condiciones de los queries en la base de datos.
     /// </summary>
-    public class ReporteFiltro
+    public class ReporteFiltroModelo
     {
         public ProductoModelo Producto { get; set; }
         public int? LoteId { get; set; }

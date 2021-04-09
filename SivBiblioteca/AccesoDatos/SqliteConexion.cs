@@ -12,6 +12,7 @@ namespace SivBiblioteca.AccesoDatos
 {
     // TODO - validar que todos los datos esten correctos.
     // todo - cargar_porNombre<type>(string nombre);
+    // todo - probar caso producto con lote agotado (lotes.unidades == 0)
 
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
@@ -35,6 +36,11 @@ namespace SivBiblioteca.AccesoDatos
         // una vez extraido de la base de datos se divide por (10^p) para obtener la representacion
         // original de x
         const double MonedaPrecision = 4;
+
+        // Factor de conversion para obtener la representacion original de los precios.
+        // Se utiliza como parametro en los queries. El factor requiere '.0' para indicarle a
+        // sqlite que la division deberia ser decimal y no entera.
+        string FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -173,13 +179,13 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                // factor de conversion para obtener la representacion original de los precios
-                string fc = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
-
-                var q = $@"select Id, ProductoId, Unidades, (InversionUnidad / @FC) as 'InversionUnidad', (PrecioVentaUnidad / @FC) as 'PrecioVentaUnidad', datetime(FechaCreacion, 'unixepoch', 'localtime') 
+                var q = $@"select Id, ProductoId, UnidadesCompradas, UnidadesDisponibles, 
+                            (InversionUnidad / @FC) as 'InversionUnidad', 
+                            (PrecioVentaUnidad / @FC) as 'PrecioVentaUnidad', 
+                            datetime(FechaCreacion, 'unixepoch', 'localtime') as 'FechaCreacion'
                             from lotes where id = @Id";
 
-                lote = conexion.QuerySingleOrDefault<LoteModelo>(q, new { Id = id, FC = fc });
+                lote = conexion.QuerySingleOrDefault<LoteModelo>(q, new { Id = id, FC = FactorConversion });
                 if (lote != null)
                 {
                     lote.Producto = conexion.QuerySingle<ProductoModelo>("select * from productos where id = @ID", new { ID = lote.ProductoId });
@@ -206,7 +212,7 @@ namespace SivBiblioteca.AccesoDatos
                 {
                     throw new Exception($"Total de la venta invalido: {venta.Total}, solo valores no negativos.");
                 }
-                else if (venta.Unidades > UnidadesExistentesLote(venta.Lote.Id))
+                else if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
                 {
                     throw new Exception($"El numero de unidades solicitadas sobrepasa las del lote.");
                 }
@@ -232,7 +238,7 @@ namespace SivBiblioteca.AccesoDatos
                                 ClienteId = venta.ClienteId
                             }
                         );
-                        conexion.Execute("update Lotes set Unidades = Unidades - @UnidadesVendidas where Id = @Id",
+                        conexion.Execute("update Lotes set UnidadesDisponibles = UnidadesDisponibles - @UnidadesVendidas where Id = @Id",
                             new { UnidadesVendidas = venta.Unidades, Id = venta.Lote.Id }
                         );
                     }
@@ -241,14 +247,14 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
-        public int UnidadesExistentesLote(int loteId)
+        public int UnidadesDisponiblesLote(int loteId)
         {
             int unidades = 0;
             if (loteId < 1) { return unidades; }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = "select Unidades from Lotes where Id = @Id";
+                var q = "select UnidadesDisponibles from Lotes where Id = @Id";
                 unidades = conexion.ExecuteScalar<int>(q, new { Id = loteId });
             }
             return unidades;
@@ -287,12 +293,10 @@ namespace SivBiblioteca.AccesoDatos
             return clientes;
         }
 
-        public List<ReporteVenta> ReporteVentas(ReporteFiltro filtro = null, int? limiteFilas = null)
+        public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null)
         {
-            // factor de conversion para obtener la representacion original de los precios
-            string FC = Convert.ToInt32(Math.Pow(10, MonedaPrecision)).ToString() + ".0";
             var parametros = new DynamicParameters();
-            parametros.Add("@FC", FC);
+            parametros.Add("@FC", FactorConversion);
 
             var q = @"select lotes.id as 'LoteId', productos.nombre as 'NombreProducto', 
                             ventas.Unidades as 'UnidadesVendidas',
@@ -320,18 +324,18 @@ namespace SivBiblioteca.AccesoDatos
 
                 if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
                 {
-                    condiciones.Add("fecha BETWEEN @F1 AND @F2");
+                    condiciones.Add("ventas.fecha BETWEEN @F1 AND @F2");
                     parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
                     parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
                 }
 
-                if (filtro.Producto != null)
+                if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
                     condiciones.Add("productos.id = @ProductoId");
                     parametros.Add("@ProductoId", filtro.Producto.Id);
                 }
 
-                if (filtro.Cliente != null)
+                if (filtro.FiltroPorCliente && filtro.Cliente != null)
                 {
                     condiciones.Add("clientes.id = @ClienteId");
                     parametros.Add("@ClienteId", filtro.Cliente.Id);
@@ -361,7 +365,7 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                return conexion.Query<ReporteVenta>(q, parametros).ToList();
+                return conexion.Query<ReporteVentaModelo>(q, parametros).ToList();
             }
         }
 
@@ -394,9 +398,14 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException($"Id de producto invalido: {lote.Producto.Id}, el id deber ser mayor a 0.");
             }
 
-            if (lote.Unidades < 1)
+            if (lote.UnidadesCompradas < 1)
             {
-                throw new ArgumentException($"Unidades invalidas: {lote.Unidades}, las unidades deben ser positivas.");
+                throw new ArgumentException($"Unidades invalidas: {lote.UnidadesCompradas}, las unidades deben ser positivas.");
+            }
+
+            if (lote.UnidadesCompradas != lote.UnidadesDisponibles)
+            {
+                throw new ArgumentException($"Las unidades compradas y disponibles no deben diferir incialmente. Unidades compra: {lote.UnidadesCompradas}, Unidades disponibles: {lote.UnidadesDisponibles}");
             }
 
             if (lote.InversionUnidad < 0)
@@ -406,18 +415,19 @@ namespace SivBiblioteca.AccesoDatos
 
             if (lote.PrecioVentaUnidad < 0)
             {
-                throw new ArgumentException($"Precio de venta invalid0: {lote.PrecioVentaUnidad}, el precio de venta por unidad no debe ser negativo.");
+                throw new ArgumentException($"Precio de venta invalido: {lote.PrecioVentaUnidad}, el precio de venta por unidad no debe ser negativo.");
             }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"insert into Lotes (ProductoId, Unidades, InversionUnidad, PrecioVentaUnidad, FechaCreacion)
-                            values (@ProductoId, @Unidades, @InversionUnidad, @PrecioVentaUnidad, strftime('%s', 'now'))";
+                var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, InversionUnidad, PrecioVentaUnidad, FechaCreacion)
+                            values (@ProductoId, @UnidadesCompradas, @UnidadesDisponibles, @InversionUnidad, @PrecioVentaUnidad, strftime('%s', 'now'))";
 
                 conexion.Execute(q, new
                 {
                     ProductoId = lote.Producto.Id,
-                    Unidades = lote.Unidades,
+                    UnidadesCompradas = lote.UnidadesCompradas,
+                    UnidadesDisponibles = lote.UnidadesDisponibles,
                     InversionUnidad = ConvertirMonedaARepresentacionInterna(lote.InversionUnidad),
                     PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad)
                 });
@@ -460,6 +470,74 @@ namespace SivBiblioteca.AccesoDatos
                 categorias = conexion.Query<CategoriaModelo>(q, new { Nombre = '%' + nombre + '%' }).ToList();
             }
             return categorias;
+        }
+
+        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@FC", FactorConversion);
+
+            var q = @"select productos.Nombre as 'NombreProducto',
+                    productos.Descripcion as 'DescripcionProducto',
+                    lotes.PrecioVentaUnidad / @FC as 'PrecioVentaUnidad',
+                    lotes.id as 'LoteId',
+                    lotes.UnidadesCompradas as 'UnidadesCompradas',
+                    lotes.UnidadesDisponibles as 'UnidadesDisponibles',
+                    lotes.InversionUnidad / @FC as 'InversionUnidad',
+                    datetime(lotes.FechaCreacion, 'unixepoch', 'localtime') as 'FechaAgregado'
+                    from Productos
+                    join lotes on lotes.ProductoId = productos.Id";
+
+            var joins = new List<string>();
+            var condiciones = new List<string>();
+
+            if (filtro != null)
+            {
+
+                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
+                {
+                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
+                    condiciones.Add("ProductoCategoria.CategoriaId in @Ids");
+                    parametros.Add("@Ids", filtro.Categorias.Select(c => c.Id).ToList());
+                }
+
+                if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
+                {
+                    condiciones.Add("lotes.FechaCreacion BETWEEN @F1 AND @F2");
+                    parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
+                    parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
+                }
+
+                if (filtro.FiltroPorProducto && filtro.Producto != null)
+                {
+                    condiciones.Add("productos.id = @ProductoId");
+                    parametros.Add("@ProductoId", filtro.Producto.Id);
+                }
+            }
+
+            if (joins.Count > 0)
+            {
+                q += " " + string.Join(" ", joins);
+            }
+
+            if (condiciones.Count > 0)
+            {
+                q += " where ";
+                q += string.Join(" and ", condiciones);
+            }
+
+            q += " order by lotes.id desc";
+
+            if (limiteFilas != null && limiteFilas > -1)
+            {
+                q += $" limit @Limite";
+                parametros.Add("@Limite", limiteFilas);
+            }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                return conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
+            }
         }
     }         
 }

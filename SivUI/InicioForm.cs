@@ -74,5 +74,13 @@ namespace SivUI
         {
 
         }
+
+        private void gestionarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new GestionarInventarioForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
     }
 }

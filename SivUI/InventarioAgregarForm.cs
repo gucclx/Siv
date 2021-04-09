@@ -14,7 +14,7 @@ namespace SivUI
     public partial class InventarioAgregarForm : Form, ISolicitudProducto
     {
         List<ProductoModelo> productosDisponibles = ConfigGlobal.conexion.CargarProductos();
-        ProductoModelo producto;
+
         public InventarioAgregarForm()
         {
             InitializeComponent();
@@ -98,7 +98,8 @@ namespace SivUI
 
             LoteModelo lote = new LoteModelo();
 
-            lote.Unidades = int.Parse(unidades_tb.Text);
+            lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
+            lote.UnidadesDisponibles = lote.UnidadesCompradas;
             lote.InversionUnidad = decimal.Parse(inversion_unidad_tb.Text);
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
             lote.Producto = (ProductoModelo)productos_dropdown.SelectedItem;

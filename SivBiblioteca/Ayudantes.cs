@@ -1,8 +1,9 @@
-﻿using ClosedXML.Excel;
+﻿using CsvHelper;
 using SivBiblioteca.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,80 +36,34 @@ namespace SivBiblioteca
             return xEsDecimal && (decimalX >= 0);
         }
         
-        public static void GuardarExcelReporteVentas(List<ReporteVenta> reportes, FileInfo archivo)
+        public static async Task GuardarCsvReporteVentasAsync(List<ReporteVentaModelo> reportes, FileInfo archivo)
         {
             if (archivo.Exists)
             {
                 archivo.Delete();
             }
-        
-            var wb = new XLWorkbook();
-            var ws = wb.Worksheets.Add("Reporte Ventas");
 
-            var tituloRango = ws.Range(ws.Cell(1, 1).Address, ws.Cell(1, 10).Address).Merge();
-            tituloRango.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            tituloRango.Value = "Reporte de ventas";
-            tituloRango.Style.Font.Bold = true;
-            tituloRango.Style.Font.FontSize = 16;
-            tituloRango.Style.Fill.SetBackgroundColor(XLColor.CornflowerBlue);
-
-            var titulos = new List<string>
-                ( 
-                    new[]
-                    {
-                        "ID Lote",
-                        "Producto",
-                        "Unidades Vendidas",
-                        "Inversión Unidad",
-                        "Precio Venta Unidad",
-                        "Inversión Venta",
-                        "Ingreso Venta",
-                        "Ganancia Venta",
-                        "Fecha Venta",
-                        "Cliente"
-                    }
-                );
-
-
-
-            for (int i = 1; i <= titulos.Count; i++)
+            using (var stream = File.OpenWrite(archivo.FullName))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8))
+            using (var csv = new CsvWriter(writer, CultureInfo.CurrentCulture))
             {
-                ws.Cell(2, i).Value = titulos[i - 1];
-                ws.Cell(2, i).Style.Font.Bold = true;
+                await csv.WriteRecordsAsync(reportes);
+            }
+        }
+
+        public static async Task GuardarCsvReporteInventarioAsync(List<ReporteInventarioModelo> reportes, FileInfo archivo)
+        {
+            if (archivo.Exists)
+            {
+                archivo.Delete();
             }
 
-            for (int i = 0; i < reportes.Count; i++)
+            using (var stream = File.OpenWrite(archivo.FullName))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8))
+            using (var csv = new CsvWriter(writer, CultureInfo.CurrentCulture))
             {
-                ws.Cell(3 + i, 1).Value = reportes[i].LoteId;
-                ws.Cell(3 + i, 2).Value = reportes[i].NombreProducto;
-                ws.Cell(3 + i, 3).Value = reportes[i].UnidadesVendidas;
-                ws.Cell(3 + i, 4).Value = reportes[i].InversionUnidad;
-                ws.Cell(3 + i, 5).Value = reportes[i].PrecioVentaUnidad;
-                ws.Cell(3 + i, 6).Value = reportes[i].InversionVenta;
-                ws.Cell(3 + i, 7).Value = reportes[i].IngresoVenta;
-                ws.Cell(3 + i, 8).Value = reportes[i].GananciaVenta;
-                ws.Cell(3 + i, 9).Value = reportes[i].FechaVenta;
-                ws.Cell(3 + i, 10).Value = reportes[i].NombreCliente;
+                await csv.WriteRecordsAsync(reportes);
             }
-
-            //var test = reportes.Select(r => 
-            //    new
-            //    {
-            //        r.LoteId,
-            //        r.NombreProducto,
-            //        r.UnidadesVendidas,
-            //        r.InversionUnidad,
-            //        r.PrecioVentaUnidad,
-            //        r.InversionVenta,
-            //        r.IngresoVenta,
-            //        r.GananciaVenta,
-            //        r.FechaVenta,
-            //        r.NombreCliente
-            //    }
-            //);
-            ws.Columns().AdjustToContents();
-
-            wb.SaveAs(archivo.FullName);
         }
     }
 }

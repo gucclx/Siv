@@ -9,6 +9,6 @@ namespace SivUI
 {
     public interface ISolicitudFiltro
     {
-        void FiltroCreado(ReporteFiltro filtro);
+        void FiltroCreado(ReporteFiltroModelo filtro);
     }
 }

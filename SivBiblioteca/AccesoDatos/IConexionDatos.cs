@@ -17,10 +17,11 @@ namespace SivBiblioteca.AccesoDatos
         int CargarUltimoLoteId();
         LoteModelo CargarLote_PorId(int id);
         void GuardarVentas(List<VentaModelo> ventas);
-        int UnidadesExistentesLote(int productoId);
+        int UnidadesDisponiblesLote(int productoId);
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
-        List<ReporteVenta> ReporteVentas(ReporteFiltro filtro, int? limiteFilas);
+        List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null);
+        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null);
         List<ProductoModelo> CargarProductos();
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);

@@ -41,6 +41,7 @@
             this.total_inversion_label = new System.Windows.Forms.Label();
             this.exportar_button = new System.Windows.Forms.Button();
             this.limpiar_button = new System.Windows.Forms.Button();
+            this.exportando_label = new System.Windows.Forms.Label();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -176,12 +177,23 @@
             this.limpiar_button.UseVisualStyleBackColor = true;
             this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
             // 
+            // exportando_label
+            // 
+            this.exportando_label.AutoSize = true;
+            this.exportando_label.Location = new System.Drawing.Point(747, 26);
+            this.exportando_label.Name = "exportando_label";
+            this.exportando_label.Size = new System.Drawing.Size(121, 25);
+            this.exportando_label.TabIndex = 24;
+            this.exportando_label.Text = "Exportando...";
+            this.exportando_label.Visible = false;
+            // 
             // GestionarVentasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
+            this.Controls.Add(this.exportando_label);
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.total_inversion_tb);
@@ -223,5 +235,6 @@
         private System.Windows.Forms.Label total_inversion_label;
         private System.Windows.Forms.Button exportar_button;
         private System.Windows.Forms.Button limpiar_button;
+        private System.Windows.Forms.Label exportando_label;
     }
 }

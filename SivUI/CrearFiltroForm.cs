@@ -20,7 +20,7 @@ namespace SivUI
 
         ISolicitudFiltro solicitante;
 
-        public CrearFiltroForm(ISolicitudFiltro solicitante, ReporteFiltro filtro = null)
+        public CrearFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();
             productos_dropdown.DataSource = productos;
@@ -98,7 +98,7 @@ namespace SivUI
 
         private void listo_button_Click(object sender, EventArgs e)
         {
-            var filtro = new ReporteFiltro();
+            var filtro = new ReporteFiltroModelo();
 
             filtro.Categorias = categoriasSeleccionadas;
             filtro.FechaInicial = fecha_inicial_dtp.Value.Date;
