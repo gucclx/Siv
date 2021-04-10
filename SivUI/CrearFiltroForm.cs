@@ -12,10 +12,10 @@ using SivBiblioteca;
 
 namespace SivUI
 {
-    public partial class CrearFiltroForm : Form, ISolicitudCategoria, ISolicitudCliente
+    public partial class CrearFiltroForm : Form, ISolicitudCategoria, ISolicitudCliente, ISolicitudProducto
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-        List<ProductoModelo> productos = ConfigGlobal.conexion.CargarProductos();
+        ProductoModelo producto;
         ClienteModelo cliente;
 
         ISolicitudFiltro solicitante;
@@ -23,20 +23,21 @@ namespace SivUI
         public CrearFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();
-            productos_dropdown.DataSource = productos;
-            productos_dropdown.DisplayMember = nameof(ProductoModelo.Nombre);
             this.solicitante = solicitante;
             
             // Cargar filtro anterior
             if (filtro != null)
             {
-                if (filtro.FechaInicial != null) { fecha_inicial_dtp.Value = filtro.FechaInicial; }
-                if (filtro.FechaFinal != null) { fecha_final_dtp.Value = filtro.FechaFinal; }
+                if (filtro.FiltroPorFechas)
+                {
+                    if (filtro.FechaInicial != null) { fecha_inicial_dtp.Value = filtro.FechaInicial; }
+                    if (filtro.FechaFinal != null) { fecha_final_dtp.Value = filtro.FechaFinal; }
+                }
 
                 filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
                 habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
 
-                if (filtro.Cliente != null)
+                if (filtro.FiltroPorCliente && filtro.Cliente != null)
                 {
                     cliente = filtro.Cliente;
                     cliente_tb.Text = cliente.NombreCompleto;
@@ -45,9 +46,10 @@ namespace SivUI
                 filtrar_por_cliente_groupbox.Enabled = filtro.FiltroPorCliente;
                 filtrar_por_cliente_checkbox.Checked = filtro.FiltroPorCliente;
 
-                if (filtro.Producto != null)
+                if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
-                    productos_dropdown.SelectedItem = productos.Where(p => p.Id == filtro.Producto.Id).FirstOrDefault();
+                    producto = filtro.Producto;
+                    nombre_producto_tb.Text = filtro.Producto.Nombre;
                 }
 
                 filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
@@ -107,7 +109,7 @@ namespace SivUI
             
             if (filtrar_por_producto_checkbox.Checked)
             {
-                filtro.Producto = ((ProductoModelo)productos_dropdown.SelectedItem);
+                filtro.Producto = producto;
                 filtro.FiltroPorProducto = true;
             }
 
@@ -139,15 +141,22 @@ namespace SivUI
            filtrar_por_producto_groupbox.Enabled = filtrar_por_producto_checkbox.Checked;
         }
 
-        private void limpiar_cliente_label_Click(object sender, EventArgs e)
-        {
-            cliente = null;
-            cliente_tb.Clear();
-        }
-
         private void filtrar_por_cliente_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             filtrar_por_cliente_groupbox.Enabled = filtrar_por_cliente_checkbox.Checked;
+        }
+
+        private void buscar_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new BuscarProductoForm(this);
+            frm.Show();
+        }
+
+        public void ProductoListo(ProductoModelo producto)
+        {
+            if (producto == null) return;
+            this.producto = producto;
+            nombre_producto_tb.Text = producto.Nombre;
         }
     }
 }

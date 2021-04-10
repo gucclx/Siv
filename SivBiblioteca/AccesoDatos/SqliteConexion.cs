@@ -559,5 +559,52 @@ namespace SivBiblioteca.AccesoDatos
             }
             return productos;
         }
+
+        public void EditarProducto(ProductoModelo producto)
+        {
+            if (producto == null)
+            {
+                throw new ArgumentException($"Producto nulo.");
+            }
+            if (producto.Id < 1)
+            {
+                throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1");
+            }
+            if (string.IsNullOrEmpty(producto.Nombre))
+            {
+                throw new ArgumentException("El nombre del producto no puede estar vacio.");
+            }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"update Productos set Nombre = @Nombre where Id = @Id";
+                conexion.Execute(q, new { Nombre = producto.Nombre, Id = producto.Id });
+
+                conexion.Open();
+                using (var transaccion = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        q = "delete from ProductoCategoria where ProductoId = @Id";
+                        conexion.Execute(q);
+
+                        q = @"insert into ProductoCategoria (productoId, CategoriaId)
+                                values (@ProductoId, @CategoriaId)";
+
+                        foreach (var categoria in producto.Categorias)
+                        {
+                            conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id});
+                        }
+                        
+                        transaccion.Commit();
+                    }
+                    catch
+                    {
+                        transaccion.Rollback();
+                        throw;
+                    }                   
+                }
+            }
+        }
     }         
 }

@@ -27,5 +27,6 @@ namespace SivBiblioteca.AccesoDatos
         bool ProductoExiste(string nombre);
         List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre);
         List<ProductoModelo> BuscarProducto_PorNombre(string nombre);
+        void EditarProducto(ProductoModelo producto);
     }
 }

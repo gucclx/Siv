@@ -41,14 +41,14 @@
             this.buscar_linklabel = new System.Windows.Forms.LinkLabel();
             this.cliente_tb = new System.Windows.Forms.TextBox();
             this.cliente_label = new System.Windows.Forms.Label();
-            this.productos_dropdown = new System.Windows.Forms.ComboBox();
             this.filtrar_por_producto_checkbox = new System.Windows.Forms.CheckBox();
             this.filtrar_por_producto_groupbox = new System.Windows.Forms.GroupBox();
             this.producto_nombre_label = new System.Windows.Forms.Label();
             this.filtrar_por_cliente_groupbox = new System.Windows.Forms.GroupBox();
-            this.limpiar_cliente_label = new System.Windows.Forms.Label();
             this.filtrar_por_cliente_checkbox = new System.Windows.Forms.CheckBox();
             this.categorias_label = new System.Windows.Forms.Label();
+            this.nombre_producto_tb = new System.Windows.Forms.TextBox();
+            this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
             this.filtrar_por_fechas_groupbox.SuspendLayout();
             this.filtrar_por_producto_groupbox.SuspendLayout();
             this.filtrar_por_cliente_groupbox.SuspendLayout();
@@ -205,15 +205,6 @@
             this.cliente_label.TabIndex = 25;
             this.cliente_label.Text = "Nombre";
             // 
-            // productos_dropdown
-            // 
-            this.productos_dropdown.FormattingEnabled = true;
-            this.productos_dropdown.Location = new System.Drawing.Point(22, 60);
-            this.productos_dropdown.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.productos_dropdown.Name = "productos_dropdown";
-            this.productos_dropdown.Size = new System.Drawing.Size(292, 29);
-            this.productos_dropdown.TabIndex = 32;
-            // 
             // filtrar_por_producto_checkbox
             // 
             this.filtrar_por_producto_checkbox.AutoSize = true;
@@ -229,8 +220,9 @@
             // 
             // filtrar_por_producto_groupbox
             // 
+            this.filtrar_por_producto_groupbox.Controls.Add(this.buscar_producto_linklabel);
+            this.filtrar_por_producto_groupbox.Controls.Add(this.nombre_producto_tb);
             this.filtrar_por_producto_groupbox.Controls.Add(this.producto_nombre_label);
-            this.filtrar_por_producto_groupbox.Controls.Add(this.productos_dropdown);
             this.filtrar_por_producto_groupbox.Enabled = false;
             this.filtrar_por_producto_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filtrar_por_producto_groupbox.Location = new System.Drawing.Point(301, 12);
@@ -254,7 +246,6 @@
             // 
             // filtrar_por_cliente_groupbox
             // 
-            this.filtrar_por_cliente_groupbox.Controls.Add(this.limpiar_cliente_label);
             this.filtrar_por_cliente_groupbox.Controls.Add(this.cliente_tb);
             this.filtrar_por_cliente_groupbox.Controls.Add(this.buscar_linklabel);
             this.filtrar_por_cliente_groupbox.Controls.Add(this.cliente_label);
@@ -268,20 +259,6 @@
             this.filtrar_por_cliente_groupbox.TabIndex = 33;
             this.filtrar_por_cliente_groupbox.TabStop = false;
             this.filtrar_por_cliente_groupbox.Text = "Cliente";
-            // 
-            // limpiar_cliente_label
-            // 
-            this.limpiar_cliente_label.AutoSize = true;
-            this.limpiar_cliente_label.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.limpiar_cliente_label.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.limpiar_cliente_label.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.limpiar_cliente_label.Location = new System.Drawing.Point(252, 31);
-            this.limpiar_cliente_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.limpiar_cliente_label.Name = "limpiar_cliente_label";
-            this.limpiar_cliente_label.Size = new System.Drawing.Size(65, 23);
-            this.limpiar_cliente_label.TabIndex = 28;
-            this.limpiar_cliente_label.Text = "Limpiar";
-            this.limpiar_cliente_label.Click += new System.EventHandler(this.limpiar_cliente_label_Click);
             // 
             // filtrar_por_cliente_checkbox
             // 
@@ -304,6 +281,28 @@
             this.categorias_label.Size = new System.Drawing.Size(215, 25);
             this.categorias_label.TabIndex = 34;
             this.categorias_label.Text = "Filtrar por las categorias";
+            // 
+            // nombre_producto_tb
+            // 
+            this.nombre_producto_tb.Location = new System.Drawing.Point(22, 59);
+            this.nombre_producto_tb.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.nombre_producto_tb.Name = "nombre_producto_tb";
+            this.nombre_producto_tb.ReadOnly = true;
+            this.nombre_producto_tb.Size = new System.Drawing.Size(300, 29);
+            this.nombre_producto_tb.TabIndex = 29;
+            this.nombre_producto_tb.TabStop = false;
+            // 
+            // buscar_producto_linklabel
+            // 
+            this.buscar_producto_linklabel.AutoSize = true;
+            this.buscar_producto_linklabel.Location = new System.Drawing.Point(90, 30);
+            this.buscar_producto_linklabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
+            this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
+            this.buscar_producto_linklabel.TabIndex = 28;
+            this.buscar_producto_linklabel.TabStop = true;
+            this.buscar_producto_linklabel.Text = "Buscar";
+            this.buscar_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_producto_linklabel_LinkClicked);
             // 
             // CrearFiltroForm
             // 
@@ -355,13 +354,13 @@
         private System.Windows.Forms.LinkLabel buscar_linklabel;
         private System.Windows.Forms.TextBox cliente_tb;
         private System.Windows.Forms.Label cliente_label;
-        private System.Windows.Forms.ComboBox productos_dropdown;
         private System.Windows.Forms.CheckBox filtrar_por_producto_checkbox;
         private System.Windows.Forms.GroupBox filtrar_por_producto_groupbox;
         private System.Windows.Forms.Label producto_nombre_label;
         private System.Windows.Forms.GroupBox filtrar_por_cliente_groupbox;
         private System.Windows.Forms.CheckBox filtrar_por_cliente_checkbox;
-        private System.Windows.Forms.Label limpiar_cliente_label;
         private System.Windows.Forms.Label categorias_label;
+        private System.Windows.Forms.TextBox nombre_producto_tb;
+        private System.Windows.Forms.LinkLabel buscar_producto_linklabel;
     }
 }
