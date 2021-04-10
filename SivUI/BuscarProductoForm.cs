@@ -12,11 +12,11 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class BuscarClienteForm : Form
+    public partial class BuscarProductoForm : Form
     {
-        List<ClienteModelo> resultados;
-        ISolicitudCliente solicitante;
-        public BuscarClienteForm(ISolicitudCliente solicitante)
+        List<ProductoModelo> resultados;
+        ISolicitudProducto solicitante;
+        public BuscarProductoForm(ISolicitudProducto solicitante = null)
         {
             InitializeComponent();
             this.solicitante = solicitante;
@@ -26,23 +26,30 @@ namespace SivUI
         {
             resultados_listbox.DataSource = null;
             resultados_listbox.DataSource = resultados;
-            resultados_listbox.DisplayMember = nameof(ClienteModelo.NombreCompleto);
+            resultados_listbox.DisplayMember = nameof(ProductoModelo.Nombre);
         }
 
-        private void buscar_cliente_button_Click(object sender, EventArgs e)
+        private void Trabajando(bool trabajando)
         {
-            var nombre = nombre_completo_tb.Text.Trim();
+            seleccionar_button.Enabled = !trabajando;
+            buscar_producto_button.Enabled = !trabajando;
+
+        }
+
+        private void buscar_producto_button_Click(object sender, EventArgs e)
+        {
+            var nombre = nombre_producto_tb.Text.Trim();
 
             if (string.IsNullOrEmpty(nombre))
             {
                 return;
             }
 
-            seleccionar_button.Enabled = false;
-          
+            Trabajando(true);
+
             try
             {
-                resultados = ConfigGlobal.conexion.BuscarCliente_PorNombre(nombre);
+                resultados = ConfigGlobal.conexion.BuscarProducto_PorNombre(nombre);
                 ActualizarResultados();
             }
             catch (Exception ex)
@@ -50,13 +57,13 @@ namespace SivUI
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            seleccionar_button.Enabled = true;
+            Trabajando(false);
         }
 
         private void seleccionar_button_Click(object sender, EventArgs e)
         {
-            var clienteSeleccionado = (ClienteModelo)resultados_listbox.SelectedItem;
-            solicitante.ClienteListo(clienteSeleccionado);
+            var producto = ((ProductoModelo)resultados_listbox.SelectedItem);
+            solicitante.ProductoListo(producto);
             this.Close();
         }
     }

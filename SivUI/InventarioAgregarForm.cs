@@ -13,12 +13,11 @@ namespace SivUI
 {
     public partial class InventarioAgregarForm : Form, ISolicitudProducto
     {
-        List<ProductoModelo> productosDisponibles = ConfigGlobal.conexion.CargarProductos();
+        ProductoModelo producto;
 
         public InventarioAgregarForm()
         {
             InitializeComponent();
-            ActualizarListaProductos();
             ActualizarUltimoLoteId();
         }
 
@@ -61,13 +60,6 @@ namespace SivUI
             }
             return esFormValido;
         }
-        private void ActualizarListaProductos()
-        {
-            productos_dropdown.DataSource = null;
-            productos_dropdown.DataSource = productosDisponibles;
-            productos_dropdown.DisplayMember = nameof(CategoriaModelo.Nombre);
-        }
-
         private void inversion_total_tb_TextChanged(object sender, EventArgs e)
         {
             CalcularInversionPorUnidad();
@@ -96,13 +88,19 @@ namespace SivUI
         {
             if (ValidarForm() == false) return;
 
+            if (this.producto == null)
+            {
+                MessageBox.Show($"Debe seleccionar un producto.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             LoteModelo lote = new LoteModelo();
 
             lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
             lote.UnidadesDisponibles = lote.UnidadesCompradas;
             lote.InversionUnidad = decimal.Parse(inversion_unidad_tb.Text);
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
-            lote.Producto = (ProductoModelo)productos_dropdown.SelectedItem;
+            // todo - cambiar a tb
+            lote.Producto = this.producto;
             
             try
             {
@@ -129,10 +127,14 @@ namespace SivUI
 
         public void ProductoListo(ProductoModelo producto)
         {
-            productosDisponibles.Add(producto);
-            ActualizarListaProductos();
-            productos_dropdown.SelectedItem = producto;
-            
+            this.producto = producto;
+            nombre_producto_tb.Text = producto.Nombre;
+        }
+
+        private void buscar_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new BuscarProductoForm(this);
+            frm.ShowDialog();
         }
     }
 }

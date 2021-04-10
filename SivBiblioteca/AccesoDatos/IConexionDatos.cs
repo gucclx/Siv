@@ -26,5 +26,6 @@ namespace SivBiblioteca.AccesoDatos
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);
         List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre);
+        List<ProductoModelo> BuscarProducto_PorNombre(string nombre);
     }
 }

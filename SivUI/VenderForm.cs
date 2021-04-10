@@ -230,6 +230,7 @@ namespace SivUI
 
         public void ClienteListo(ClienteModelo cliente)
         {
+            if (cliente == null) return;
             this.cliente = cliente;
             cliente_tb.Text = this.cliente.NombreCompleto;            
         }

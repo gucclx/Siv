@@ -76,7 +76,7 @@ namespace SivUI
             frm.Show();
         }
 
-        public void TareaCompleta(List<CategoriaModelo> categorias)
+        public void CategoriasListas(List<CategoriaModelo> categorias)
         {
             foreach(var categoria in categorias)
             {

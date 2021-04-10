@@ -14,11 +14,11 @@ namespace SivUI
     public partial class CrearCategoriaForm : Form
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-        ISolicitudCategoria formSolicitante;
-        public CrearCategoriaForm(ISolicitudCategoria solicitante)
+        ISolicitudCategoria solicitante;
+        public CrearCategoriaForm(ISolicitudCategoria solicitante = null)
         {
             InitializeComponent();
-            formSolicitante = solicitante;
+            this.solicitante = solicitante;
         }
 
         private void ActualizarListaCategorias()
@@ -91,7 +91,11 @@ namespace SivUI
                 return;
             }
 
-            formSolicitante.TareaCompleta(categoriasSeleccionadas);
+            if (solicitante != null)
+            {
+                solicitante.CategoriasListas(categoriasSeleccionadas);
+            }
+            
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }

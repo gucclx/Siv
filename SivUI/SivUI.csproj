@@ -72,6 +72,12 @@
     <Compile Include="BuscarClienteForm.Designer.cs">
       <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BuscarProductoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuscarProductoForm.Designer.cs">
+      <DependentUpon>BuscarProductoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CrearCategoriaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,12 @@
     </Compile>
     <Compile Include="EliminarCategoriaForm.Designer.cs">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExportarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportarForm.Designer.cs">
+      <DependentUpon>ExportarForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GestionarInventarioForm.cs">
       <SubType>Form</SubType>
@@ -150,6 +162,9 @@
     <EmbeddedResource Include="BuscarClienteForm.resx">
       <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BuscarProductoForm.resx">
+      <DependentUpon>BuscarProductoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearCategoriaForm.resx">
       <DependentUpon>CrearCategoriaForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -164,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EliminarCategoriaForm.resx">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportarForm.resx">
+      <DependentUpon>ExportarForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionarInventarioForm.resx">
       <DependentUpon>GestionarInventarioForm.cs</DependentUpon>

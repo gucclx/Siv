@@ -32,22 +32,21 @@
             this.nombre_producto_tb = new System.Windows.Forms.TextBox();
             this.producto_nombre_label = new System.Windows.Forms.Label();
             this.nueva_categoria_linklabel = new System.Windows.Forms.LinkLabel();
-            this.categorias_disponibles_dropdown = new System.Windows.Forms.ComboBox();
-            this.seleccionar_categorias_label = new System.Windows.Forms.Label();
             this.categorias_seleccionadas_listbox = new System.Windows.Forms.ListBox();
-            this.agregar_categoria_button = new System.Windows.Forms.Button();
             this.remover_categoria_button = new System.Windows.Forms.Button();
             this.crear_producto_button = new System.Windows.Forms.Button();
             this.descripcion_tb = new System.Windows.Forms.TextBox();
             this.descripcion_label = new System.Windows.Forms.Label();
             this.categorias_seleccionadas_label = new System.Windows.Forms.Label();
+            this.buscar_categoria_linklabel = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // header_label
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(274, 24);
+            this.header_label.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.header_label.Location = new System.Drawing.Point(153, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(231, 30);
             this.header_label.TabIndex = 2;
@@ -55,15 +54,19 @@
             // 
             // nombre_producto_tb
             // 
-            this.nombre_producto_tb.Location = new System.Drawing.Point(49, 83);
+            this.nombre_producto_tb.BackColor = System.Drawing.Color.Gray;
+            this.nombre_producto_tb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.nombre_producto_tb.ForeColor = System.Drawing.Color.White;
+            this.nombre_producto_tb.Location = new System.Drawing.Point(22, 80);
             this.nombre_producto_tb.Name = "nombre_producto_tb";
-            this.nombre_producto_tb.Size = new System.Drawing.Size(691, 33);
+            this.nombre_producto_tb.Size = new System.Drawing.Size(497, 33);
             this.nombre_producto_tb.TabIndex = 4;
             // 
             // producto_nombre_label
             // 
             this.producto_nombre_label.AutoSize = true;
-            this.producto_nombre_label.Location = new System.Drawing.Point(44, 55);
+            this.producto_nombre_label.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.producto_nombre_label.Location = new System.Drawing.Point(17, 52);
             this.producto_nombre_label.Name = "producto_nombre_label";
             this.producto_nombre_label.Size = new System.Drawing.Size(194, 25);
             this.producto_nombre_label.TabIndex = 3;
@@ -73,87 +76,71 @@
             // 
             this.nueva_categoria_linklabel.AutoSize = true;
             this.nueva_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nueva_categoria_linklabel.Location = new System.Drawing.Point(243, 122);
+            this.nueva_categoria_linklabel.LinkColor = System.Drawing.Color.Ivory;
+            this.nueva_categoria_linklabel.Location = new System.Drawing.Point(309, 139);
             this.nueva_categoria_linklabel.Name = "nueva_categoria_linklabel";
-            this.nueva_categoria_linklabel.Size = new System.Drawing.Size(123, 21);
-            this.nueva_categoria_linklabel.TabIndex = 12;
+            this.nueva_categoria_linklabel.Size = new System.Drawing.Size(94, 21);
+            this.nueva_categoria_linklabel.TabIndex = 6;
             this.nueva_categoria_linklabel.TabStop = true;
-            this.nueva_categoria_linklabel.Text = "Nueva categoria";
+            this.nueva_categoria_linklabel.Text = "Crear nueva";
             this.nueva_categoria_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.nueva_categoria_linklabel_LinkClicked);
-            // 
-            // categorias_disponibles_dropdown
-            // 
-            this.categorias_disponibles_dropdown.FormattingEnabled = true;
-            this.categorias_disponibles_dropdown.Location = new System.Drawing.Point(49, 147);
-            this.categorias_disponibles_dropdown.Name = "categorias_disponibles_dropdown";
-            this.categorias_disponibles_dropdown.Size = new System.Drawing.Size(497, 33);
-            this.categorias_disponibles_dropdown.TabIndex = 13;
-            // 
-            // seleccionar_categorias_label
-            // 
-            this.seleccionar_categorias_label.AutoSize = true;
-            this.seleccionar_categorias_label.Location = new System.Drawing.Point(44, 119);
-            this.seleccionar_categorias_label.Name = "seleccionar_categorias_label";
-            this.seleccionar_categorias_label.Size = new System.Drawing.Size(201, 25);
-            this.seleccionar_categorias_label.TabIndex = 11;
-            this.seleccionar_categorias_label.Text = "Seleccionar categorias";
             // 
             // categorias_seleccionadas_listbox
             // 
+            this.categorias_seleccionadas_listbox.BackColor = System.Drawing.Color.DarkGray;
+            this.categorias_seleccionadas_listbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_listbox.ForeColor = System.Drawing.Color.Black;
             this.categorias_seleccionadas_listbox.FormattingEnabled = true;
             this.categorias_seleccionadas_listbox.HorizontalScrollbar = true;
-            this.categorias_seleccionadas_listbox.ItemHeight = 25;
-            this.categorias_seleccionadas_listbox.Location = new System.Drawing.Point(49, 216);
+            this.categorias_seleccionadas_listbox.ItemHeight = 21;
+            this.categorias_seleccionadas_listbox.Location = new System.Drawing.Point(22, 164);
             this.categorias_seleccionadas_listbox.Name = "categorias_seleccionadas_listbox";
             this.categorias_seleccionadas_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.categorias_seleccionadas_listbox.Size = new System.Drawing.Size(497, 154);
-            this.categorias_seleccionadas_listbox.TabIndex = 14;
-            // 
-            // agregar_categoria_button
-            // 
-            this.agregar_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_categoria_button.Location = new System.Drawing.Point(552, 144);
-            this.agregar_categoria_button.Name = "agregar_categoria_button";
-            this.agregar_categoria_button.Size = new System.Drawing.Size(188, 37);
-            this.agregar_categoria_button.TabIndex = 18;
-            this.agregar_categoria_button.Text = "Agregar";
-            this.agregar_categoria_button.UseVisualStyleBackColor = true;
-            this.agregar_categoria_button.Click += new System.EventHandler(this.agregar_categoria_button_Click);
+            this.categorias_seleccionadas_listbox.Size = new System.Drawing.Size(497, 107);
+            this.categorias_seleccionadas_listbox.TabIndex = 7;
             // 
             // remover_categoria_button
             // 
-            this.remover_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.remover_categoria_button.Location = new System.Drawing.Point(552, 216);
+            this.remover_categoria_button.BackColor = System.Drawing.Color.DimGray;
+            this.remover_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.remover_categoria_button.ForeColor = System.Drawing.Color.LightSkyBlue;
+            this.remover_categoria_button.Location = new System.Drawing.Point(331, 279);
             this.remover_categoria_button.Name = "remover_categoria_button";
             this.remover_categoria_button.Size = new System.Drawing.Size(188, 37);
-            this.remover_categoria_button.TabIndex = 19;
+            this.remover_categoria_button.TabIndex = 8;
             this.remover_categoria_button.Text = "Remover selección";
-            this.remover_categoria_button.UseVisualStyleBackColor = true;
+            this.remover_categoria_button.UseVisualStyleBackColor = false;
             this.remover_categoria_button.Click += new System.EventHandler(this.remover_categoria_button_Click);
             // 
             // crear_producto_button
             // 
-            this.crear_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.crear_producto_button.Location = new System.Drawing.Point(552, 440);
+            this.crear_producto_button.BackColor = System.Drawing.Color.DimGray;
+            this.crear_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.crear_producto_button.ForeColor = System.Drawing.Color.LightSkyBlue;
+            this.crear_producto_button.Location = new System.Drawing.Point(331, 452);
             this.crear_producto_button.Name = "crear_producto_button";
             this.crear_producto_button.Size = new System.Drawing.Size(188, 37);
-            this.crear_producto_button.TabIndex = 20;
+            this.crear_producto_button.TabIndex = 10;
             this.crear_producto_button.Text = "Crear producto";
-            this.crear_producto_button.UseVisualStyleBackColor = true;
+            this.crear_producto_button.UseVisualStyleBackColor = false;
             this.crear_producto_button.Click += new System.EventHandler(this.crear_producto_button_Click);
             // 
             // descripcion_tb
             // 
-            this.descripcion_tb.Location = new System.Drawing.Point(49, 401);
+            this.descripcion_tb.BackColor = System.Drawing.Color.DarkGray;
+            this.descripcion_tb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.descripcion_tb.Location = new System.Drawing.Point(22, 322);
             this.descripcion_tb.Multiline = true;
             this.descripcion_tb.Name = "descripcion_tb";
             this.descripcion_tb.Size = new System.Drawing.Size(497, 76);
-            this.descripcion_tb.TabIndex = 22;
+            this.descripcion_tb.TabIndex = 9;
             // 
             // descripcion_label
             // 
             this.descripcion_label.AutoSize = true;
-            this.descripcion_label.Location = new System.Drawing.Point(44, 373);
+            this.descripcion_label.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.descripcion_label.Location = new System.Drawing.Point(17, 294);
             this.descripcion_label.Name = "descripcion_label";
             this.descripcion_label.Size = new System.Drawing.Size(111, 25);
             this.descripcion_label.TabIndex = 21;
@@ -162,31 +149,43 @@
             // categorias_seleccionadas_label
             // 
             this.categorias_seleccionadas_label.AutoSize = true;
-            this.categorias_seleccionadas_label.Location = new System.Drawing.Point(44, 183);
+            this.categorias_seleccionadas_label.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.categorias_seleccionadas_label.Location = new System.Drawing.Point(17, 136);
             this.categorias_seleccionadas_label.Name = "categorias_seleccionadas_label";
             this.categorias_seleccionadas_label.Size = new System.Drawing.Size(224, 25);
             this.categorias_seleccionadas_label.TabIndex = 23;
             this.categorias_seleccionadas_label.Text = "Categorias seleccionadas";
             // 
+            // buscar_categoria_linklabel
+            // 
+            this.buscar_categoria_linklabel.AutoSize = true;
+            this.buscar_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_categoria_linklabel.LinkColor = System.Drawing.Color.Ivory;
+            this.buscar_categoria_linklabel.Location = new System.Drawing.Point(247, 139);
+            this.buscar_categoria_linklabel.Name = "buscar_categoria_linklabel";
+            this.buscar_categoria_linklabel.Size = new System.Drawing.Size(56, 21);
+            this.buscar_categoria_linklabel.TabIndex = 5;
+            this.buscar_categoria_linklabel.TabStop = true;
+            this.buscar_categoria_linklabel.Text = "Buscar";
+            this.buscar_categoria_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_categoria_linklabel_LinkClicked);
+            // 
             // CrearProductoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(784, 501);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(537, 501);
+            this.Controls.Add(this.buscar_categoria_linklabel);
             this.Controls.Add(this.categorias_seleccionadas_label);
             this.Controls.Add(this.descripcion_tb);
             this.Controls.Add(this.descripcion_label);
             this.Controls.Add(this.crear_producto_button);
             this.Controls.Add(this.remover_categoria_button);
-            this.Controls.Add(this.agregar_categoria_button);
             this.Controls.Add(this.categorias_seleccionadas_listbox);
             this.Controls.Add(this.nueva_categoria_linklabel);
-            this.Controls.Add(this.categorias_disponibles_dropdown);
-            this.Controls.Add(this.seleccionar_categorias_label);
-            this.Controls.Add(this.nombre_producto_tb);
             this.Controls.Add(this.producto_nombre_label);
             this.Controls.Add(this.header_label);
+            this.Controls.Add(this.nombre_producto_tb);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.Margin = new System.Windows.Forms.Padding(6);
@@ -204,14 +203,12 @@
         private System.Windows.Forms.TextBox nombre_producto_tb;
         private System.Windows.Forms.Label producto_nombre_label;
         private System.Windows.Forms.LinkLabel nueva_categoria_linklabel;
-        private System.Windows.Forms.ComboBox categorias_disponibles_dropdown;
-        private System.Windows.Forms.Label seleccionar_categorias_label;
         private System.Windows.Forms.ListBox categorias_seleccionadas_listbox;
-        private System.Windows.Forms.Button agregar_categoria_button;
         private System.Windows.Forms.Button remover_categoria_button;
         private System.Windows.Forms.Button crear_producto_button;
         private System.Windows.Forms.TextBox descripcion_tb;
         private System.Windows.Forms.Label descripcion_label;
         private System.Windows.Forms.Label categorias_seleccionadas_label;
+        private System.Windows.Forms.LinkLabel buscar_categoria_linklabel;
     }
 }

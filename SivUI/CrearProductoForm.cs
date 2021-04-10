@@ -12,14 +12,11 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    // TODO - si no se cierrra el formulario quiza exista un bug potencial donde el frm llamante recibe multiples productos
-    // TODO - seleccionar categorias deberia abrir buscar categorias form
     public partial class CrearProductoForm : Form, ISolicitudCategoria
     {
-        List<CategoriaModelo> categoriasDisponibles = ConfigGlobal.conexion.CargarCategorias();
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ISolicitudProducto solicitante;
-        public CrearProductoForm(ISolicitudProducto solicitante)
+        public CrearProductoForm(ISolicitudProducto solicitante = null)
         {
             InitializeComponent();
             ActualizarCategorias();
@@ -28,20 +25,9 @@ namespace SivUI
 
         private void ActualizarCategorias()
         {
-            categorias_disponibles_dropdown.DataSource = null;
-            categorias_disponibles_dropdown.DataSource = categoriasDisponibles;
-            categorias_disponibles_dropdown.DisplayMember = nameof(CategoriaModelo.Nombre);
             categorias_seleccionadas_listbox.DataSource = null;
             categorias_seleccionadas_listbox.DataSource = categoriasSeleccionadas;
             categorias_seleccionadas_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
-        }
-
-        private void agregar_categoria_button_Click(object sender, EventArgs e)
-        {
-            var categoriaSeleccionada = (CategoriaModelo)categorias_disponibles_dropdown.SelectedItem;
-            categoriasSeleccionadas.Add(categoriaSeleccionada);
-            categoriasDisponibles.Remove(categoriaSeleccionada);
-            ActualizarCategorias();
         }
 
         private void remover_categoria_button_Click(object sender, EventArgs e)
@@ -51,7 +37,6 @@ namespace SivUI
             foreach(var categoria in categoriasARemover)
             {
                 categoriasSeleccionadas.Remove(categoria);
-                categoriasDisponibles.Add(categoria);
             }
 
             ActualizarCategorias();
@@ -109,19 +94,18 @@ namespace SivUI
             nombre_producto_tb.Focus();
             descripcion_tb.Clear();
 
-            foreach (var categoria in categoriasSeleccionadas)
-            {
-                categoriasDisponibles.Add(categoria);
-            }
-
             categoriasSeleccionadas = new List<CategoriaModelo>();
             ActualizarCategorias();
 
-            solicitante.ProductoListo(producto);
+            if (solicitante != null)
+            {
+                solicitante.ProductoListo(producto);
+            }
+            
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public void TareaCompleta(List<CategoriaModelo> categorias)
+        public void CategoriasListas(List<CategoriaModelo> categorias)
         {
             foreach (var categoria in categorias)
             {
@@ -136,5 +120,10 @@ namespace SivUI
             frm.Show();
         }
 
+        private void buscar_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new BuscarCategoriasForm(this);
+            frm.Show();
+        }
     }
 }

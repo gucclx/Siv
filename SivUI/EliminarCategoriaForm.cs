@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class EliminarCategoriaForm : Form
+    public partial class EliminarCategoriaForm : Form, ISolicitudCategoria
     {
-        List<CategoriaModelo> categoriasDisponibles = ConfigGlobal.conexion.CargarCategorias();
+        List<CategoriaModelo> CategoriasAEliminar;
         public EliminarCategoriaForm()
         {
             InitializeComponent();
@@ -22,23 +22,17 @@ namespace SivUI
 
         private void ActualizarListaCategorias()
         {
-            categorias_existentes_listbox.DataSource = null;
-            categorias_existentes_listbox.DataSource = categoriasDisponibles;
-            categorias_existentes_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
+            categorias_listbox.DataSource = null;
+            categorias_listbox.DataSource = CategoriasAEliminar;
+            categorias_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
         }
 
         private void eliminar_categoria_button_Click(object sender, EventArgs e)
         {
-           
-            var categorias = categorias_existentes_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
-        
-            if (categorias.Count == 0)
-            {
-                return;
-            }
-
+            
             var mensaje = "Las categorias seleccionadas se eliminarán de la base de datos. Estas categorias ya no serán asociadas con ningún producto. ¿Desea continuar?";
             var continuar = MessageBox.Show(mensaje, "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
             if (continuar == DialogResult.No)
             {
                 return;
@@ -46,26 +40,39 @@ namespace SivUI
 
             try
             {
-                ConfigGlobal.conexion.EliminarCategorias(categorias);
+                ConfigGlobal.conexion.EliminarCategorias(CategoriasAEliminar);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            CategoriasAEliminar = null;
             
             MessageBox.Show("Categorias eliminadas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            foreach (var categoria in categorias)
-            {
-                categoriasDisponibles.Remove(categoria);
-            }
             ActualizarListaCategorias();
         }
 
-        private void cerrar_button_Click(object sender, EventArgs e)
+        private void buscar_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Close();
+            var frm = new BuscarCategoriasForm(this);
+            frm.Show();
+        }
+
+        public void CategoriasListas(List<CategoriaModelo> categorias)
+        {
+            CategoriasAEliminar = categorias;
+            ActualizarListaCategorias();
+        }
+
+        private void remover_button_Click(object sender, EventArgs e)
+        {
+            var categoriasSeleccionadas = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
+            foreach (var categoria in categoriasSeleccionadas)
+            {
+                CategoriasAEliminar.Remove(categoria);
+            }
         }
     }
 }

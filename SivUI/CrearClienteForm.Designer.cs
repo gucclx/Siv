@@ -41,17 +41,17 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(190, 9);
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Location = new System.Drawing.Point(188, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(141, 30);
+            this.header_label.Size = new System.Drawing.Size(144, 30);
             this.header_label.TabIndex = 15;
             this.header_label.Text = "Nuevo cliente";
             // 
             // crear_cliente_button
             // 
             this.crear_cliente_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.crear_cliente_button.Location = new System.Drawing.Point(394, 321);
+            this.crear_cliente_button.Location = new System.Drawing.Point(396, 264);
             this.crear_cliente_button.Name = "crear_cliente_button";
             this.crear_cliente_button.Size = new System.Drawing.Size(115, 37);
             this.crear_cliente_button.TabIndex = 3;
@@ -61,7 +61,7 @@
             // 
             // nombre_cliente_tb
             // 
-            this.nombre_cliente_tb.Location = new System.Drawing.Point(14, 94);
+            this.nombre_cliente_tb.Location = new System.Drawing.Point(14, 85);
             this.nombre_cliente_tb.Name = "nombre_cliente_tb";
             this.nombre_cliente_tb.Size = new System.Drawing.Size(497, 33);
             this.nombre_cliente_tb.TabIndex = 0;
@@ -69,7 +69,7 @@
             // nombre_cliente_label
             // 
             this.nombre_cliente_label.AutoSize = true;
-            this.nombre_cliente_label.Location = new System.Drawing.Point(9, 63);
+            this.nombre_cliente_label.Location = new System.Drawing.Point(9, 54);
             this.nombre_cliente_label.Name = "nombre_cliente_label";
             this.nombre_cliente_label.Size = new System.Drawing.Size(81, 25);
             this.nombre_cliente_label.TabIndex = 16;
@@ -77,7 +77,7 @@
             // 
             // apellido_cliente_tb
             // 
-            this.apellido_cliente_tb.Location = new System.Drawing.Point(14, 164);
+            this.apellido_cliente_tb.Location = new System.Drawing.Point(14, 155);
             this.apellido_cliente_tb.Name = "apellido_cliente_tb";
             this.apellido_cliente_tb.Size = new System.Drawing.Size(497, 33);
             this.apellido_cliente_tb.TabIndex = 1;
@@ -85,7 +85,7 @@
             // apellido_cliente_label
             // 
             this.apellido_cliente_label.AutoSize = true;
-            this.apellido_cliente_label.Location = new System.Drawing.Point(9, 133);
+            this.apellido_cliente_label.Location = new System.Drawing.Point(9, 124);
             this.apellido_cliente_label.Name = "apellido_cliente_label";
             this.apellido_cliente_label.Size = new System.Drawing.Size(82, 25);
             this.apellido_cliente_label.TabIndex = 19;
@@ -93,7 +93,7 @@
             // 
             // numero_contacto_cliente_tb
             // 
-            this.numero_contacto_cliente_tb.Location = new System.Drawing.Point(14, 234);
+            this.numero_contacto_cliente_tb.Location = new System.Drawing.Point(14, 225);
             this.numero_contacto_cliente_tb.Name = "numero_contacto_cliente_tb";
             this.numero_contacto_cliente_tb.Size = new System.Drawing.Size(497, 33);
             this.numero_contacto_cliente_tb.TabIndex = 2;
@@ -101,7 +101,7 @@
             // numero_contacto_label
             // 
             this.numero_contacto_label.AutoSize = true;
-            this.numero_contacto_label.Location = new System.Drawing.Point(9, 203);
+            this.numero_contacto_label.Location = new System.Drawing.Point(9, 194);
             this.numero_contacto_label.Name = "numero_contacto_label";
             this.numero_contacto_label.Size = new System.Drawing.Size(278, 25);
             this.numero_contacto_label.TabIndex = 21;
@@ -112,7 +112,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(521, 370);
+            this.ClientSize = new System.Drawing.Size(521, 343);
             this.Controls.Add(this.numero_contacto_cliente_tb);
             this.Controls.Add(this.numero_contacto_label);
             this.Controls.Add(this.apellido_cliente_tb);

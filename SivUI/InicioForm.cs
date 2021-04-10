@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SivBiblioteca.Modelos;
+using SivBiblioteca;
 
 namespace SivUI
 {
-    public partial class InicioForm : Form, ISolicitudCategoria, ISolicitudProducto
+    public partial class InicioForm : Form
     {
         public InicioForm()
         {
@@ -36,7 +37,7 @@ namespace SivUI
 
         private void crearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frm = new CrearCategoriaForm(this);
+            var frm = new CrearCategoriaForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -52,7 +53,7 @@ namespace SivUI
 
         private void crear_producto_ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            var frm = new CrearProductoForm(this);
+            var frm = new CrearProductoForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -66,18 +67,33 @@ namespace SivUI
             this.Show();
         }
 
-        public void ProductoListo(ProductoModelo producto)
-        {
-
-        }
-        public void TareaCompleta(List<CategoriaModelo> categorias)
-        {
-
-        }
-
         private void gestionarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new GestionarInventarioForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void exportarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new ExportarForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void eliminarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new EliminarCategoriaForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void crearToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var frm = new CrearClienteForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();

@@ -79,7 +79,7 @@ namespace SivUI
 
         private void listo_button_Click(object sender, EventArgs e)
         {
-            solicitante.TareaCompleta(categoriasSeleccionadas);
+            solicitante.CategoriasListas(categoriasSeleccionadas);
             this.Close();
         }
     }

@@ -111,6 +111,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="categorias"> Lista de categorias a eliminar. </param>
         public void EliminarCategorias(List<CategoriaModelo> categorias)
         {
+            if (categorias == null) return;
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "delete from Categorias where Id = @Id";
@@ -194,7 +195,6 @@ namespace SivBiblioteca.AccesoDatos
             return lote;
         }
 
-        // TODO - actualizar logica para lotes
         /// <summary>
         /// Guarda una lista de ventas a la base de datos.
         /// </summary>
@@ -538,6 +538,26 @@ namespace SivBiblioteca.AccesoDatos
             {
                 return conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
             }
+        }
+
+        // TODO - cargar las categorias del producto.
+        /// <summary>
+        /// Carga y retorna una lista de productos cuyo nombre contiene el parametro 'nombre'.
+        /// </summary>
+        /// <param name="nombre"> Nombre del producto a buscar. </param>
+        /// <returns> Los productos encontrados. </returns>
+        public List<ProductoModelo> BuscarProducto_PorNombre(string nombre)
+        {
+            nombre = nombre.Trim();
+            var productos = new List<ProductoModelo>();
+            if (string.IsNullOrEmpty(nombre)) { return productos; }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = "select * from Productos where Nombre like @Nombre";
+                productos = conexion.Query<ProductoModelo>(q, new { Nombre = '%' + nombre + '%' }).ToList();
+            }
+            return productos;
         }
     }         
 }

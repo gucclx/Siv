@@ -9,6 +9,6 @@ namespace SivUI
 {
     public interface ISolicitudCategoria
     {
-        void TareaCompleta(List<CategoriaModelo> categorias);
+        void CategoriasListas(List<CategoriaModelo> categorias);
     }
 }
