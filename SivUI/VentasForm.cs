@@ -14,13 +14,13 @@ using System.IO;
 
 namespace SivUI
 {
-    public partial class GestionarVentasForm : Form, ISolicitudFiltro
+    public partial class VentasForm : Form, ISolicitudFiltro
     {
         BindingSource resultados;
         ReporteFiltroModelo reporteFiltro;
         const int LimiteFilasReporte = 1000;
 
-        public GestionarVentasForm()
+        public VentasForm()
         {
             InitializeComponent();
 

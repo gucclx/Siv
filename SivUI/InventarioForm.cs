@@ -13,12 +13,12 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class GestionarInventarioForm : Form, ISolicitudFiltro
+    public partial class InventarioForm : Form, ISolicitudFiltro
     {
         BindingSource resultados;
         ReporteFiltroModelo reporteFiltro;
         const int LimiteFilasReporte = 1000;
-        public GestionarInventarioForm()
+        public InventarioForm()
         {
             InitializeComponent();
             resultados_dtgv.AutoGenerateColumns = false;
@@ -41,11 +41,11 @@ namespace SivUI
 
             var unidadesCompradasColumna = new DataGridViewTextBoxColumn();
             unidadesCompradasColumna.HeaderText = "Unidades compradas";
-            unidadesCompradasColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesCompradas);
+            unidadesCompradasColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesCompradasLote);
 
             var unidadesDisponiblesColumna = new DataGridViewTextBoxColumn();
             unidadesDisponiblesColumna.HeaderText = "Unidades disponibles";
-            unidadesDisponiblesColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesDisponibles);
+            unidadesDisponiblesColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesDisponiblesLote);
 
             var inversionUnidadColumna = new DataGridViewTextBoxColumn();
             inversionUnidadColumna.HeaderText = "Inversión Unidad";
@@ -53,7 +53,7 @@ namespace SivUI
 
             var inversionTotalColumna = new DataGridViewTextBoxColumn();
             inversionTotalColumna.HeaderText = "Inversión total";
-            inversionTotalColumna.DataPropertyName = nameof(ReporteInventarioModelo.InversionTotal);
+            inversionTotalColumna.DataPropertyName = nameof(ReporteInventarioModelo.InversionLote);
 
             var fechaAgregadocolumna = new DataGridViewTextBoxColumn();
             fechaAgregadocolumna.HeaderText = "Fecha Agregado";
@@ -119,9 +119,9 @@ namespace SivUI
 
             foreach (ReporteInventarioModelo reporte in resultados)
             {
-                unidadesTotal += reporte.UnidadesDisponibles;
-                inversionTotal += reporte.InversionTotal;
-                valorUnidades += reporte.UnidadesDisponibles * reporte.InversionUnidad;
+                unidadesTotal += reporte.UnidadesDisponiblesLote;
+                inversionTotal += reporte.InversionLote;
+                valorUnidades += reporte.UnidadesDisponiblesLote * reporte.InversionUnidad;
             }
 
             total_unidades_tb.Text = unidadesTotal.ToString();

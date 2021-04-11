@@ -13,8 +13,6 @@ namespace SivBiblioteca.AccesoDatos
     // TODO - validar que todos los datos esten correctos.
     // todo - cargar_porNombre<type>(string nombre);
     // todo - probar caso producto con lote agotado (lotes.unidades == 0)
-    // todo - guardar la inversion total de los lotes en la base de datos en vez de la inversion por unidad.
-    // guardar la inversion por unidad produce una inversion total imprecisa cuando se calcula a partir de una inversion por unidad imprecisa.
 
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
@@ -183,7 +181,7 @@ namespace SivBiblioteca.AccesoDatos
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = $@"select Id, ProductoId, UnidadesCompradas, UnidadesDisponibles, 
-                            (InversionUnidad / @FC) as 'InversionUnidad', 
+                            (Inversion / @FC) as 'Inversion',
                             (PrecioVentaUnidad / @FC) as 'PrecioVentaUnidad', 
                             datetime(FechaCreacion, 'unixepoch', 'localtime') as 'FechaCreacion'
                             from lotes where id = @Id";
@@ -216,7 +214,7 @@ namespace SivBiblioteca.AccesoDatos
                 }
                 else if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
                 {
-                    throw new Exception($"El numero de unidades solicitadas sobrepasa las del lote.");
+                    throw new Exception($"El numero de unidades solicitadas sobrepasa las disponibles en el lote.");
                 }
             }
 
@@ -302,7 +300,8 @@ namespace SivBiblioteca.AccesoDatos
 
             var q = @"select lotes.id as 'LoteId', productos.nombre as 'NombreProducto', 
                             ventas.Unidades as 'UnidadesVendidas',
-                            lotes.InversionUnidad / @FC as 'InversionUnidad',
+                            lotes.Inversion / @FC as 'InversionLote',
+                            lotes.UnidadesCompradas as 'UnidadesCompradasLote',
                             ventas.PrecioVentaUnidad / @FC as 'PrecioVentaUnidad',
                             datetime(ventas.fecha, 'unixepoch', 'localtime') as 'FechaVenta',
                             clientes.Nombre || ' ' || coalesce(clientes.apellido, '') as 'NombreCliente'
@@ -366,7 +365,7 @@ namespace SivBiblioteca.AccesoDatos
             }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
+            {                
                 return conexion.Query<ReporteVentaModelo>(q, parametros).ToList();
             }
         }
@@ -410,9 +409,9 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException($"Las unidades compradas y disponibles no deben diferir incialmente. Unidades compra: {lote.UnidadesCompradas}, Unidades disponibles: {lote.UnidadesDisponibles}");
             }
 
-            if (lote.InversionUnidad < 0)
+            if (lote.Inversion < 0)
             {
-                throw new ArgumentException($"Inversion por unidad invalida: {lote.InversionUnidad}, la inversion por unidad no debe ser negativa.");
+                throw new ArgumentException($"Inversion invalida: {lote.Inversion}, la inversion no debe ser negativa.");
             }
 
             if (lote.PrecioVentaUnidad < 0)
@@ -422,15 +421,15 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, InversionUnidad, PrecioVentaUnidad, FechaCreacion)
-                            values (@ProductoId, @UnidadesCompradas, @UnidadesDisponibles, @InversionUnidad, @PrecioVentaUnidad, strftime('%s', 'now'))";
+                var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, Inversion, PrecioVentaUnidad, FechaCreacion)
+                            values (@ProductoId, @UnidadesCompradas, @UnidadesDisponibles, @Inversion, @PrecioVentaUnidad, strftime('%s', 'now'))";
 
                 conexion.Execute(q, new
                 {
                     ProductoId = lote.Producto.Id,
                     UnidadesCompradas = lote.UnidadesCompradas,
                     UnidadesDisponibles = lote.UnidadesDisponibles,
-                    InversionUnidad = ConvertirMonedaARepresentacionInterna(lote.InversionUnidad),
+                    Inversion = ConvertirMonedaARepresentacionInterna(lote.Inversion),
                     PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad)
                 });
 
@@ -483,9 +482,9 @@ namespace SivBiblioteca.AccesoDatos
                     productos.Descripcion as 'DescripcionProducto',
                     lotes.PrecioVentaUnidad / @FC as 'PrecioVentaUnidad',
                     lotes.id as 'LoteId',
-                    lotes.UnidadesCompradas as 'UnidadesCompradas',
-                    lotes.UnidadesDisponibles as 'UnidadesDisponibles',
-                    lotes.InversionUnidad / @FC as 'InversionUnidad',
+                    lotes.UnidadesCompradas as 'UnidadesCompradasLote',
+                    lotes.UnidadesDisponibles as 'UnidadesDisponiblesLote',
+                    lotes.Inversion / @FC as 'InversionLote',
                     datetime(lotes.FechaCreacion, 'unixepoch', 'localtime') as 'FechaAgregado'
                     from Productos
                     join lotes on lotes.ProductoId = productos.Id";

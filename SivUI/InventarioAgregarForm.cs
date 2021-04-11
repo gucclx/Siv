@@ -97,8 +97,9 @@ namespace SivUI
 
             lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
             lote.UnidadesDisponibles = lote.UnidadesCompradas;
-            lote.InversionUnidad = decimal.Parse(inversion_unidad_tb.Text);
+            lote.Inversion = decimal.Parse(inversion_total_tb.Text);
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
+
             // todo - cambiar a tb
             lote.Producto = this.producto;
             

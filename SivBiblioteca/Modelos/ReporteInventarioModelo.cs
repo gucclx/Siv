@@ -32,22 +32,23 @@ namespace SivBiblioteca.Modelos
 
         [Name("Unidades compradas")]
         [Index(4)]
-        public int UnidadesCompradas { get; set; }
+        public int UnidadesCompradasLote { get; set; }
 
         [Name("Unidades disponibles")]
         [Index(5)]
-        public int UnidadesDisponibles { get; set; }
+        public int UnidadesDisponiblesLote { get; set; }
 
         [Name("Inversión Unidad")]
         [Index(6)]
-        public decimal InversionUnidad { get; set; }
+        public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
 
         [Name("Inversión total")]
         [Index(7)]
-        public decimal InversionTotal { get { return UnidadesCompradas * InversionUnidad; } }
+        public decimal InversionLote { get; set; }
 
         [Name("Fecha agregado")]
-        [Index(7)]
+        [Index(8)]
         public string FechaAgregado { get; set; }
+
     }
 }

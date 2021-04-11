@@ -35,7 +35,7 @@ namespace SivUI
             this.Show();
         }
 
-        private void crearToolStripMenuItem_Click(object sender, EventArgs e)
+        private void crear_categorias_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new CrearCategoriaForm();
             this.Hide();
@@ -45,7 +45,7 @@ namespace SivUI
 
         private void gestionar_ventas_ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            var frm = new GestionarVentasForm();
+            var frm = new VentasForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -61,15 +61,15 @@ namespace SivUI
 
         private void gestionar_ventas_ToolStripMenuItem1_Click_1(object sender, EventArgs e)
         {
-            var frm = new GestionarVentasForm();
+            var frm = new VentasForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
         }
 
-        private void gestionarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void acceder_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frm = new GestionarInventarioForm();
+            var frm = new InventarioForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -83,17 +83,9 @@ namespace SivUI
             this.Show();
         }
 
-        private void eliminarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void eliminar_categorias_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new EliminarCategoriaForm();
-            this.Hide();
-            frm.ShowDialog();
-            this.Show();
-        }
-
-        private void crearToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            var frm = new CrearClienteForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -115,7 +107,15 @@ namespace SivUI
             this.Show();
         }
 
-        private void editar_cliente_ToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void crear_clientes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new CrearClienteForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void editar_cliente_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new EditarClienteForm();
             this.Hide();

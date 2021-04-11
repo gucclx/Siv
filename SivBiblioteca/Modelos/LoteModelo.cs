@@ -13,7 +13,8 @@ namespace SivBiblioteca.Modelos
         public int ProductoId { get; set; }
         public int UnidadesDisponibles { get; set; }
         public int UnidadesCompradas { get; set; }
-        public decimal InversionUnidad { get; set; }
+        public decimal Inversion { get; set; }
+        public decimal InversionUnidad { get { return Inversion / UnidadesCompradas; } }
         public decimal PrecioVentaUnidad { get; set; }
         public string FechaCreacion { get; set; }
 

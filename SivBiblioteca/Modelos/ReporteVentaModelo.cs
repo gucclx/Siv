@@ -14,6 +14,12 @@ namespace SivBiblioteca.Modelos
     /// </summary>
     public class ReporteVentaModelo
     {
+        [Ignore]
+        public decimal InversionLote { get; set; }
+
+        [Ignore]
+        public int UnidadesCompradasLote { get; set; }
+
         [Name("ID lote")]
         [Index(0)]
         public int LoteId { get; set; }
@@ -28,7 +34,7 @@ namespace SivBiblioteca.Modelos
 
         [Name("Inversión Unidad")]
         [Index(3)]
-        public decimal InversionUnidad { get; set; }
+        public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
 
         [Name("Precio Venta Unidad")]
         [Index(4)]
@@ -40,7 +46,7 @@ namespace SivBiblioteca.Modelos
 
         [Name("Ingreso Venta")]
         [Index(6)]
-        public decimal IngresoVenta { get { return PrecioVentaUnidad* UnidadesVendidas; } }
+        public decimal IngresoVenta { get { return PrecioVentaUnidad * UnidadesVendidas; } }
 
         [Name("Ganancia Venta")]
         [Index(7)]

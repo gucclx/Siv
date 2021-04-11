@@ -145,6 +145,7 @@ namespace SivUI
         {
             // verificar que la lista no este vacia
             var listaVentas = ventas.List.OfType<VentaModelo>().ToList();
+
             if (listaVentas.Count == 0)
             {
                 return;
