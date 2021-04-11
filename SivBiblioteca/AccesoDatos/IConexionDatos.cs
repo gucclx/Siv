@@ -11,6 +11,7 @@ namespace SivBiblioteca.AccesoDatos
     {
         void GuardarCategorias(List<CategoriaModelo> categoria);
         List<CategoriaModelo> CargarCategorias();
+        List<CategoriaModelo> CargarCategorias_PorProductoId(int id);
         bool CategoriaExiste(string nombreCategoria);
         void EliminarCategorias(List<CategoriaModelo> categorias);
         void GuardarProducto(ProductoModelo producto);
@@ -28,5 +29,7 @@ namespace SivBiblioteca.AccesoDatos
         List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre);
         List<ProductoModelo> BuscarProducto_PorNombre(string nombre);
         void EditarProducto(ProductoModelo producto);
+        void EditarLote(LoteModelo lote);
+        void EditarCliente(ClienteModelo cliente);
     }
 }

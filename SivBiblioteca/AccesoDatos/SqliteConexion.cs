@@ -13,6 +13,8 @@ namespace SivBiblioteca.AccesoDatos
     // TODO - validar que todos los datos esten correctos.
     // todo - cargar_porNombre<type>(string nombre);
     // todo - probar caso producto con lote agotado (lotes.unidades == 0)
+    // todo - guardar la inversion total de los lotes en la base de datos en vez de la inversion por unidad.
+    // guardar la inversion por unidad produce una inversion total imprecisa cuando se calcula a partir de una inversion por unidad imprecisa.
 
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
@@ -560,6 +562,7 @@ namespace SivBiblioteca.AccesoDatos
             return productos;
         }
 
+        // TODO - probar con productos.categoria == null
         public void EditarProducto(ProductoModelo producto)
         {
             if (producto == null)
@@ -586,7 +589,7 @@ namespace SivBiblioteca.AccesoDatos
                     try
                     {
                         q = "delete from ProductoCategoria where ProductoId = @Id";
-                        conexion.Execute(q);
+                        conexion.Execute(q, new { Id = producto.Id});
 
                         q = @"insert into ProductoCategoria (productoId, CategoriaId)
                                 values (@ProductoId, @CategoriaId)";
@@ -604,6 +607,94 @@ namespace SivBiblioteca.AccesoDatos
                         throw;
                     }                   
                 }
+            }
+        }
+
+        /// <summary>
+        /// Carga y retorna las categorias de un producto especificando el id del producto.
+        /// Util cuando se carga un producto desde BuscarProducto_PorNombre
+        /// ya que es ineficiente cargar todas las categorias de todos los posibles
+        /// productos de dicha funcion.
+        /// </summary>
+        /// <param name="id"> Id del producto. </param>
+        /// <returns> Las categorias del producto cuyo id fue proporcionado. </returns>
+        public List<CategoriaModelo> CargarCategorias_PorProductoId(int id)
+        {
+            List<CategoriaModelo> categorias = null;
+            if (id < 1) return categorias;
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"select categorias.nombre, categorias.id from Categorias 
+                        join ProductoCategoria on ProductoCategoria.CategoriaId = categorias.Id
+                        where ProductoCategoria.ProductoId = @Id";
+                return categorias = conexion.Query<CategoriaModelo>(q, new { Id = id }).ToList();
+            }
+        }
+
+        public void EditarLote(LoteModelo lote)
+        {
+            if (lote == null)
+            {
+                throw new ArgumentException("Lote nulo");
+            }
+            if (lote.Id < 1)
+            {
+                throw new ArgumentException($"Id del lote invalido: { lote.Id }");
+            }
+            if (lote.UnidadesDisponibles < 0)
+            {
+                throw new ArgumentException($"Unidades disponibles invalidas: { lote.UnidadesDisponibles } La cantidad no puede ser negativa.");
+            }
+            if (lote.PrecioVentaUnidad < 0)
+            {
+                throw new ArgumentException($"Precio de venta por unidad invalido: { lote.PrecioVentaUnidad} El precio no puede ser negativo.");
+            }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"select UnidadesDisponibles from lotes where Id = @Id";
+                var unidadesDisponibles = conexion.ExecuteScalar<int>(q, new { Id = lote.Id });
+
+                if (lote.UnidadesDisponibles > unidadesDisponibles)
+                {
+                    throw new ArgumentException($@"Unidades disponibles solicitadas invalidas. 
+                                                    La cantidad de unidades disponibles solicitada es mayor a la cantidad de unidades disponibles en la base de datos.
+                                                    Cantidad solicitada: { lote.UnidadesDisponibles }, cantidad en la base de datos: { unidadesDisponibles }.
+                                                    No se permite agregar unidades al lote.");
+                }
+
+                q = "update lotes set UnidadesDisponibles = @UnidadesDisponibles, PrecioVentaUnidad = @PrecioVentaUnidad where Id = @Id";
+
+                conexion.Execute(q, 
+                    new
+                    { UnidadesDisponibles = lote.UnidadesDisponibles,
+                        PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad),
+                        Id = lote.Id
+                    });               
+            }
+        }
+
+        public void EditarCliente(ClienteModelo cliente)
+        {
+            cliente.Nombre = cliente.Nombre.Trim();
+            if (string.IsNullOrEmpty(cliente.Nombre))
+            {
+                throw new ArgumentException("El nombre del cliente no puede estar vacio.");
+            }
+            if (cliente.Id < 1)
+            {
+                throw new ArgumentException($"Id del cliente invalido: { cliente.Id }");
+            }
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var q = @"update clientes set Nombre = @Nombre, NumeroContacto = @NumeroContacto
+                            where Id = @Id";
+
+                var parametros = new { Nombre = cliente.Nombre, NumeroContacto = cliente.NumeroContacto, Id = cliente.Id };
+
+                conexion.Execute(q, parametros);
             }
         }
     }         

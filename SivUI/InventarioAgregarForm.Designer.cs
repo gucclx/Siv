@@ -104,9 +104,9 @@
             this.producto_label.AutoSize = true;
             this.producto_label.Location = new System.Drawing.Point(42, 179);
             this.producto_label.Name = "producto_label";
-            this.producto_label.Size = new System.Drawing.Size(201, 25);
+            this.producto_label.Size = new System.Drawing.Size(204, 25);
             this.producto_label.TabIndex = 8;
-            this.producto_label.Text = "ProductoSeleccionado";
+            this.producto_label.Text = "Producto seleccionado";
             // 
             // precio_venta_defecto_tb
             // 

@@ -40,6 +40,8 @@
             this.total_inversion_label = new System.Windows.Forms.Label();
             this.total_unidades_tb = new System.Windows.Forms.TextBox();
             this.total_unidades_label = new System.Windows.Forms.Label();
+            this.valor_unidades_tb = new System.Windows.Forms.TextBox();
+            this.valor_unidades_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.contenedor_panel.SuspendLayout();
             this.SuspendLayout();
@@ -133,10 +135,10 @@
             // 
             // total_inversion_tb
             // 
-            this.total_inversion_tb.Location = new System.Drawing.Point(782, 419);
+            this.total_inversion_tb.Location = new System.Drawing.Point(845, 420);
             this.total_inversion_tb.Name = "total_inversion_tb";
             this.total_inversion_tb.ReadOnly = true;
-            this.total_inversion_tb.Size = new System.Drawing.Size(190, 33);
+            this.total_inversion_tb.Size = new System.Drawing.Size(127, 33);
             this.total_inversion_tb.TabIndex = 33;
             this.total_inversion_tb.TabStop = false;
             this.total_inversion_tb.Text = "N/A";
@@ -144,18 +146,18 @@
             // total_inversion_label
             // 
             this.total_inversion_label.AutoSize = true;
-            this.total_inversion_label.Location = new System.Drawing.Point(782, 391);
+            this.total_inversion_label.Location = new System.Drawing.Point(840, 392);
             this.total_inversion_label.Name = "total_inversion_label";
-            this.total_inversion_label.Size = new System.Drawing.Size(134, 25);
+            this.total_inversion_label.Size = new System.Drawing.Size(132, 25);
             this.total_inversion_label.TabIndex = 32;
-            this.total_inversion_label.Text = "Total inversión";
+            this.total_inversion_label.Text = "Inversión total";
             // 
             // total_unidades_tb
             // 
-            this.total_unidades_tb.Location = new System.Drawing.Point(586, 418);
+            this.total_unidades_tb.Location = new System.Drawing.Point(493, 420);
             this.total_unidades_tb.Name = "total_unidades_tb";
             this.total_unidades_tb.ReadOnly = true;
-            this.total_unidades_tb.Size = new System.Drawing.Size(190, 33);
+            this.total_unidades_tb.Size = new System.Drawing.Size(130, 33);
             this.total_unidades_tb.TabIndex = 35;
             this.total_unidades_tb.TabStop = false;
             this.total_unidades_tb.Text = "N/A";
@@ -163,11 +165,30 @@
             // total_unidades_label
             // 
             this.total_unidades_label.AutoSize = true;
-            this.total_unidades_label.Location = new System.Drawing.Point(581, 391);
+            this.total_unidades_label.Location = new System.Drawing.Point(488, 393);
             this.total_unidades_label.Name = "total_unidades_label";
-            this.total_unidades_label.Size = new System.Drawing.Size(194, 25);
+            this.total_unidades_label.Size = new System.Drawing.Size(135, 25);
             this.total_unidades_label.TabIndex = 34;
-            this.total_unidades_label.Text = "Unidades Disponibles";
+            this.total_unidades_label.Text = "Unidades disp.";
+            // 
+            // valor_unidades_tb
+            // 
+            this.valor_unidades_tb.Location = new System.Drawing.Point(629, 420);
+            this.valor_unidades_tb.Name = "valor_unidades_tb";
+            this.valor_unidades_tb.ReadOnly = true;
+            this.valor_unidades_tb.Size = new System.Drawing.Size(210, 33);
+            this.valor_unidades_tb.TabIndex = 37;
+            this.valor_unidades_tb.TabStop = false;
+            this.valor_unidades_tb.Text = "N/A";
+            // 
+            // valor_unidades_label
+            // 
+            this.valor_unidades_label.AutoSize = true;
+            this.valor_unidades_label.Location = new System.Drawing.Point(624, 393);
+            this.valor_unidades_label.Name = "valor_unidades_label";
+            this.valor_unidades_label.Size = new System.Drawing.Size(215, 25);
+            this.valor_unidades_label.TabIndex = 36;
+            this.valor_unidades_label.Text = "Inversión unidades disp.";
             // 
             // GestionarInventarioForm
             // 
@@ -175,6 +196,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
+            this.Controls.Add(this.valor_unidades_tb);
+            this.Controls.Add(this.valor_unidades_label);
             this.Controls.Add(this.total_unidades_tb);
             this.Controls.Add(this.total_unidades_label);
             this.Controls.Add(this.total_inversion_tb);
@@ -214,5 +237,7 @@
         private System.Windows.Forms.Label total_inversion_label;
         private System.Windows.Forms.TextBox total_unidades_tb;
         private System.Windows.Forms.Label total_unidades_label;
+        private System.Windows.Forms.TextBox valor_unidades_tb;
+        private System.Windows.Forms.Label valor_unidades_label;
     }
 }

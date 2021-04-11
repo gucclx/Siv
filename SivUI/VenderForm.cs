@@ -89,8 +89,17 @@ namespace SivUI
             // cargar lote y verificar que el lote se haya encontrado
 
             var loteId = int.Parse(lote_id_tb.Text.Trim());
-            var lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
+            LoteModelo lote = null;
 
+            try
+            {
+                lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
             if (lote == null)
             {
                 MessageBox.Show("El lote no existe.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -115,6 +124,7 @@ namespace SivUI
                 if (lote.UnidadesDisponibles == 0)
                 {
                     MessageBox.Show($"El lote no contiene unidades.", "Lote vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
                 MessageBox.Show($"Cantidad solicitada de unidades inválida. Solo { lote.UnidadesDisponibles } unidades disponibles.", "Cantidad disponible insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

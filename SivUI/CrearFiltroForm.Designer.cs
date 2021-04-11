@@ -43,12 +43,13 @@
             this.cliente_label = new System.Windows.Forms.Label();
             this.filtrar_por_producto_checkbox = new System.Windows.Forms.CheckBox();
             this.filtrar_por_producto_groupbox = new System.Windows.Forms.GroupBox();
+            this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
+            this.nombre_producto_tb = new System.Windows.Forms.TextBox();
             this.producto_nombre_label = new System.Windows.Forms.Label();
             this.filtrar_por_cliente_groupbox = new System.Windows.Forms.GroupBox();
             this.filtrar_por_cliente_checkbox = new System.Windows.Forms.CheckBox();
             this.categorias_label = new System.Windows.Forms.Label();
-            this.nombre_producto_tb = new System.Windows.Forms.TextBox();
-            this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
+            this.buscar_categorias_label = new System.Windows.Forms.LinkLabel();
             this.filtrar_por_fechas_groupbox.SuspendLayout();
             this.filtrar_por_producto_groupbox.SuspendLayout();
             this.filtrar_por_cliente_groupbox.SuspendLayout();
@@ -128,7 +129,7 @@
             this.categorias_listbox.FormattingEnabled = true;
             this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 21;
-            this.categorias_listbox.Location = new System.Drawing.Point(9, 271);
+            this.categorias_listbox.Location = new System.Drawing.Point(11, 227);
             this.categorias_listbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.categorias_listbox.Name = "categorias_listbox";
             this.categorias_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
@@ -139,7 +140,7 @@
             // 
             this.remover_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.remover_categoria_button.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.remover_categoria_button.Location = new System.Drawing.Point(186, 451);
+            this.remover_categoria_button.Location = new System.Drawing.Point(188, 407);
             this.remover_categoria_button.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.remover_categoria_button.MaximumSize = new System.Drawing.Size(801, 600);
             this.remover_categoria_button.Name = "remover_categoria_button";
@@ -152,22 +153,21 @@
             // agregar_categorias_button
             // 
             this.agregar_categorias_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_categorias_button.Location = new System.Drawing.Point(11, 451);
+            this.agregar_categorias_button.Location = new System.Drawing.Point(13, 407);
             this.agregar_categorias_button.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.agregar_categorias_button.Name = "agregar_categorias_button";
             this.agregar_categorias_button.Size = new System.Drawing.Size(109, 37);
             this.agregar_categorias_button.TabIndex = 22;
             this.agregar_categorias_button.Text = "Agregar";
             this.agregar_categorias_button.UseVisualStyleBackColor = true;
-            this.agregar_categorias_button.Click += new System.EventHandler(this.agregar_categorias_button_Click);
             // 
             // listo_button
             // 
             this.listo_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.listo_button.Location = new System.Drawing.Point(863, 451);
+            this.listo_button.Location = new System.Drawing.Point(855, 415);
             this.listo_button.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.listo_button.Name = "listo_button";
-            this.listo_button.Size = new System.Drawing.Size(109, 37);
+            this.listo_button.Size = new System.Drawing.Size(118, 37);
             this.listo_button.TabIndex = 24;
             this.listo_button.Text = "Listo";
             this.listo_button.UseVisualStyleBackColor = true;
@@ -234,6 +234,28 @@
             this.filtrar_por_producto_groupbox.TabStop = false;
             this.filtrar_por_producto_groupbox.Text = "Producto";
             // 
+            // buscar_producto_linklabel
+            // 
+            this.buscar_producto_linklabel.AutoSize = true;
+            this.buscar_producto_linklabel.Location = new System.Drawing.Point(90, 30);
+            this.buscar_producto_linklabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
+            this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
+            this.buscar_producto_linklabel.TabIndex = 28;
+            this.buscar_producto_linklabel.TabStop = true;
+            this.buscar_producto_linklabel.Text = "Buscar";
+            this.buscar_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_producto_linklabel_LinkClicked);
+            // 
+            // nombre_producto_tb
+            // 
+            this.nombre_producto_tb.Location = new System.Drawing.Point(22, 59);
+            this.nombre_producto_tb.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.nombre_producto_tb.Name = "nombre_producto_tb";
+            this.nombre_producto_tb.ReadOnly = true;
+            this.nombre_producto_tb.Size = new System.Drawing.Size(300, 29);
+            this.nombre_producto_tb.TabIndex = 29;
+            this.nombre_producto_tb.TabStop = false;
+            // 
             // producto_nombre_label
             // 
             this.producto_nombre_label.AutoSize = true;
@@ -251,7 +273,7 @@
             this.filtrar_por_cliente_groupbox.Controls.Add(this.cliente_label);
             this.filtrar_por_cliente_groupbox.Enabled = false;
             this.filtrar_por_cliente_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_cliente_groupbox.Location = new System.Drawing.Point(638, 12);
+            this.filtrar_por_cliente_groupbox.Location = new System.Drawing.Point(639, 12);
             this.filtrar_por_cliente_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_cliente_groupbox.Name = "filtrar_por_cliente_groupbox";
             this.filtrar_por_cliente_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
@@ -259,57 +281,53 @@
             this.filtrar_por_cliente_groupbox.TabIndex = 33;
             this.filtrar_por_cliente_groupbox.TabStop = false;
             this.filtrar_por_cliente_groupbox.Text = "Cliente";
+            this.filtrar_por_cliente_groupbox.Visible = false;
             // 
             // filtrar_por_cliente_checkbox
             // 
             this.filtrar_por_cliente_checkbox.AutoSize = true;
             this.filtrar_por_cliente_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_cliente_checkbox.Location = new System.Drawing.Point(638, 136);
+            this.filtrar_por_cliente_checkbox.Location = new System.Drawing.Point(639, 136);
             this.filtrar_por_cliente_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_cliente_checkbox.Name = "filtrar_por_cliente_checkbox";
             this.filtrar_por_cliente_checkbox.Size = new System.Drawing.Size(147, 25);
             this.filtrar_por_cliente_checkbox.TabIndex = 9;
             this.filtrar_por_cliente_checkbox.Text = "Filtrar por cliente";
             this.filtrar_por_cliente_checkbox.UseVisualStyleBackColor = true;
+            this.filtrar_por_cliente_checkbox.Visible = false;
             this.filtrar_por_cliente_checkbox.CheckedChanged += new System.EventHandler(this.filtrar_por_cliente_checkbox_CheckedChanged);
             // 
             // categorias_label
             // 
             this.categorias_label.AutoSize = true;
-            this.categorias_label.Location = new System.Drawing.Point(6, 242);
+            this.categorias_label.Location = new System.Drawing.Point(6, 198);
             this.categorias_label.Name = "categorias_label";
             this.categorias_label.Size = new System.Drawing.Size(215, 25);
             this.categorias_label.TabIndex = 34;
             this.categorias_label.Text = "Filtrar por las categorias";
             // 
-            // nombre_producto_tb
+            // buscar_categorias_label
             // 
-            this.nombre_producto_tb.Location = new System.Drawing.Point(22, 59);
-            this.nombre_producto_tb.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.nombre_producto_tb.Name = "nombre_producto_tb";
-            this.nombre_producto_tb.ReadOnly = true;
-            this.nombre_producto_tb.Size = new System.Drawing.Size(300, 29);
-            this.nombre_producto_tb.TabIndex = 29;
-            this.nombre_producto_tb.TabStop = false;
-            // 
-            // buscar_producto_linklabel
-            // 
-            this.buscar_producto_linklabel.AutoSize = true;
-            this.buscar_producto_linklabel.Location = new System.Drawing.Point(90, 30);
-            this.buscar_producto_linklabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
-            this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
-            this.buscar_producto_linklabel.TabIndex = 28;
-            this.buscar_producto_linklabel.TabStop = true;
-            this.buscar_producto_linklabel.Text = "Buscar";
-            this.buscar_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_producto_linklabel_LinkClicked);
+            this.buscar_categorias_label.AutoSize = true;
+            this.buscar_categorias_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_categorias_label.Location = new System.Drawing.Point(221, 201);
+            this.buscar_categorias_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.buscar_categorias_label.Name = "buscar_categorias_label";
+            this.buscar_categorias_label.Size = new System.Drawing.Size(56, 21);
+            this.buscar_categorias_label.TabIndex = 30;
+            this.buscar_categorias_label.TabStop = true;
+            this.buscar_categorias_label.Text = "Buscar";
+            this.buscar_categorias_label.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_categorias_label_LinkClicked);
             // 
             // CrearFiltroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(984, 501);
+            this.ClientSize = new System.Drawing.Size(984, 466);
+            this.Controls.Add(this.buscar_categorias_label);
             this.Controls.Add(this.categorias_label);
             this.Controls.Add(this.categorias_listbox);
             this.Controls.Add(this.agregar_categorias_button);
@@ -327,6 +345,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "CrearFiltroForm";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ajuste de filtros";
             this.filtrar_por_fechas_groupbox.ResumeLayout(false);
@@ -362,5 +381,6 @@
         private System.Windows.Forms.Label categorias_label;
         private System.Windows.Forms.TextBox nombre_producto_tb;
         private System.Windows.Forms.LinkLabel buscar_producto_linklabel;
+        private System.Windows.Forms.LinkLabel buscar_categorias_label;
     }
 }

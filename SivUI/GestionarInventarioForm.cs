@@ -105,21 +105,28 @@ namespace SivUI
             resultados_dtgv.DataSource = null;
             resultados_dtgv.Rows.Clear();
             GC.Collect();
+
+            total_unidades_tb.Text = "N/A";
+            total_inversion_tb.Text = "N/A";
+            valor_unidades_tb.Text = "N/A";
         }
 
         private void CalcularResumenReporte()
         {
             int unidadesTotal = 0;
             decimal inversionTotal = 0;
+            decimal valorUnidades = 0;
 
             foreach (ReporteInventarioModelo reporte in resultados)
             {
                 unidadesTotal += reporte.UnidadesDisponibles;
                 inversionTotal += reporte.InversionTotal;
+                valorUnidades += reporte.UnidadesDisponibles * reporte.InversionUnidad;
             }
 
             total_unidades_tb.Text = unidadesTotal.ToString();
             total_inversion_tb.Text = inversionTotal.ToString();
+            valor_unidades_tb.Text = valorUnidades.ToString();
         }
 
         private void limpiar_button_Click(object sender, EventArgs e)

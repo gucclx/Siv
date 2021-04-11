@@ -72,12 +72,6 @@ namespace SivUI
             filtrar_por_fechas_groupbox.Enabled = habilitar_fechas_checkbox.Checked;
         }
 
-        private void agregar_categorias_button_Click(object sender, EventArgs e)
-        {
-            var frm = new BuscarCategoriasForm(this);
-            frm.Show();
-        }
-
         public void CategoriasListas(List<CategoriaModelo> categorias)
         {
             foreach(var categoria in categorias)
@@ -157,6 +151,12 @@ namespace SivUI
             if (producto == null) return;
             this.producto = producto;
             nombre_producto_tb.Text = producto.Nombre;
+        }
+
+        private void buscar_categorias_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new BuscarCategoriasForm(this);
+            frm.ShowDialog();
         }
     }
 }

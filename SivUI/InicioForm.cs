@@ -98,5 +98,29 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
         }
+
+        private void editar_producto_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new EditarProductoForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void editar_lotes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new EditarLoteForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void editar_cliente_ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var frm = new EditarClienteForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
     }
 }

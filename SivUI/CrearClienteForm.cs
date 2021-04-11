@@ -35,6 +35,7 @@ namespace SivUI
         private void crear_cliente_button_Click(object sender, EventArgs e)
         {
             if (ValidarForm() == false) { return; }
+            
             ClienteModelo cliente = new ClienteModelo();
             cliente.Nombre = nombre_cliente_tb.Text.Trim();
             cliente.Apellido = apellido_cliente_tb.Text.Trim();

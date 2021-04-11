@@ -102,11 +102,29 @@
     <Compile Include="CrearProductoForm.Designer.cs">
       <DependentUpon>CrearProductoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditarLoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditarLoteForm.Designer.cs">
+      <DependentUpon>EditarLoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditarProductoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditarProductoForm.Designer.cs">
+      <DependentUpon>EditarProductoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EliminarCategoriaForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EliminarCategoriaForm.Designer.cs">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditarClienteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditarClienteForm.Designer.cs">
+      <DependentUpon>EditarClienteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportarForm.cs">
       <SubType>Form</SubType>
@@ -177,8 +195,17 @@
     <EmbeddedResource Include="CrearProductoForm.resx">
       <DependentUpon>CrearProductoForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditarLoteForm.resx">
+      <DependentUpon>EditarLoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditarProductoForm.resx">
+      <DependentUpon>EditarProductoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EliminarCategoriaForm.resx">
       <DependentUpon>EliminarCategoriaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditarClienteForm.resx">
+      <DependentUpon>EditarClienteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportarForm.resx">
       <DependentUpon>ExportarForm.cs</DependentUpon>
