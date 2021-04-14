@@ -31,7 +31,7 @@
             this.filtros_button = new System.Windows.Forms.Button();
             this.exportar_inventario_button = new System.Windows.Forms.Button();
             this.exportar_ventas_button = new System.Windows.Forms.Button();
-            this.exportando_label = new System.Windows.Forms.Label();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // filtros_button
@@ -67,15 +67,15 @@
             this.exportar_ventas_button.UseVisualStyleBackColor = true;
             this.exportar_ventas_button.Click += new System.EventHandler(this.exportar_ventas_button_Click);
             // 
-            // exportando_label
+            // tarea_label
             // 
-            this.exportando_label.AutoSize = true;
-            this.exportando_label.Location = new System.Drawing.Point(200, 18);
-            this.exportando_label.Name = "exportando_label";
-            this.exportando_label.Size = new System.Drawing.Size(121, 25);
-            this.exportando_label.TabIndex = 25;
-            this.exportando_label.Text = "Exportando...";
-            this.exportando_label.Visible = false;
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(200, 18);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 25;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
             // 
             // ExportarForm
             // 
@@ -83,7 +83,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(521, 331);
-            this.Controls.Add(this.exportando_label);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.exportar_ventas_button);
             this.Controls.Add(this.exportar_inventario_button);
             this.Controls.Add(this.filtros_button);
@@ -104,6 +104,6 @@
         private System.Windows.Forms.Button filtros_button;
         private System.Windows.Forms.Button exportar_inventario_button;
         private System.Windows.Forms.Button exportar_ventas_button;
-        private System.Windows.Forms.Label exportando_label;
+        private System.Windows.Forms.Label tarea_label;
     }
 }

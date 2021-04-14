@@ -22,7 +22,17 @@ namespace SivBiblioteca
             bool xEsEntero = int.TryParse(x, out intX);
 
             return xEsEntero && (intX > 0);
+        }
 
+        public static bool EsEnteroNonegativo(string x)
+        {
+            x = x.Trim();
+            if (string.IsNullOrEmpty(x)) { return false; }
+
+            int intX = 0;
+            bool xEsEntero = int.TryParse(x, out intX);
+
+            return xEsEntero && (intX >= 0);
         }
 
         public static bool EsDecimalNoNegativo(string x)

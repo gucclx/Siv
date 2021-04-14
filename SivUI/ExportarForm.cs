@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
+using SivBiblioteca.AccesoDatos;
 
 namespace SivUI
 {
+    // TODO - paginar resultados de la base de datos y escribir el archivo por lotes.
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
         ReporteFiltroModelo reporteFiltro;
@@ -37,12 +39,17 @@ namespace SivUI
 
         private async void exportar_inventario_button_Click(object sender, EventArgs e)
         {
+            var destino = GuardarDialogo();
+            if (destino == null) return;
+
             Exportando(true);
+            CambiarTareaLabel("Extrayendo inventario de la base de datos...");
 
             List<ReporteInventarioModelo> reportes;
+
             try
             {
-                reportes = ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro);
+                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro));
             }
             catch (Exception ex)
             {
@@ -51,12 +58,7 @@ namespace SivUI
                 return;
             }
 
-            var destino = GuardarDialogo();
-            if (destino == null)
-            {
-                Exportando(false);
-                return;
-            }
+            CambiarTareaLabel($"Exportando { reportes.Count.ToString("#,##0") } filas...");
 
             try
             {
@@ -67,7 +69,20 @@ namespace SivUI
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
             Exportando(false);
+        }
+
+        /// <summary>
+        /// Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
+        /// </summary>
+        /// <param name="s"></param>
+        private void CambiarTareaLabel(string s)
+        {
+            tarea_label.Text = s;
+            tarea_label.AutoSize = false;
+            tarea_label.TextAlign = ContentAlignment.MiddleCenter;
+            tarea_label.Dock = DockStyle.Fill;
         }
 
         /// <summary>
@@ -93,6 +108,9 @@ namespace SivUI
 
         private async void exportar_ventas_button_Click(object sender, EventArgs e)
         {
+            var destino = GuardarDialogo();
+            if (destino == null) return;
+
             Exportando(true);
             List<ReporteVentaModelo> reportes;
             try
@@ -105,14 +123,7 @@ namespace SivUI
                 Exportando(false);
                 return;
             }
-
-            var destino = GuardarDialogo();
-            if (destino == null)
-            {
-                Exportando(false);
-                return;
-            }
-
+            
             try
             {
                 await Ayudantes.GuardarCsvReporteVentasAsync(reportes, destino);
@@ -132,7 +143,7 @@ namespace SivUI
         /// <param name="trabajando"> Indica si se esta exportando o no. </param>
         private void Exportando(bool trabajando)
         {
-            exportando_label.Visible = trabajando;
+            tarea_label.Visible = trabajando;
             filtros_button.Enabled = !trabajando;
             exportar_inventario_button.Enabled = !trabajando;
             exportar_ventas_button.Enabled = !trabajando;

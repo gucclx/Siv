@@ -39,7 +39,7 @@
             this.precio_venta_defecto_label = new System.Windows.Forms.Label();
             this.agregar_al_inventario_button = new System.Windows.Forms.Button();
             this.nuevo_producto_linklabel = new System.Windows.Forms.LinkLabel();
-            this.ultimo_lote_id_label = new System.Windows.Forms.TextBox();
+            this.lote_id_tb = new System.Windows.Forms.TextBox();
             this.lote_id_label = new System.Windows.Forms.Label();
             this.header_label = new System.Windows.Forms.Label();
             this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
@@ -97,7 +97,6 @@
             this.inversion_unidad_tb.Size = new System.Drawing.Size(182, 33);
             this.inversion_unidad_tb.TabIndex = 6;
             this.inversion_unidad_tb.TabStop = false;
-            this.inversion_unidad_tb.Text = "N/A";
             // 
             // producto_label
             // 
@@ -147,14 +146,15 @@
             this.nuevo_producto_linklabel.Text = "Crear nuevo";
             this.nuevo_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.nuevo_producto_linklabel_LinkClicked);
             // 
-            // ultimo_lote_id_label
+            // lote_id_tb
             // 
-            this.ultimo_lote_id_label.Location = new System.Drawing.Point(47, 305);
-            this.ultimo_lote_id_label.Name = "ultimo_lote_id_label";
-            this.ultimo_lote_id_label.ReadOnly = true;
-            this.ultimo_lote_id_label.Size = new System.Drawing.Size(152, 33);
-            this.ultimo_lote_id_label.TabIndex = 17;
-            this.ultimo_lote_id_label.TabStop = false;
+            this.lote_id_tb.Location = new System.Drawing.Point(47, 305);
+            this.lote_id_tb.Name = "lote_id_tb";
+            this.lote_id_tb.ReadOnly = true;
+            this.lote_id_tb.Size = new System.Drawing.Size(152, 33);
+            this.lote_id_tb.TabIndex = 17;
+            this.lote_id_tb.TabStop = false;
+            this.lote_id_tb.Text = "N/A";
             // 
             // lote_id_label
             // 
@@ -195,7 +195,6 @@
             this.nombre_producto_tb.Size = new System.Drawing.Size(696, 33);
             this.nombre_producto_tb.TabIndex = 20;
             this.nombre_producto_tb.TabStop = false;
-            this.nombre_producto_tb.Text = "N/A";
             // 
             // InventarioAgregarForm
             // 
@@ -206,7 +205,7 @@
             this.Controls.Add(this.nombre_producto_tb);
             this.Controls.Add(this.buscar_producto_linklabel);
             this.Controls.Add(this.header_label);
-            this.Controls.Add(this.ultimo_lote_id_label);
+            this.Controls.Add(this.lote_id_tb);
             this.Controls.Add(this.lote_id_label);
             this.Controls.Add(this.nuevo_producto_linklabel);
             this.Controls.Add(this.agregar_al_inventario_button);
@@ -221,6 +220,7 @@
             this.Controls.Add(this.unidades_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "InventarioAgregarForm";
@@ -243,7 +243,7 @@
         private System.Windows.Forms.Label precio_venta_defecto_label;
         private System.Windows.Forms.Button agregar_al_inventario_button;
         private System.Windows.Forms.LinkLabel nuevo_producto_linklabel;
-        private System.Windows.Forms.TextBox ultimo_lote_id_label;
+        private System.Windows.Forms.TextBox lote_id_tb;
         private System.Windows.Forms.Label lote_id_label;
         private System.Windows.Forms.Label header_label;
         private System.Windows.Forms.LinkLabel buscar_producto_linklabel;

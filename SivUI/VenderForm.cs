@@ -41,7 +41,7 @@ namespace SivUI
             descripcionProductoColumna.ReadOnly = true;
 
             var precioVentaProductoColumna = new DataGridViewTextBoxColumn();
-            precioVentaProductoColumna.HeaderText = "Precio por unidad";
+            precioVentaProductoColumna.HeaderText = "Precio Unidad";
             precioVentaProductoColumna.DataPropertyName = nameof(VentaModelo.PrecioVentaUnidad);
             precioVentaProductoColumna.ReadOnly = false;
 
@@ -98,6 +98,7 @@ namespace SivUI
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             
             if (lote == null)

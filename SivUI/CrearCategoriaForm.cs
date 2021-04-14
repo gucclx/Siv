@@ -81,6 +81,8 @@ namespace SivUI
 
         private void crear_categorias_button_Click(object sender, EventArgs e)
         {
+            if (categoriasSeleccionadas.Count == 0) return;
+
             try
             {
                 ConfigGlobal.conexion.GuardarCategorias(categoriasSeleccionadas);              
@@ -103,6 +105,7 @@ namespace SivUI
         private void remover_categoria_button_Click(object sender, EventArgs e)
         {
             var categorias = categorias_listbox.SelectedItems;
+            if (categorias.Count == 0) return;
 
             foreach (var categoria in categorias)
             {

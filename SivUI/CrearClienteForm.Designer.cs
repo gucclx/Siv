@@ -51,7 +51,7 @@
             // crear_cliente_button
             // 
             this.crear_cliente_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.crear_cliente_button.Location = new System.Drawing.Point(396, 264);
+            this.crear_cliente_button.Location = new System.Drawing.Point(396, 294);
             this.crear_cliente_button.Name = "crear_cliente_button";
             this.crear_cliente_button.Size = new System.Drawing.Size(115, 37);
             this.crear_cliente_button.TabIndex = 3;

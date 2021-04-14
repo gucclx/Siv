@@ -149,19 +149,25 @@ namespace SivUI
 
         private void Exportando(bool trabajando)
         {
-            exportando_label.Visible = trabajando;
+            tarea_label.Visible = trabajando;
             exportar_button.Enabled = !trabajando;
             cargar_reporte_button.Enabled = !trabajando;
             limpiar_button.Enabled = !trabajando;
             filtros_button.Enabled = !trabajando;
         }
 
+        private void CambiarTareaLabel(string s)
+        {
+            tarea_label.Text = s;
+            tarea_label.AutoSize = false;
+            tarea_label.TextAlign = ContentAlignment.MiddleCenter;
+            tarea_label.Dock = DockStyle.Fill;
+        }
+
         private async void exportar_button_Click(object sender, EventArgs e)
         {
             if (resultados == null || resultados.DataSource == null) return;
-
-            Exportando(true);
-
+            
             using (var dialogGuardar = new SaveFileDialog())
             {
                 dialogGuardar.Filter = "CSV |*.csv";
@@ -171,6 +177,8 @@ namespace SivUI
                     FileInfo archivo = new FileInfo(dialogGuardar.FileName);
                     try
                     {
+                        Exportando(true);
+                        CambiarTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
                         await Ayudantes.GuardarCsvReporteInventarioAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
                         MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -180,7 +188,6 @@ namespace SivUI
                     }
                 }
             }
-
             Exportando(false);
         }
     }

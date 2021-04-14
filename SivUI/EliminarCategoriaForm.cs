@@ -13,7 +13,7 @@ namespace SivUI
 {
     public partial class EliminarCategoriaForm : Form, ISolicitudCategoria
     {
-        List<CategoriaModelo> CategoriasAEliminar;
+        List<CategoriaModelo> categoriasAEliminar = new List<CategoriaModelo>();
         public EliminarCategoriaForm()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace SivUI
         private void ActualizarListaCategorias()
         {
             categorias_listbox.DataSource = null;
-            categorias_listbox.DataSource = CategoriasAEliminar;
+            categorias_listbox.DataSource = categoriasAEliminar;
             categorias_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
         }
 
@@ -40,7 +40,7 @@ namespace SivUI
 
             try
             {
-                ConfigGlobal.conexion.EliminarCategorias(CategoriasAEliminar);
+                ConfigGlobal.conexion.EliminarCategorias(categoriasAEliminar);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace SivUI
                 return;
             }
 
-            CategoriasAEliminar = null;
+            categoriasAEliminar = null;
             
             MessageBox.Show("Categorias eliminadas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ActualizarListaCategorias();
@@ -62,7 +62,12 @@ namespace SivUI
 
         public void CategoriasListas(List<CategoriaModelo> categorias)
         {
-            CategoriasAEliminar = categorias;
+            if (categorias == null) return;
+            foreach (var categoria in categorias)
+            {
+                if (categoriasAEliminar.Find(c => c.Id == categoria.Id) != null) continue;
+                categoriasAEliminar.Add(categoria);
+            }
             ActualizarListaCategorias();
         }
 
@@ -71,8 +76,9 @@ namespace SivUI
             var categoriasSeleccionadas = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
             foreach (var categoria in categoriasSeleccionadas)
             {
-                CategoriasAEliminar.Remove(categoria);
+                categoriasAEliminar.Remove(categoria);
             }
+            ActualizarListaCategorias();
         }
     }
 }

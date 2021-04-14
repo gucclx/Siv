@@ -23,6 +23,9 @@ namespace SivUI
             this.solicitante = solicitante;
         }
 
+        /// <summary>
+        /// Actualiza la lista de categorias presentadas en el listbox.
+        /// </summary>
         private void ActualizarCategorias()
         {
             categorias_seleccionadas_listbox.DataSource = null;
@@ -68,7 +71,7 @@ namespace SivUI
 
             if (productoExiste)
             {
-                MessageBox.Show("El nombre del producto ya existe.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("El nombre del producto ya existe en la base de datos.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -93,10 +96,10 @@ namespace SivUI
             nombre_producto_tb.Clear();
             nombre_producto_tb.Focus();
             descripcion_tb.Clear();
-
             categoriasSeleccionadas = new List<CategoriaModelo>();
             ActualizarCategorias();
 
+            // Pasar el producto al form solicitante.
             if (solicitante != null)
             {
                 solicitante.ProductoListo(producto);
@@ -109,6 +112,8 @@ namespace SivUI
         {
             foreach (var categoria in categorias)
             {
+                if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
+
                 categoriasSeleccionadas.Add(categoria);
             }
             ActualizarCategorias();
@@ -117,13 +122,13 @@ namespace SivUI
         private void nueva_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new CrearCategoriaForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         private void buscar_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarCategoriasForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
     }
 }

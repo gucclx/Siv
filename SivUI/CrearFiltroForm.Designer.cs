@@ -281,7 +281,6 @@
             this.filtrar_por_cliente_groupbox.TabIndex = 33;
             this.filtrar_por_cliente_groupbox.TabStop = false;
             this.filtrar_por_cliente_groupbox.Text = "Cliente";
-            this.filtrar_por_cliente_groupbox.Visible = false;
             // 
             // filtrar_por_cliente_checkbox
             // 
@@ -294,7 +293,6 @@
             this.filtrar_por_cliente_checkbox.TabIndex = 9;
             this.filtrar_por_cliente_checkbox.Text = "Filtrar por cliente";
             this.filtrar_por_cliente_checkbox.UseVisualStyleBackColor = true;
-            this.filtrar_por_cliente_checkbox.Visible = false;
             this.filtrar_por_cliente_checkbox.CheckedChanged += new System.EventHandler(this.filtrar_por_cliente_checkbox_CheckedChanged);
             // 
             // categorias_label

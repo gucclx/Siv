@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.header_label = new System.Windows.Forms.Label();
-            this.exportando_label = new System.Windows.Forms.Label();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.exportar_button = new System.Windows.Forms.Button();
             this.filtros_button = new System.Windows.Forms.Button();
             this.resultados_dtgv = new System.Windows.Forms.DataGridView();
@@ -56,15 +56,15 @@
             this.header_label.TabIndex = 16;
             this.header_label.Text = "Información del inventario";
             // 
-            // exportando_label
+            // tarea_label
             // 
-            this.exportando_label.AutoSize = true;
-            this.exportando_label.Location = new System.Drawing.Point(747, 25);
-            this.exportando_label.Name = "exportando_label";
-            this.exportando_label.Size = new System.Drawing.Size(121, 25);
-            this.exportando_label.TabIndex = 27;
-            this.exportando_label.Text = "Exportando...";
-            this.exportando_label.Visible = false;
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(747, 25);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 27;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
             // 
             // exportar_button
             // 
@@ -190,12 +190,13 @@
             this.valor_unidades_label.TabIndex = 36;
             this.valor_unidades_label.Text = "Inversión unidades disp.";
             // 
-            // GestionarInventarioForm
+            // InventarioForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.valor_unidades_tb);
             this.Controls.Add(this.valor_unidades_label);
             this.Controls.Add(this.total_unidades_tb);
@@ -205,15 +206,15 @@
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.cargar_reporte_button);
             this.Controls.Add(this.contenedor_panel);
-            this.Controls.Add(this.exportando_label);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.filtros_button);
             this.Controls.Add(this.header_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
-            this.Name = "GestionarInventarioForm";
+            this.Name = "InventarioForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Información del inventario";
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).EndInit();
@@ -226,7 +227,7 @@
         #endregion
 
         private System.Windows.Forms.Label header_label;
-        private System.Windows.Forms.Label exportando_label;
+        private System.Windows.Forms.Label tarea_label;
         private System.Windows.Forms.Button exportar_button;
         private System.Windows.Forms.Button filtros_button;
         private System.Windows.Forms.DataGridView resultados_dtgv;

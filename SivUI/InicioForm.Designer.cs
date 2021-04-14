@@ -52,6 +52,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.White;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.productosToolStripMenuItem,
             this.inventarioToolStripMenuItem,
@@ -170,14 +171,14 @@
             // crear_clientes_ToolStripMenuItem
             // 
             this.crear_clientes_ToolStripMenuItem.Name = "crear_clientes_ToolStripMenuItem";
-            this.crear_clientes_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.crear_clientes_ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.crear_clientes_ToolStripMenuItem.Text = "Crear";
             this.crear_clientes_ToolStripMenuItem.Click += new System.EventHandler(this.crear_clientes_ToolStripMenuItem_Click);
             // 
             // editar_cliente_ToolStripMenuItem
             // 
             this.editar_cliente_ToolStripMenuItem.Name = "editar_cliente_ToolStripMenuItem";
-            this.editar_cliente_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editar_cliente_ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.editar_cliente_ToolStripMenuItem.Text = "Editar";
             this.editar_cliente_ToolStripMenuItem.Click += new System.EventHandler(this.editar_cliente_ToolStripMenuItem_Click);
             // 
@@ -207,7 +208,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(584, 361);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

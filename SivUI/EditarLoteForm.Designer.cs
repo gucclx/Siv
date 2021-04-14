@@ -51,7 +51,7 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(327, 9);
+            this.header_label.Location = new System.Drawing.Point(330, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(164, 30);
             this.header_label.TabIndex = 17;
@@ -59,7 +59,7 @@
             // 
             // lote_id_tb
             // 
-            this.lote_id_tb.Location = new System.Drawing.Point(15, 305);
+            this.lote_id_tb.Location = new System.Drawing.Point(18, 316);
             this.lote_id_tb.Name = "lote_id_tb";
             this.lote_id_tb.Size = new System.Drawing.Size(156, 33);
             this.lote_id_tb.TabIndex = 6;
@@ -67,7 +67,7 @@
             // lote_id_label
             // 
             this.lote_id_label.AutoSize = true;
-            this.lote_id_label.Location = new System.Drawing.Point(10, 277);
+            this.lote_id_label.Location = new System.Drawing.Point(13, 288);
             this.lote_id_label.Name = "lote_id_label";
             this.lote_id_label.Size = new System.Drawing.Size(67, 25);
             this.lote_id_label.TabIndex = 18;
@@ -76,7 +76,7 @@
             // cargar_lote_button
             // 
             this.cargar_lote_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cargar_lote_button.Location = new System.Drawing.Point(177, 302);
+            this.cargar_lote_button.Location = new System.Drawing.Point(180, 313);
             this.cargar_lote_button.Name = "cargar_lote_button";
             this.cargar_lote_button.Size = new System.Drawing.Size(120, 37);
             this.cargar_lote_button.TabIndex = 20;
@@ -86,7 +86,7 @@
             // 
             // unidades_disponibles_tb
             // 
-            this.unidades_disponibles_tb.Location = new System.Drawing.Point(279, 114);
+            this.unidades_disponibles_tb.Location = new System.Drawing.Point(282, 114);
             this.unidades_disponibles_tb.Name = "unidades_disponibles_tb";
             this.unidades_disponibles_tb.Size = new System.Drawing.Size(108, 33);
             this.unidades_disponibles_tb.TabIndex = 2;
@@ -96,7 +96,7 @@
             // unidades_disponibles_label
             // 
             this.unidades_disponibles_label.AutoSize = true;
-            this.unidades_disponibles_label.Location = new System.Drawing.Point(279, 61);
+            this.unidades_disponibles_label.Location = new System.Drawing.Point(282, 61);
             this.unidades_disponibles_label.Name = "unidades_disponibles_label";
             this.unidades_disponibles_label.Size = new System.Drawing.Size(108, 50);
             this.unidades_disponibles_label.TabIndex = 21;
@@ -104,7 +104,7 @@
             // 
             // unidades_adquiridas_tb
             // 
-            this.unidades_adquiridas_tb.Location = new System.Drawing.Point(177, 114);
+            this.unidades_adquiridas_tb.Location = new System.Drawing.Point(180, 114);
             this.unidades_adquiridas_tb.Name = "unidades_adquiridas_tb";
             this.unidades_adquiridas_tb.ReadOnly = true;
             this.unidades_adquiridas_tb.Size = new System.Drawing.Size(96, 33);
@@ -115,7 +115,7 @@
             // unidades_adquiridas_label
             // 
             this.unidades_adquiridas_label.AutoSize = true;
-            this.unidades_adquiridas_label.Location = new System.Drawing.Point(172, 61);
+            this.unidades_adquiridas_label.Location = new System.Drawing.Point(175, 61);
             this.unidades_adquiridas_label.Name = "unidades_adquiridas_label";
             this.unidades_adquiridas_label.Size = new System.Drawing.Size(101, 50);
             this.unidades_adquiridas_label.TabIndex = 23;
@@ -123,7 +123,7 @@
             // 
             // inversion_unidad_tb
             // 
-            this.inversion_unidad_tb.Location = new System.Drawing.Point(393, 114);
+            this.inversion_unidad_tb.Location = new System.Drawing.Point(396, 114);
             this.inversion_unidad_tb.Name = "inversion_unidad_tb";
             this.inversion_unidad_tb.ReadOnly = true;
             this.inversion_unidad_tb.Size = new System.Drawing.Size(150, 33);
@@ -134,7 +134,7 @@
             // inversion_unidad_label
             // 
             this.inversion_unidad_label.AutoSize = true;
-            this.inversion_unidad_label.Location = new System.Drawing.Point(388, 86);
+            this.inversion_unidad_label.Location = new System.Drawing.Point(391, 86);
             this.inversion_unidad_label.Name = "inversion_unidad_label";
             this.inversion_unidad_label.Size = new System.Drawing.Size(155, 25);
             this.inversion_unidad_label.TabIndex = 25;
@@ -142,7 +142,7 @@
             // 
             // inversion_total_tb
             // 
-            this.inversion_total_tb.Location = new System.Drawing.Point(682, 114);
+            this.inversion_total_tb.Location = new System.Drawing.Point(685, 114);
             this.inversion_total_tb.Name = "inversion_total_tb";
             this.inversion_total_tb.ReadOnly = true;
             this.inversion_total_tb.Size = new System.Drawing.Size(127, 33);
@@ -153,7 +153,7 @@
             // inversion_total_label
             // 
             this.inversion_total_label.AutoSize = true;
-            this.inversion_total_label.Location = new System.Drawing.Point(677, 86);
+            this.inversion_total_label.Location = new System.Drawing.Point(680, 86);
             this.inversion_total_label.Name = "inversion_total_label";
             this.inversion_total_label.Size = new System.Drawing.Size(132, 25);
             this.inversion_total_label.TabIndex = 27;
@@ -161,7 +161,7 @@
             // 
             // producto_tb
             // 
-            this.producto_tb.Location = new System.Drawing.Point(15, 114);
+            this.producto_tb.Location = new System.Drawing.Point(18, 114);
             this.producto_tb.Name = "producto_tb";
             this.producto_tb.ReadOnly = true;
             this.producto_tb.Size = new System.Drawing.Size(156, 33);
@@ -172,7 +172,7 @@
             // producto_label
             // 
             this.producto_label.AutoSize = true;
-            this.producto_label.Location = new System.Drawing.Point(10, 86);
+            this.producto_label.Location = new System.Drawing.Point(13, 86);
             this.producto_label.Name = "producto_label";
             this.producto_label.Size = new System.Drawing.Size(89, 25);
             this.producto_label.TabIndex = 29;
@@ -180,7 +180,7 @@
             // 
             // precio_venta_unidad_tb
             // 
-            this.precio_venta_unidad_tb.Location = new System.Drawing.Point(549, 114);
+            this.precio_venta_unidad_tb.Location = new System.Drawing.Point(552, 114);
             this.precio_venta_unidad_tb.Name = "precio_venta_unidad_tb";
             this.precio_venta_unidad_tb.Size = new System.Drawing.Size(127, 33);
             this.precio_venta_unidad_tb.TabIndex = 4;
@@ -190,7 +190,7 @@
             // precio_venta_unidad_label
             // 
             this.precio_venta_unidad_label.AutoSize = true;
-            this.precio_venta_unidad_label.Location = new System.Drawing.Point(544, 86);
+            this.precio_venta_unidad_label.Location = new System.Drawing.Point(547, 86);
             this.precio_venta_unidad_label.Name = "precio_venta_unidad_label";
             this.precio_venta_unidad_label.Size = new System.Drawing.Size(131, 25);
             this.precio_venta_unidad_label.TabIndex = 31;
@@ -200,7 +200,7 @@
             // 
             this.editar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.editar_button.ForeColor = System.Drawing.Color.Gold;
-            this.editar_button.Location = new System.Drawing.Point(702, 302);
+            this.editar_button.Location = new System.Drawing.Point(696, 312);
             this.editar_button.Name = "editar_button";
             this.editar_button.Size = new System.Drawing.Size(107, 37);
             this.editar_button.TabIndex = 7;
@@ -213,7 +213,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(819, 350);
+            this.ClientSize = new System.Drawing.Size(824, 361);
             this.Controls.Add(this.editar_button);
             this.Controls.Add(this.precio_venta_unidad_tb);
             this.Controls.Add(this.precio_venta_unidad_label);
@@ -238,7 +238,7 @@
             this.MaximizeBox = false;
             this.Name = "EditarLoteForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "N/A";
+            this.Text = "Editar lotes";
             this.ResumeLayout(false);
             this.PerformLayout();
 

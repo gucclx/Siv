@@ -60,6 +60,7 @@ namespace SivUI
             var seleccion = resultados_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
             foreach (var categoria in seleccion)
             {
+                if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
                 categoriasSeleccionadas.Add(categoria);
                 resultados.Remove(categoria);
             }

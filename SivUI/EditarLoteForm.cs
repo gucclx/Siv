@@ -67,9 +67,9 @@ namespace SivUI
         private void editar_button_Click(object sender, EventArgs e)
         {
             if (lote == null) return;
-            if (Ayudantes.EsEnteroPositivo(unidades_disponibles_tb.Text) == false)
+            if (Ayudantes.EsEnteroNonegativo(unidades_disponibles_tb.Text) == false)
             {
-                MessageBox.Show("Unidades disponibles inválidas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace SivUI
 
             if (nuevoUnidadesDisponibles > lote.UnidadesDisponibles)
             {
-                MessageBox.Show("No se permite agregar unidades al lote. Unidades disponibles inválidas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se permite agregar unidades al lote. Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

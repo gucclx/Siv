@@ -26,7 +26,20 @@ namespace SivUI
         /// </summary>
         private void ActualizarUltimoLoteId()
         {
-            ultimo_lote_id_label.Text = ConfigGlobal.conexion.CargarUltimoLoteId().ToString();
+            int id;
+            try
+            {
+                id = ConfigGlobal.conexion.CargarUltimoLoteId();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (id < 1) return;
+
+            lote_id_tb.Text = id.ToString();           
         }
 
         private void LimpiarForm()
@@ -36,27 +49,35 @@ namespace SivUI
             inversion_total_tb.Text = "";
             inversion_unidad_tb.Text = "N/A";
             precio_venta_defecto_tb.Text = "";
+            producto = null;
+            nombre_producto_tb.Text = "";
         }
         private bool ValidarForm()
         {
             bool esFormValido = true;
 
+            if (producto == null)
+            {
+                esFormValido = false;
+                MessageBox.Show($"Debe seleccionar un producto.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Cantidad de unidades inválida", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
+                MessageBox.Show("Cantidad de unidades inválida.", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
             }
 
             if (Ayudantes.EsDecimalNoNegativo(inversion_total_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Inversión total inválida", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Inversión total inválida.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (Ayudantes.EsDecimalNoNegativo(precio_venta_defecto_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Precio de venta inválido", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Precio de venta inválido.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             return esFormValido;
         }
@@ -88,11 +109,6 @@ namespace SivUI
         {
             if (ValidarForm() == false) return;
 
-            if (this.producto == null)
-            {
-                MessageBox.Show($"Debe seleccionar un producto.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
             LoteModelo lote = new LoteModelo();
 
             lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
@@ -101,18 +117,22 @@ namespace SivUI
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
 
             // todo - cambiar a tb
-            lote.Producto = this.producto;
+            lote.Producto = producto;
             
             try
             {
                 ConfigGlobal.conexion.GuardarLote(lote);
+            }
+            catch (OverflowException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            
             LimpiarForm();
             ActualizarUltimoLoteId();
             MessageBox.Show($"ID del lote: {lote.Id}", "Lote agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -128,6 +148,8 @@ namespace SivUI
 
         public void ProductoListo(ProductoModelo producto)
         {
+            if (producto == null) return;
+
             this.producto = producto;
             nombre_producto_tb.Text = producto.Nombre;
         }

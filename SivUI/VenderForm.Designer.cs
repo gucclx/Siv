@@ -43,7 +43,6 @@
             this.buscar_linklabel = new System.Windows.Forms.LinkLabel();
             this.comentario_tb = new System.Windows.Forms.TextBox();
             this.comentario_label = new System.Windows.Forms.Label();
-            this.o_label = new System.Windows.Forms.Label();
             this.crear_nuevo_cliente_label = new System.Windows.Forms.LinkLabel();
             this.limpiar_cliente_button = new System.Windows.Forms.Button();
             this.panel_contenedor = new System.Windows.Forms.Panel();
@@ -168,9 +167,10 @@
             // buscar_linklabel
             // 
             this.buscar_linklabel.AutoSize = true;
-            this.buscar_linklabel.Location = new System.Drawing.Point(78, 375);
+            this.buscar_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_linklabel.Location = new System.Drawing.Point(87, 378);
             this.buscar_linklabel.Name = "buscar_linklabel";
-            this.buscar_linklabel.Size = new System.Drawing.Size(68, 25);
+            this.buscar_linklabel.Size = new System.Drawing.Size(56, 21);
             this.buscar_linklabel.TabIndex = 19;
             this.buscar_linklabel.TabStop = true;
             this.buscar_linklabel.Text = "Buscar";
@@ -193,21 +193,13 @@
             this.comentario_label.TabIndex = 20;
             this.comentario_label.Text = "Comentario";
             // 
-            // o_label
-            // 
-            this.o_label.AutoSize = true;
-            this.o_label.Location = new System.Drawing.Point(152, 375);
-            this.o_label.Name = "o_label";
-            this.o_label.Size = new System.Drawing.Size(20, 25);
-            this.o_label.TabIndex = 22;
-            this.o_label.Text = "-";
-            // 
             // crear_nuevo_cliente_label
             // 
             this.crear_nuevo_cliente_label.AutoSize = true;
-            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(178, 375);
+            this.crear_nuevo_cliente_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(198, 378);
             this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
-            this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(115, 25);
+            this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(95, 21);
             this.crear_nuevo_cliente_label.TabIndex = 23;
             this.crear_nuevo_cliente_label.TabStop = true;
             this.crear_nuevo_cliente_label.Text = "Crear nuevo";
@@ -242,7 +234,6 @@
             this.Controls.Add(this.panel_contenedor);
             this.Controls.Add(this.limpiar_cliente_button);
             this.Controls.Add(this.crear_nuevo_cliente_label);
-            this.Controls.Add(this.o_label);
             this.Controls.Add(this.comentario_tb);
             this.Controls.Add(this.comentario_label);
             this.Controls.Add(this.buscar_linklabel);
@@ -259,6 +250,7 @@
             this.Controls.Add(this.lote_id_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "VenderForm";
@@ -288,7 +280,6 @@
         private System.Windows.Forms.LinkLabel buscar_linklabel;
         private System.Windows.Forms.TextBox comentario_tb;
         private System.Windows.Forms.Label comentario_label;
-        private System.Windows.Forms.Label o_label;
         private System.Windows.Forms.LinkLabel crear_nuevo_cliente_label;
         private System.Windows.Forms.Button limpiar_cliente_button;
         private System.Windows.Forms.Panel panel_contenedor;

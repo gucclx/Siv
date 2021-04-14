@@ -53,13 +53,14 @@ namespace SivUI
         private void buscar_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarProductoForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         private void remover_categorias_button_Click(object sender, EventArgs e)
         {
             if (producto == null) return;
             var categoriasSeleccionadas = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
+
             foreach (var categoria in categoriasSeleccionadas)
             {
                 producto.Categorias.Remove(categoria);
@@ -78,6 +79,7 @@ namespace SivUI
             if (producto == null) return;
             foreach (var categoria in categorias)
             {
+                if (producto.Categorias.Find(c => c.Id == categoria.Id) != null) continue;
                 producto.Categorias.Add(categoria);
             }
             ActualizarCategorias();

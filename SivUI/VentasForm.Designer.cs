@@ -41,7 +41,7 @@
             this.total_inversion_label = new System.Windows.Forms.Label();
             this.exportar_button = new System.Windows.Forms.Button();
             this.limpiar_button = new System.Windows.Forms.Button();
-            this.exportando_label = new System.Windows.Forms.Label();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -177,23 +177,24 @@
             this.limpiar_button.UseVisualStyleBackColor = true;
             this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
             // 
-            // exportando_label
+            // tarea_label
             // 
-            this.exportando_label.AutoSize = true;
-            this.exportando_label.Location = new System.Drawing.Point(747, 26);
-            this.exportando_label.Name = "exportando_label";
-            this.exportando_label.Size = new System.Drawing.Size(121, 25);
-            this.exportando_label.TabIndex = 24;
-            this.exportando_label.Text = "Exportando...";
-            this.exportando_label.Visible = false;
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(747, 26);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 24;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
             // 
-            // GestionarVentasForm
+            // VentasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
-            this.Controls.Add(this.exportando_label);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.total_inversion_tb);
@@ -211,7 +212,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
-            this.Name = "GestionarVentasForm";
+            this.Name = "VentasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Información de ventas";
             this.contenedor_panel.ResumeLayout(false);
@@ -235,6 +236,6 @@
         private System.Windows.Forms.Label total_inversion_label;
         private System.Windows.Forms.Button exportar_button;
         private System.Windows.Forms.Button limpiar_button;
-        private System.Windows.Forms.Label exportando_label;
+        private System.Windows.Forms.Label tarea_label;
     }
 }
