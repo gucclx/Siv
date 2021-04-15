@@ -19,6 +19,7 @@ namespace SivUI
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
         ReporteFiltroModelo reporteFiltro;
+        const int LimiteFilas = 100_000;
         public ExportarForm()
         {
             InitializeComponent();
@@ -43,33 +44,30 @@ namespace SivUI
             if (destino == null) return;
 
             Exportando(true);
-            CambiarTareaLabel("Extrayendo inventario de la base de datos...");
+            CambiarTareaLabel("Exportando...");
 
             List<ReporteInventarioModelo> reportes;
+            int? comienzo = 0;
 
             try
             {
-                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro));
+                do
+                {
+                    reportes = await Task.Run(() =>
+                        ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
+                    );
+                    await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
+                    comienzo = reportes.LastOrDefault()?.LoteId;
+                } while (reportes.Count > 0);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Exportando(false);
                 return;
             }
 
-            CambiarTareaLabel($"Exportando { reportes.Count.ToString("#,##0") } filas...");
-
-            try
-            {
-                await Ayudantes.GuardarCsvReporteInventarioAsync(reportes, destino);
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
         }
 
@@ -112,27 +110,30 @@ namespace SivUI
             if (destino == null) return;
 
             Exportando(true);
+            CambiarTareaLabel("Exportando...");
+
             List<ReporteVentaModelo> reportes;
+            int? comienzo = 0;
+
             try
             {
-                reportes = ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro);
+                do
+                {
+                    reportes = await Task.Run(() =>
+                        ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
+                    );
+                    await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
+                    comienzo = reportes.LastOrDefault()?.LoteId;
+                } while (reportes.Count > 0);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Exportando(false);
                 return;
             }
-            
-            try
-            {
-                await Ayudantes.GuardarCsvReporteVentasAsync(reportes, destino);
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
         }
 

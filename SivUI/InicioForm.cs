@@ -59,7 +59,7 @@ namespace SivUI
             this.Show();
         }
 
-        private void gestionar_ventas_ToolStripMenuItem1_Click_1(object sender, EventArgs e)
+        private void historial_ventas_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new VentasForm();
             this.Hide();
@@ -67,7 +67,7 @@ namespace SivUI
             this.Show();
         }
 
-        private void acceder_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void historial_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new InventarioForm();
             this.Hide();

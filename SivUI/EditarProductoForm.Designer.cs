@@ -40,6 +40,8 @@
             this.remover_categorias_button = new System.Windows.Forms.Button();
             this.editar_button = new System.Windows.Forms.Button();
             this.crear_categoria_linklabel = new System.Windows.Forms.LinkLabel();
+            this.nueva_descripcion_tb = new System.Windows.Forms.TextBox();
+            this.descripcion_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // header_label
@@ -84,7 +86,7 @@
             // 
             // nuevo_nombre_tb
             // 
-            this.nuevo_nombre_tb.Location = new System.Drawing.Point(12, 171);
+            this.nuevo_nombre_tb.Location = new System.Drawing.Point(12, 150);
             this.nuevo_nombre_tb.Name = "nuevo_nombre_tb";
             this.nuevo_nombre_tb.Size = new System.Drawing.Size(449, 33);
             this.nuevo_nombre_tb.TabIndex = 26;
@@ -92,7 +94,7 @@
             // nuevo_nombre_label
             // 
             this.nuevo_nombre_label.AutoSize = true;
-            this.nuevo_nombre_label.Location = new System.Drawing.Point(7, 143);
+            this.nuevo_nombre_label.Location = new System.Drawing.Point(12, 122);
             this.nuevo_nombre_label.Name = "nuevo_nombre_label";
             this.nuevo_nombre_label.Size = new System.Drawing.Size(138, 25);
             this.nuevo_nombre_label.TabIndex = 25;
@@ -104,16 +106,16 @@
             this.categorias_listbox.FormattingEnabled = true;
             this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 21;
-            this.categorias_listbox.Location = new System.Drawing.Point(12, 256);
+            this.categorias_listbox.Location = new System.Drawing.Point(12, 317);
             this.categorias_listbox.Name = "categorias_listbox";
             this.categorias_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.categorias_listbox.Size = new System.Drawing.Size(449, 130);
+            this.categorias_listbox.Size = new System.Drawing.Size(449, 88);
             this.categorias_listbox.TabIndex = 27;
             // 
             // categorias_producto_label
             // 
             this.categorias_producto_label.AutoSize = true;
-            this.categorias_producto_label.Location = new System.Drawing.Point(7, 228);
+            this.categorias_producto_label.Location = new System.Drawing.Point(7, 289);
             this.categorias_producto_label.Name = "categorias_producto_label";
             this.categorias_producto_label.Size = new System.Drawing.Size(215, 25);
             this.categorias_producto_label.TabIndex = 28;
@@ -123,7 +125,7 @@
             // 
             this.agregar_categorias_linklabel.AutoSize = true;
             this.agregar_categorias_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.agregar_categorias_linklabel.Location = new System.Drawing.Point(228, 231);
+            this.agregar_categorias_linklabel.Location = new System.Drawing.Point(228, 292);
             this.agregar_categorias_linklabel.Name = "agregar_categorias_linklabel";
             this.agregar_categorias_linklabel.Size = new System.Drawing.Size(66, 21);
             this.agregar_categorias_linklabel.TabIndex = 29;
@@ -134,7 +136,7 @@
             // remover_categorias_button
             // 
             this.remover_categorias_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.remover_categorias_button.Location = new System.Drawing.Point(12, 392);
+            this.remover_categorias_button.Location = new System.Drawing.Point(12, 411);
             this.remover_categorias_button.Name = "remover_categorias_button";
             this.remover_categorias_button.Size = new System.Drawing.Size(204, 37);
             this.remover_categorias_button.TabIndex = 30;
@@ -158,7 +160,7 @@
             // 
             this.crear_categoria_linklabel.AutoSize = true;
             this.crear_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.crear_categoria_linklabel.Location = new System.Drawing.Point(413, 231);
+            this.crear_categoria_linklabel.Location = new System.Drawing.Point(413, 292);
             this.crear_categoria_linklabel.Name = "crear_categoria_linklabel";
             this.crear_categoria_linklabel.Size = new System.Drawing.Size(48, 21);
             this.crear_categoria_linklabel.TabIndex = 32;
@@ -166,12 +168,32 @@
             this.crear_categoria_linklabel.Text = "Crear";
             this.crear_categoria_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.crear_categoria_linklabel_LinkClicked);
             // 
+            // nueva_descripcion_tb
+            // 
+            this.nueva_descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nueva_descripcion_tb.Location = new System.Drawing.Point(12, 214);
+            this.nueva_descripcion_tb.Multiline = true;
+            this.nueva_descripcion_tb.Name = "nueva_descripcion_tb";
+            this.nueva_descripcion_tb.Size = new System.Drawing.Size(449, 72);
+            this.nueva_descripcion_tb.TabIndex = 34;
+            // 
+            // descripcion_label
+            // 
+            this.descripcion_label.AutoSize = true;
+            this.descripcion_label.Location = new System.Drawing.Point(7, 186);
+            this.descripcion_label.Name = "descripcion_label";
+            this.descripcion_label.Size = new System.Drawing.Size(168, 25);
+            this.descripcion_label.TabIndex = 33;
+            this.descripcion_label.Text = "Nueva descripción";
+            // 
             // EditarProductoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(473, 502);
+            this.ClientSize = new System.Drawing.Size(473, 501);
+            this.Controls.Add(this.nueva_descripcion_tb);
+            this.Controls.Add(this.descripcion_label);
             this.Controls.Add(this.crear_categoria_linklabel);
             this.Controls.Add(this.editar_button);
             this.Controls.Add(this.remover_categorias_button);
@@ -211,5 +233,7 @@
         private System.Windows.Forms.Button remover_categorias_button;
         private System.Windows.Forms.Button editar_button;
         private System.Windows.Forms.LinkLabel crear_categoria_linklabel;
+        private System.Windows.Forms.TextBox nueva_descripcion_tb;
+        private System.Windows.Forms.Label descripcion_label;
     }
 }

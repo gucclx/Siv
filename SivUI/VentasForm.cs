@@ -80,16 +80,21 @@ namespace SivUI
             resultados_dtgv.Columns.Add(nombreClienteColumna);
         }
 
-        private void cargar_reporte_button_Click(object sender, EventArgs e)
+        private async void cargar_reporte_button_Click(object sender, EventArgs e)
         {
             cargar_reporte_button.Enabled = false;
             LimpiarResultados();
 
             try
             {
+                ConfigTareaLabel("Extrayendo información de la base de datos...");
                 // cargar reportes
-                var reportes = ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilasReporte);
-              
+                var reportes = await Task.Run(() =>
+                    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilasReporte)
+                );
+
+                ConfigTareaLabel(visible: false);
+
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
                 resultados_dtgv.DataSource = resultados;                
@@ -164,8 +169,9 @@ namespace SivUI
             filtros_button.Enabled = !trabajando;
         }
 
-        private void CambiarTareaLabel(string s)
+        private void ConfigTareaLabel(string s = "", bool visible = true)
         {
+            tarea_label.Visible = visible;
             tarea_label.Text = s;
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
@@ -186,8 +192,8 @@ namespace SivUI
                     try
                     {
                         Exportando(true);
-                        CambiarTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
-                        await Ayudantes.GuardarCsvReporteVentasAsync(reportes: resultados.List.Cast<ReporteVentaModelo>().ToList(), archivo: archivo);
+                        ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteVentaModelo>().ToList(), archivo: archivo);
                         MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (IOException ex)
@@ -197,6 +203,7 @@ namespace SivUI
                 }
             }
             Exportando(false);
+            ConfigTareaLabel(visible: false);
         }
     }
 }

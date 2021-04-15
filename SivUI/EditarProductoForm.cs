@@ -26,6 +26,7 @@ namespace SivUI
             this.producto = producto;
             nombre_producto_tb.Text = producto.Nombre;
             nuevo_nombre_tb.Text = producto.Nombre;
+            nueva_descripcion_tb.Text = producto.Descripcion;
 
             try
             {
@@ -104,6 +105,8 @@ namespace SivUI
             }
 
             producto.Nombre = nuevoNombre;
+            producto.Descripcion = nueva_descripcion_tb.Text.Trim();
+
             try
             {
                 ConfigGlobal.conexion.EditarProducto(producto);
@@ -123,6 +126,7 @@ namespace SivUI
             nombre_producto_tb.Clear();
             nombre_producto_tb.Focus();
             nuevo_nombre_tb.Clear();
+            nueva_descripcion_tb.Clear();
             ActualizarCategorias();
         }
     }

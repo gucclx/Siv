@@ -341,7 +341,7 @@ namespace SivBiblioteca.AccesoDatos
         ///     Limite de filas a retornar. Util si la informacion se presentara al usuario. 
         /// </param>
         /// <returns> Lista de reportes. </returns>
-        public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null)
+        public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
 
@@ -421,6 +421,12 @@ namespace SivBiblioteca.AccesoDatos
                 q += " " + string.Join(" ", joins);
             }
 
+            if (comienzo != null)
+            {
+                condiciones.Add("ventas.id > @Comienzo");
+                parametros.Add("@Comienzo", comienzo);
+            }
+
             // Agregar las condiciones al query.
             if (condiciones.Count > 0)
             {
@@ -428,7 +434,7 @@ namespace SivBiblioteca.AccesoDatos
                 q += string.Join(" and ", condiciones);
             }
 
-            q += " order by ventas.id desc";
+            q += " order by ventas.id asc";
 
             // Agregar el limite de filas a retornar.
             if (limiteFilas != null && limiteFilas > -1)
@@ -603,7 +609,7 @@ namespace SivBiblioteca.AccesoDatos
         ///     Limite de filas a retonar. 
         /// </param>
         /// <returns> Una lista de reportes. </returns>
-        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null)
+        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
 
@@ -644,26 +650,32 @@ namespace SivBiblioteca.AccesoDatos
                 // Si se filtra por el tipo de producto.
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
-                    // Se utiliza case para forzar a sqlite
-                    // a que en caso de que se provea un rango de fechas
-                    // en la que los lotes fueron creados, sqlite utilize
-                    // el index en la columna lotes.FechaCreacion de primero
-                    // y luego escoga solo los lotes asociados con el producto especificado.
+                    if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
+                    {
+                        // Se utiliza case para forzar a sqlite
+                        // a que en caso de que se provea un rango de fechas
+                        // en la que los lotes fueron creados, sqlite utilize
+                        // el index en la columna lotes.FechaCreacion de primero
+                        // y luego escoga solo los lotes asociados con el producto especificado.
 
-                    // sin case, sqlite aparenta no utilizar el index de primero.
-                    // Asumiendo que se proporciona un rango de fechas, aqui los query plans:
+                        // sin case, sqlite aparenta no utilizar el index de primero.
+                        // Asumiendo que se proporciona un rango de fechas, aqui los query plans:
 
-                    // query plan sin case:
-                    // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
-                    // SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
+                        // query plan sin case:
+                        // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
+                        // SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
 
-                    // query plan con case:
-                    // SEARCH TABLE lotes USING INDEX idx_Lotes_FechaCreacion(FechaCreacion>? AND FechaCreacion <?)
-                    // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
+                        // query plan con case:
+                        // SEARCH TABLE lotes USING INDEX idx_Lotes_FechaCreacion(FechaCreacion>? AND FechaCreacion <?)
+                        // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
 
-                    // https://stackoverflow.com/a/49861947
-
-                    condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
+                        // https://stackoverflow.com/a/49861947
+                        condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
+                    }
+                    else
+                    {
+                        condiciones.Add("productos.id = @ProductoId");
+                    }                    
                     parametros.Add("@ProductoId", filtro.Producto.Id);
                 }
             }
@@ -674,6 +686,12 @@ namespace SivBiblioteca.AccesoDatos
                 q += " " + string.Join(" ", joins);
             }
 
+            if (comienzo != null)
+            {
+                condiciones.Add("lotes.id > @Comienzo");
+                parametros.Add("@Comienzo", comienzo);
+            }
+
             // Agregar condiciones necesarias al query.
             if (condiciones.Count > 0)
             {
@@ -681,10 +699,10 @@ namespace SivBiblioteca.AccesoDatos
                 q += string.Join(" and ", condiciones);
             }
 
-            q += " order by lotes.id desc";
+            q += " order by lotes.id asc";
 
             // Agregar el limte de filas a retornar.
-            if (limiteFilas != null && limiteFilas > -1)
+            if (limiteFilas != null)
             {
                 q += $" limit @Limite";
                 parametros.Add("@Limite", limiteFilas);
@@ -735,6 +753,10 @@ namespace SivBiblioteca.AccesoDatos
             {
                 throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1");
             }
+
+            producto.Nombre = producto.Nombre.Trim();
+            producto.Descripcion = producto.Descripcion.Trim();
+
             if (string.IsNullOrEmpty(producto.Nombre))
             {
                 throw new ArgumentException("El nombre del producto no puede estar vacio.");
@@ -742,8 +764,8 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"update Productos set Nombre = @Nombre where Id = @Id";
-                conexion.Execute(q, new { Nombre = producto.Nombre, Id = producto.Id });
+                var q = @"update Productos set Nombre = @Nombre, Descripcion = @Descripcion where Id = @Id";
+                conexion.Execute(q, new { Nombre = producto.Nombre, Descripcion = producto.Descripcion, Id = producto.Id });
 
                 conexion.Open();
                 using (var transaccion = conexion.BeginTransaction())

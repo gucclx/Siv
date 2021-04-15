@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using SivBiblioteca.Modelos;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace SivBiblioteca
 {
     public static class Ayudantes
-    {        
+    {
         public static bool EsEnteroPositivo(string x)
         {
             x = x.Trim();
@@ -46,31 +47,23 @@ namespace SivBiblioteca
             return xEsDecimal && (decimalX >= 0);
         }
         
-        public static async Task GuardarCsvReporteVentasAsync(List<ReporteVentaModelo> reportes, FileInfo archivo)
+        /// <summary>
+        /// Guarda una lista de reportes de inventario o ventas como archivo .csv.
+        /// Si el archivo seleccionado existe, la lista sera adjuntada al archivo.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reportes"> Reportes a guardar. </param>
+        /// <param name="archivo"> Archivo donde se escribiran los reportes. </param>
+        /// <returns></returns>
+        public static async Task GuardarCsvReporteAsync<T>(IEnumerable<T> reportes, FileInfo archivo)
         {
-            if (archivo.Exists)
+            var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
-                archivo.Delete();
-            }
+                HasHeaderRecord = !File.Exists(archivo.FullName)
+            };            
 
-            using (var stream = File.OpenWrite(archivo.FullName))
-            using (var writer = new StreamWriter(stream, Encoding.UTF8))
-            using (var csv = new CsvWriter(writer, CultureInfo.CurrentCulture))
-            {
-                await csv.WriteRecordsAsync(reportes);
-            }
-        }
-
-        public static async Task GuardarCsvReporteInventarioAsync(List<ReporteInventarioModelo> reportes, FileInfo archivo)
-        {
-            if (archivo.Exists)
-            {
-                archivo.Delete();
-            }
-
-            using (var stream = File.OpenWrite(archivo.FullName))
-            using (var writer = new StreamWriter(stream, Encoding.UTF8))
-            using (var csv = new CsvWriter(writer, CultureInfo.CurrentCulture))
+            using (var writer = new StreamWriter(archivo.FullName, true, Encoding.UTF8))
+            using (var csv = new CsvWriter(writer, config))
             {
                 await csv.WriteRecordsAsync(reportes);
             }
