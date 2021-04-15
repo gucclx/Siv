@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class CrearProductoForm : Form, ISolicitudCategoria
+    public partial class CrearProductoForm : Form, ISolicitudCategorias
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ISolicitudProducto solicitante;

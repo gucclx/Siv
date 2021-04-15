@@ -14,13 +14,14 @@ namespace SivBiblioteca.Modelos
     {
         public ProductoModelo Producto { get; set; }
         public int? LoteId { get; set; }
-        public List<CategoriaModelo> Categorias { get; set; }
+        public CategoriaModelo Categoria { get; set; }
         public ClienteModelo Cliente { get; set; }
         public DateTime FechaInicial { get; set; }
         public DateTime FechaFinal { get; set; }
         public bool FiltroPorFechas { get; set; } = false;
         public bool FiltroPorCliente { get; set; } = false;
         public bool FiltroPorProducto { get; set; } = false;
+        public bool FiltroPorCategoria { get; set; } = false;
 
     }
 }

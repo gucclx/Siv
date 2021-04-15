@@ -13,6 +13,7 @@ namespace SivBiblioteca.AccesoDatos
     // TODO - validar que todos los datos esten correctos.
     // todo - cargar_porNombre<type>(string nombre);
     // todo - siempre revisar si una lista es nula antes de iterar en ella.
+    // todo - crear index en categoriaid en productocategoria
 
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
@@ -365,11 +366,11 @@ namespace SivBiblioteca.AccesoDatos
             if (filtro != null)
             {
                 // Si se filtra por categorias del producto.
-                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
+                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId in @Ids");
-                    parametros.Add("@Ids", filtro.Categorias.Select(c => c.Id).ToList());
+                    condiciones.Add("ProductoCategoria.CategoriaId = @Id");
+                    parametros.Add("@Id", filtro.Categoria.Id);
                 }
 
                 // Si se filtra por fecha de venta.
@@ -632,11 +633,11 @@ namespace SivBiblioteca.AccesoDatos
             if (filtro != null)
             {
                 // Si se filtra por las categorias de los productos en el inventario.
-                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
+                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId in @Ids");
-                    parametros.Add("@Ids", filtro.Categorias.Select(c => c.Id).ToList());
+                    condiciones.Add("ProductoCategoria.CategoriaId = @Id");
+                    parametros.Add("@Id", filtro.Categoria.Id);
                 }
 
                 // Si se filtra por fecha de agregado al inventario.

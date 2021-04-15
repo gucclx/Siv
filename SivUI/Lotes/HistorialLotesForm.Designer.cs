@@ -50,11 +50,11 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(359, 9);
+            this.header_label.Location = new System.Drawing.Point(405, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(266, 30);
+            this.header_label.Size = new System.Drawing.Size(174, 30);
             this.header_label.TabIndex = 16;
-            this.header_label.Text = "Información del inventario";
+            this.header_label.Text = "Historial de lotes";
             // 
             // tarea_label
             // 
@@ -216,7 +216,7 @@
             this.MaximizeBox = false;
             this.Name = "InventarioForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Información del inventario";
+            this.Text = "Historial de lotes";
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).EndInit();
             this.contenedor_panel.ResumeLayout(false);
             this.ResumeLayout(false);

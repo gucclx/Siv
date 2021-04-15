@@ -9,22 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SivBiblioteca.Modelos;
 using SivBiblioteca;
+using SivUI.Categorias;
+using SivUI.Interfaces;
 
 namespace SivUI
 {
-    public partial class CrearFiltroForm : Form, ISolicitudCategoria, ISolicitudCliente, ISolicitudProducto
+    public partial class HistorialVentasFiltroForm : Form, ISolicitudCliente, ISolicitudProducto, ISolicitudCategoria
     {
-        List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ProductoModelo producto;
         ClienteModelo cliente;
+        CategoriaModelo categoria;
 
         ISolicitudFiltro solicitante;
 
-        public CrearFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
+        public HistorialVentasFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();
             this.solicitante = solicitante;
-            
+
             // Cargar filtro anterior
             if (filtro != null)
             {
@@ -55,16 +57,15 @@ namespace SivUI
                 filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
                 filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
 
-                categoriasSeleccionadas = filtro.Categorias;
-                ActualizarCategorias();
-            }
-        }
+                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                {
+                    categoria = filtro.Categoria;
+                    categoria_nombre_tb.Text = filtro.Categoria.Nombre;
+                }
 
-        private void ActualizarCategorias()
-        {
-            categorias_listbox.DataSource = null;
-            categorias_listbox.DataSource = categoriasSeleccionadas;
-            categorias_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
+                filtrar_por_categoria_groupbox.Enabled = filtro.FiltroPorCategoria;
+                filtrar_por_categoria_checkbox.Checked = filtro.FiltroPorCategoria;
+            }
         }
 
         private void habilitar_fechas_checkbox_CheckedChanged(object sender, EventArgs e)
@@ -72,46 +73,22 @@ namespace SivUI
             filtrar_por_fechas_groupbox.Enabled = habilitar_fechas_checkbox.Checked;
         }
 
-        public void CategoriasListas(List<CategoriaModelo> categorias)
-        {
-            foreach(var categoria in categorias)
-            {
-                categoriasSeleccionadas.Add(categoria);
-            }
-            ActualizarCategorias();
-        }
-
-        private void remover_categoria_button_Click(object sender, EventArgs e)
-        {
-            var seleccion = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
-
-            foreach (var categoria in seleccion)
-            {
-                categoriasSeleccionadas.Remove(categoria);
-            }
-            ActualizarCategorias();
-        }
-
         private void listo_button_Click(object sender, EventArgs e)
         {
             var filtro = new ReporteFiltroModelo();
 
-            filtro.Categorias = categoriasSeleccionadas;
             filtro.FechaInicial = fecha_inicial_dtp.Value.Date;
             filtro.FechaFinal = fecha_final_dtp.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
             filtro.FiltroPorFechas = habilitar_fechas_checkbox.Checked;
-            
-            if (filtrar_por_producto_checkbox.Checked)
-            {
-                filtro.Producto = producto;
-                filtro.FiltroPorProducto = true;
-            }
 
-            if (filtrar_por_cliente_checkbox.Checked && cliente != null)
-            {
-                filtro.Cliente = cliente;
-                filtro.FiltroPorCliente = true;
-            }
+            filtro.Producto = producto;
+            filtro.FiltroPorProducto = filtrar_por_producto_checkbox.Checked;
+
+            filtro.Cliente = cliente;
+            filtro.FiltroPorCliente = filtrar_por_cliente_checkbox.Checked;
+
+            filtro.Categoria = categoria;
+            filtro.FiltroPorCategoria = filtrar_por_categoria_checkbox.Checked;
 
             solicitante.FiltroCreado(filtro);
             MessageBox.Show("Filtro configurado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -126,6 +103,7 @@ namespace SivUI
 
         public void ClienteListo(ClienteModelo cliente)
         {
+            if (cliente == null) return;
             this.cliente = cliente;
             cliente_tb.Text = cliente.NombreCompleto;
         }
@@ -143,7 +121,7 @@ namespace SivUI
         private void buscar_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarProductoForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         public void ProductoListo(ProductoModelo producto)
@@ -153,10 +131,22 @@ namespace SivUI
             nombre_producto_tb.Text = producto.Nombre;
         }
 
-        private void buscar_categorias_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void buscar_categoria_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var frm = new BuscarCategoriasForm(this);
+            var frm = new BuscarCategoriaForm(this);
             frm.ShowDialog();
+        }
+
+        public void CategoriaLista(CategoriaModelo categoria)
+        {
+            if (categoria == null) return;
+            this.categoria = categoria;
+            categoria_nombre_tb.Text = categoria.Nombre;
+        }
+
+        private void filtrar_por_categoria_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            filtrar_por_categoria_groupbox.Enabled = filtrar_por_categoria_checkbox.Checked;
         }
     }
 }

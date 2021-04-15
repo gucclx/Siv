@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class EliminarCategoriaForm : Form, ISolicitudCategoria
+    public partial class EliminarCategoriaForm : Form, ISolicitudCategorias
     {
         List<CategoriaModelo> categoriasAEliminar = new List<CategoriaModelo>();
         public EliminarCategoriaForm()

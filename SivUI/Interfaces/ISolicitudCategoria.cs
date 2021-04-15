@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SivUI
+namespace SivUI.Interfaces
 {
     public interface ISolicitudCategoria
     {
-        void CategoriasListas(List<CategoriaModelo> categorias);
+        void CategoriaLista(CategoriaModelo categoria);
     }
 }

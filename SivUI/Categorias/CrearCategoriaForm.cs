@@ -14,8 +14,8 @@ namespace SivUI
     public partial class CrearCategoriaForm : Form
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-        ISolicitudCategoria solicitante;
-        public CrearCategoriaForm(ISolicitudCategoria solicitante = null)
+        ISolicitudCategorias solicitante;
+        public CrearCategoriaForm(ISolicitudCategorias solicitante = null)
         {
             InitializeComponent();
             this.solicitante = solicitante;

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
 using SivBiblioteca.AccesoDatos;
+using SivUI.Filtros;
 
 namespace SivUI
 {
@@ -19,6 +20,7 @@ namespace SivUI
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
         ReporteFiltroModelo reporteFiltro;
+
         const int LimiteFilas = 100_000;
         public ExportarForm()
         {
@@ -30,16 +32,14 @@ namespace SivUI
             reporteFiltro = filtro;
         }
 
-        private void filtros_button_Click(object sender, EventArgs e)
+        private async void exportar_inventario_button_Click(object sender, EventArgs e)
         {
-            var frm = new CrearFiltroForm(this, reporteFiltro);
+            var frm = new HistorialLotesFiltroForm(this);
             this.Hide();
             frm.ShowDialog();
             this.Show();
-        }
 
-        private async void exportar_inventario_button_Click(object sender, EventArgs e)
-        {
+
             var destino = GuardarDialogo();
             if (destino == null) return;
 
@@ -69,6 +69,7 @@ namespace SivUI
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
+            reporteFiltro = null;
         }
 
         /// <summary>
@@ -106,6 +107,11 @@ namespace SivUI
 
         private async void exportar_ventas_button_Click(object sender, EventArgs e)
         {
+            var frm = new HistorialVentasFiltroForm(this);
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+
             var destino = GuardarDialogo();
             if (destino == null) return;
 
@@ -135,6 +141,7 @@ namespace SivUI
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
+            reporteFiltro = null;
         }
 
         /// <summary>
@@ -145,7 +152,6 @@ namespace SivUI
         private void Exportando(bool trabajando)
         {
             tarea_label.Visible = trabajando;
-            filtros_button.Enabled = !trabajando;
             exportar_inventario_button.Enabled = !trabajando;
             exportar_ventas_button.Enabled = !trabajando;
         }

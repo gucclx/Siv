@@ -28,22 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.filtros_button = new System.Windows.Forms.Button();
             this.exportar_inventario_button = new System.Windows.Forms.Button();
             this.exportar_ventas_button = new System.Windows.Forms.Button();
             this.tarea_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // filtros_button
-            // 
-            this.filtros_button.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.filtros_button.Location = new System.Drawing.Point(12, 12);
-            this.filtros_button.Name = "filtros_button";
-            this.filtros_button.Size = new System.Drawing.Size(98, 37);
-            this.filtros_button.TabIndex = 15;
-            this.filtros_button.Text = "Filtros";
-            this.filtros_button.UseVisualStyleBackColor = true;
-            this.filtros_button.Click += new System.EventHandler(this.filtros_button_Click);
             // 
             // exportar_inventario_button
             // 
@@ -86,7 +74,6 @@
             this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.exportar_ventas_button);
             this.Controls.Add(this.exportar_inventario_button);
-            this.Controls.Add(this.filtros_button);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -100,8 +87,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button filtros_button;
         private System.Windows.Forms.Button exportar_inventario_button;
         private System.Windows.Forms.Button exportar_ventas_button;
         private System.Windows.Forms.Label tarea_label;

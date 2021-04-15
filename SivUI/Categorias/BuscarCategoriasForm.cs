@@ -16,9 +16,9 @@ namespace SivUI
     {
         List<CategoriaModelo> resultados;
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-        ISolicitudCategoria solicitante;
+        ISolicitudCategorias solicitante;
 
-        public BuscarCategoriasForm(ISolicitudCategoria solicitante)
+        public BuscarCategoriasForm(ISolicitudCategorias solicitante)
         {
             InitializeComponent();
             this.solicitante = solicitante;

@@ -123,7 +123,7 @@ namespace SivUI
 
         private void filtros_button_Click(object sender, EventArgs e)
         {
-            var frm = new CrearFiltroForm(this, reporteFiltro);
+            var frm = new HistorialVentasFiltroForm(this, reporteFiltro);
             this.Hide();
             frm.ShowDialog();
             this.Show();

@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class EditarProductoForm : Form, ISolicitudProducto, ISolicitudCategoria
+    public partial class EditarProductoForm : Form, ISolicitudProducto, ISolicitudCategorias
     {
         ProductoModelo producto;
         public EditarProductoForm()

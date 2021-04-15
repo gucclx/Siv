@@ -1,5 +1,6 @@
 ﻿using SivBiblioteca;
 using SivBiblioteca.Modelos;
+using SivUI.Filtros;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -142,7 +143,7 @@ namespace SivUI
 
         private void filtros_button_Click(object sender, EventArgs e)
         {
-            var frm = new CrearFiltroForm(this, reporteFiltro);
+            var frm = new HistorialLotesFiltroForm(this, reporteFiltro);
             this.Hide();
             frm.ShowDialog();
             this.Show();
