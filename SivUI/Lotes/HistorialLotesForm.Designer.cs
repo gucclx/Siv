@@ -1,6 +1,6 @@
 ﻿namespace SivUI
 {
-    partial class InventarioForm
+    partial class HistorialLotesForm
     {
         /// <summary>
         /// Required designer variable.

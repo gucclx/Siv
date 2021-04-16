@@ -46,7 +46,7 @@ namespace SivUI
             Exportando(true);
             CambiarTareaLabel("Exportando...");
 
-            List<ReporteInventarioModelo> reportes;
+            List<ReporteLoteModelo> reportes;
             int? comienzo = 0;
 
             try
@@ -54,7 +54,7 @@ namespace SivUI
                 do
                 {
                     reportes = await Task.Run(() =>
-                        ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
+                        ConfigGlobal.conexion.CargarReporteLotes(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
                     );
                     await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
                     comienzo = reportes.LastOrDefault()?.LoteId;

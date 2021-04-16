@@ -369,8 +369,8 @@ namespace SivBiblioteca.AccesoDatos
                 if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId = @Id");
-                    parametros.Add("@Id", filtro.Categoria.Id);
+                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
+                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
                 }
 
                 // Si se filtra por fecha de venta.
@@ -601,7 +601,9 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Genera y retorna una lista de reportes de inventario.
+        ///     Genera y retorna una lista de reportes de lotes.
+        ///     Cada reporte contiene informacion como el id del lote adquerido, cuando se adquirio,
+        ///     el producto del lote, inversion total, etc.
         /// </summary>
         /// <param name="filtro"> 
         ///     Objeto que contiene condiciones para generar los reportes. 
@@ -610,7 +612,7 @@ namespace SivBiblioteca.AccesoDatos
         ///     Limite de filas a retonar. 
         /// </param>
         /// <returns> Una lista de reportes. </returns>
-        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
+        public List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
 
@@ -636,8 +638,8 @@ namespace SivBiblioteca.AccesoDatos
                 if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId = @Id");
-                    parametros.Add("@Id", filtro.Categoria.Id);
+                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
+                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
                 }
 
                 // Si se filtra por fecha de agregado al inventario.
@@ -711,8 +713,7 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                conexion.Open();
-                var reportes = conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
+                var reportes = conexion.Query<ReporteLoteModelo>(q, parametros).ToList();
 
                 foreach (var reporte in reportes)
                 {
@@ -933,6 +934,64 @@ namespace SivBiblioteca.AccesoDatos
 
             trans.Commit();
             con.Close();
+        }
+
+        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro)
+        {
+            var q = @"select productos.nombre as 'NombreProducto', 
+                        productos.Descripcion as 'DescripcionProducto', 
+                        total(lotes.inversion) as 'ValorUnidadesDisponiblesProducto', 
+                        sum(lotes.UnidadesDisponibles) as 'UnidadesDisponiblesProducto' 
+                        from Productos
+                        left join lotes on lotes.ProductoId = productos.Id";
+
+            var parametros = new DynamicParameters();
+
+            var joins = new List<string>();
+            var condiciones = new List<string>();
+
+            if (filtro != null)
+            {
+                if (filtro.FiltroPorProducto && filtro.Producto != null)
+                {
+                    condiciones.Add("productos.id = @ProductoId");
+                    parametros.Add("@ProductoId", filtro.Producto.Id);
+                }
+
+                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                {
+                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
+                    condiciones.Add("ProductoCateoria.CategoriaId = @CategoriaId");
+                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
+                }
+            }
+
+            // Agregar los diferentes joins al query.
+            if (joins.Count > 0)
+            {
+                q += " " + string.Join(" ", joins);
+            }
+
+            // Agregar las condiciones al query.
+            if (condiciones.Count > 0)
+            {
+                q += " where ";
+                q += string.Join(" and ", condiciones);
+            }
+
+            q += " group by productos.id";
+
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                var reportes = conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
+
+                foreach (var reporte in reportes)
+                {
+                    reporte.ValorUnidadesDisponiblesProducto = reporte.ValorUnidadesDisponiblesProducto / FactorConversion;
+                }
+
+                return reportes;
+            }
         }
     }         
 }

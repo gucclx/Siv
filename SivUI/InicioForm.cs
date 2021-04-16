@@ -69,7 +69,7 @@ namespace SivUI
 
         private void historial_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frm = new InventarioForm();
+            var frm = new HistorialLotesForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();

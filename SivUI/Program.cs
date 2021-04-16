@@ -1,4 +1,5 @@
 ﻿using SivBiblioteca;
+using SivUI.Inventario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace SivUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConfigGlobal.inicializarConexion();
-            Application.Run(new InicioForm());
+            Application.Run(new InventarioForm());
         }
     }
 }

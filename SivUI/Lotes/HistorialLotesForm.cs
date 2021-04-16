@@ -14,51 +14,52 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    public partial class InventarioForm : Form, ISolicitudFiltro
+    // todo - agregar habilidad de filtrar por lote.unidadesdisponibles > 0
+    public partial class HistorialLotesForm : Form, ISolicitudFiltro
     {
         BindingSource resultados;
         ReporteFiltroModelo reporteFiltro;
         const int LimiteFilasReporte = 1000;
-        public InventarioForm()
+        public HistorialLotesForm()
         {
             InitializeComponent();
             resultados_dtgv.AutoGenerateColumns = false;
 
             var nombreProductoColumna = new DataGridViewTextBoxColumn();
             nombreProductoColumna.HeaderText = "Producto";
-            nombreProductoColumna.DataPropertyName = nameof(ReporteInventarioModelo.NombreProducto);
+            nombreProductoColumna.DataPropertyName = nameof(ReporteLoteModelo.NombreProducto);
 
             var descripcionProductoColumna = new DataGridViewTextBoxColumn();
             descripcionProductoColumna.HeaderText = "Descripción";
-            descripcionProductoColumna.DataPropertyName = nameof(ReporteInventarioModelo.DescripcionProducto);
+            descripcionProductoColumna.DataPropertyName = nameof(ReporteLoteModelo.DescripcionProducto);
 
             var precioVentaUnidadColumna = new DataGridViewTextBoxColumn();
             precioVentaUnidadColumna.HeaderText = "Precio Venta Unidad";
-            precioVentaUnidadColumna.DataPropertyName = nameof(ReporteInventarioModelo.PrecioVentaUnidad);
+            precioVentaUnidadColumna.DataPropertyName = nameof(ReporteLoteModelo.PrecioVentaUnidad);
 
             var loteIdColumna = new DataGridViewTextBoxColumn();
             loteIdColumna.HeaderText = "ID lote";
-            loteIdColumna.DataPropertyName = nameof(ReporteInventarioModelo.LoteId);
+            loteIdColumna.DataPropertyName = nameof(ReporteLoteModelo.LoteId);
 
             var unidadesCompradasColumna = new DataGridViewTextBoxColumn();
             unidadesCompradasColumna.HeaderText = "Unidades compradas";
-            unidadesCompradasColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesCompradasLote);
+            unidadesCompradasColumna.DataPropertyName = nameof(ReporteLoteModelo.UnidadesCompradasLote);
 
             var unidadesDisponiblesColumna = new DataGridViewTextBoxColumn();
             unidadesDisponiblesColumna.HeaderText = "Unidades disponibles";
-            unidadesDisponiblesColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesDisponiblesLote);
+            unidadesDisponiblesColumna.DataPropertyName = nameof(ReporteLoteModelo.UnidadesDisponiblesLote);
 
             var inversionUnidadColumna = new DataGridViewTextBoxColumn();
             inversionUnidadColumna.HeaderText = "Inversión Unidad";
-            inversionUnidadColumna.DataPropertyName = nameof(ReporteInventarioModelo.InversionUnidad);
+            inversionUnidadColumna.DataPropertyName = nameof(ReporteLoteModelo.InversionUnidad);
 
             var inversionTotalColumna = new DataGridViewTextBoxColumn();
             inversionTotalColumna.HeaderText = "Inversión total";
-            inversionTotalColumna.DataPropertyName = nameof(ReporteInventarioModelo.InversionLote);
+            inversionTotalColumna.DataPropertyName = nameof(ReporteLoteModelo.InversionLote);
 
             var fechaAgregadocolumna = new DataGridViewTextBoxColumn();
             fechaAgregadocolumna.HeaderText = "Fecha Agregado";
-            fechaAgregadocolumna.DataPropertyName = nameof(ReporteInventarioModelo.FechaAgregado);
+            fechaAgregadocolumna.DataPropertyName = nameof(ReporteLoteModelo.FechaAgregado);
 
             resultados_dtgv.Columns.Add(nombreProductoColumna);
             resultados_dtgv.Columns.Add(descripcionProductoColumna);
@@ -83,7 +84,7 @@ namespace SivUI
 
                 // cargar reportes
                 var reportes = await Task.Run(() =>
-                    ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilasReporte)
+                    ConfigGlobal.conexion.CargarReporteLotes(reporteFiltro, limiteFilas: LimiteFilasReporte)
                 );
 
                 ConfigTareaLabel(visible: false);
@@ -124,7 +125,7 @@ namespace SivUI
             decimal inversionTotal = 0;
             decimal valorUnidades = 0;
 
-            foreach (ReporteInventarioModelo reporte in resultados)
+            foreach (ReporteLoteModelo reporte in resultados)
             {
                 unidadesTotal += reporte.UnidadesDisponiblesLote;
                 inversionTotal += reporte.InversionLote;
@@ -186,7 +187,7 @@ namespace SivUI
                     {
                         Exportando(true);
                         ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
-                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
+                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteLoteModelo>().ToList(), archivo: archivo);
                         MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (IOException ex)

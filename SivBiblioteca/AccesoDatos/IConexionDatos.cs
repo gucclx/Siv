@@ -22,7 +22,7 @@ namespace SivBiblioteca.AccesoDatos
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
         List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
-        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
+        List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
         List<ProductoModelo> CargarProductos();
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);
@@ -31,5 +31,6 @@ namespace SivBiblioteca.AccesoDatos
         void EditarProducto(ProductoModelo producto);
         void EditarLote(LoteModelo lote);
         void EditarCliente(ClienteModelo cliente);
+        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro);
     }
 }
