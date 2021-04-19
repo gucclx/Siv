@@ -94,7 +94,7 @@
             // nuevo_nombre_label
             // 
             this.nuevo_nombre_label.AutoSize = true;
-            this.nuevo_nombre_label.Location = new System.Drawing.Point(12, 122);
+            this.nuevo_nombre_label.Location = new System.Drawing.Point(7, 122);
             this.nuevo_nombre_label.Name = "nuevo_nombre_label";
             this.nuevo_nombre_label.Size = new System.Drawing.Size(138, 25);
             this.nuevo_nombre_label.TabIndex = 25;
@@ -146,6 +146,7 @@
             // 
             // editar_button
             // 
+            this.editar_button.BackColor = System.Drawing.Color.White;
             this.editar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.editar_button.ForeColor = System.Drawing.Color.Gold;
             this.editar_button.Location = new System.Drawing.Point(354, 453);
@@ -153,7 +154,7 @@
             this.editar_button.Size = new System.Drawing.Size(107, 37);
             this.editar_button.TabIndex = 31;
             this.editar_button.Text = "Editar";
-            this.editar_button.UseVisualStyleBackColor = true;
+            this.editar_button.UseVisualStyleBackColor = false;
             this.editar_button.Click += new System.EventHandler(this.editar_button_Click);
             // 
             // crear_categoria_linklabel

@@ -320,7 +320,7 @@
             this.buscar_categoria_label.Text = "Buscar";
             this.buscar_categoria_label.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_categoria_label_LinkClicked);
             // 
-            // CrearFiltroForm
+            // HistorialVentasFiltroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -342,10 +342,10 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
-            this.Name = "CrearFiltroForm";
+            this.Name = "HistorialVentasFiltroForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ajuste de filtros";
+            this.Text = "Filtros";
             this.filtrar_por_fechas_groupbox.ResumeLayout(false);
             this.filtrar_por_fechas_groupbox.PerformLayout();
             this.filtrar_por_producto_groupbox.ResumeLayout(false);

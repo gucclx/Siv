@@ -45,9 +45,12 @@
             this.filtrar_por_categoria_groupbox = new System.Windows.Forms.GroupBox();
             this.categoria_nombre_tb = new System.Windows.Forms.TextBox();
             this.categoria_nombre_label = new System.Windows.Forms.Label();
+            this.general_groupbox = new System.Windows.Forms.GroupBox();
+            this.lotes_sin_unidades_checkbox = new System.Windows.Forms.CheckBox();
             this.filtrar_por_producto_groupbox.SuspendLayout();
             this.filtrar_por_fechas_groupbox.SuspendLayout();
             this.filtrar_por_categoria_groupbox.SuspendLayout();
+            this.general_groupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // buscar_categoria_label
@@ -228,18 +231,18 @@
             this.filtrar_por_categoria_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_categoria_groupbox.Name = "filtrar_por_categoria_groupbox";
             this.filtrar_por_categoria_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.filtrar_por_categoria_groupbox.Size = new System.Drawing.Size(333, 118);
+            this.filtrar_por_categoria_groupbox.Size = new System.Drawing.Size(312, 118);
             this.filtrar_por_categoria_groupbox.TabIndex = 46;
             this.filtrar_por_categoria_groupbox.TabStop = false;
             this.filtrar_por_categoria_groupbox.Text = "Categoria";
             // 
             // categoria_nombre_tb
             // 
-            this.categoria_nombre_tb.Location = new System.Drawing.Point(21, 59);
+            this.categoria_nombre_tb.Location = new System.Drawing.Point(18, 59);
             this.categoria_nombre_tb.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.categoria_nombre_tb.Name = "categoria_nombre_tb";
             this.categoria_nombre_tb.ReadOnly = true;
-            this.categoria_nombre_tb.Size = new System.Drawing.Size(290, 29);
+            this.categoria_nombre_tb.Size = new System.Drawing.Size(277, 29);
             this.categoria_nombre_tb.TabIndex = 29;
             this.categoria_nombre_tb.TabStop = false;
             // 
@@ -253,12 +256,38 @@
             this.categoria_nombre_label.TabIndex = 9;
             this.categoria_nombre_label.Text = "Nombre";
             // 
+            // general_groupbox
+            // 
+            this.general_groupbox.Controls.Add(this.lotes_sin_unidades_checkbox);
+            this.general_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.general_groupbox.Location = new System.Drawing.Point(331, 200);
+            this.general_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.general_groupbox.Name = "general_groupbox";
+            this.general_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.general_groupbox.Size = new System.Drawing.Size(331, 118);
+            this.general_groupbox.TabIndex = 47;
+            this.general_groupbox.TabStop = false;
+            this.general_groupbox.Text = "Generales";
+            // 
+            // lotes_sin_unidades_checkbox
+            // 
+            this.lotes_sin_unidades_checkbox.AutoSize = true;
+            this.lotes_sin_unidades_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lotes_sin_unidades_checkbox.Location = new System.Drawing.Point(16, 34);
+            this.lotes_sin_unidades_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.lotes_sin_unidades_checkbox.Name = "lotes_sin_unidades_checkbox";
+            this.lotes_sin_unidades_checkbox.Size = new System.Drawing.Size(276, 25);
+            this.lotes_sin_unidades_checkbox.TabIndex = 48;
+            this.lotes_sin_unidades_checkbox.Text = "Solo lotes con unidades disponibles";
+            this.lotes_sin_unidades_checkbox.UseVisualStyleBackColor = true;
+            // 
             // HistorialLotesFiltroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(673, 401);
+            this.Controls.Add(this.general_groupbox);
             this.Controls.Add(this.filtrar_por_categoria_checkbox);
             this.Controls.Add(this.filtrar_por_categoria_groupbox);
             this.Controls.Add(this.listo_button);
@@ -280,6 +309,8 @@
             this.filtrar_por_fechas_groupbox.PerformLayout();
             this.filtrar_por_categoria_groupbox.ResumeLayout(false);
             this.filtrar_por_categoria_groupbox.PerformLayout();
+            this.general_groupbox.ResumeLayout(false);
+            this.general_groupbox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -304,5 +335,7 @@
         private System.Windows.Forms.GroupBox filtrar_por_categoria_groupbox;
         private System.Windows.Forms.TextBox categoria_nombre_tb;
         private System.Windows.Forms.Label categoria_nombre_label;
+        private System.Windows.Forms.GroupBox general_groupbox;
+        private System.Windows.Forms.CheckBox lotes_sin_unidades_checkbox;
     }
 }

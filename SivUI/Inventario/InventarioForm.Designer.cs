@@ -35,6 +35,11 @@
             this.limpiar_button = new System.Windows.Forms.Button();
             this.cargar_reporte_button = new System.Windows.Forms.Button();
             this.tarea_label = new System.Windows.Forms.Label();
+            this.unidades_tb = new System.Windows.Forms.TextBox();
+            this.total_unidades_label = new System.Windows.Forms.Label();
+            this.inversion_tb = new System.Windows.Forms.TextBox();
+            this.inversion_label = new System.Windows.Forms.Label();
+            this.exportar_button = new System.Windows.Forms.Button();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -45,7 +50,7 @@
             this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contenedor_panel.Location = new System.Drawing.Point(12, 73);
             this.contenedor_panel.Name = "contenedor_panel";
-            this.contenedor_panel.Size = new System.Drawing.Size(851, 165);
+            this.contenedor_panel.Size = new System.Drawing.Size(844, 333);
             this.contenedor_panel.TabIndex = 0;
             // 
             // resultados_dtgv
@@ -59,14 +64,14 @@
             this.resultados_dtgv.Location = new System.Drawing.Point(0, 0);
             this.resultados_dtgv.Name = "resultados_dtgv";
             this.resultados_dtgv.ReadOnly = true;
-            this.resultados_dtgv.Size = new System.Drawing.Size(851, 165);
+            this.resultados_dtgv.Size = new System.Drawing.Size(844, 333);
             this.resultados_dtgv.TabIndex = 29;
             // 
             // header_label
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(277, 9);
+            this.header_label.Location = new System.Drawing.Point(379, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(110, 30);
             this.header_label.TabIndex = 17;
@@ -81,21 +86,23 @@
             this.filtros_button.TabIndex = 26;
             this.filtros_button.Text = "Filtros";
             this.filtros_button.UseVisualStyleBackColor = true;
+            this.filtros_button.Click += new System.EventHandler(this.filtros_button_Click);
             // 
             // limpiar_button
             // 
             this.limpiar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.limpiar_button.Location = new System.Drawing.Point(174, 244);
+            this.limpiar_button.Location = new System.Drawing.Point(174, 453);
             this.limpiar_button.Name = "limpiar_button";
             this.limpiar_button.Size = new System.Drawing.Size(156, 37);
             this.limpiar_button.TabIndex = 33;
             this.limpiar_button.Text = "Limpiar";
             this.limpiar_button.UseVisualStyleBackColor = true;
+            this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
             // 
             // cargar_reporte_button
             // 
             this.cargar_reporte_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cargar_reporte_button.Location = new System.Drawing.Point(12, 244);
+            this.cargar_reporte_button.Location = new System.Drawing.Point(12, 453);
             this.cargar_reporte_button.Name = "cargar_reporte_button";
             this.cargar_reporte_button.Size = new System.Drawing.Size(156, 37);
             this.cargar_reporte_button.TabIndex = 32;
@@ -113,12 +120,64 @@
             this.tarea_label.Text = "[tarea]";
             this.tarea_label.Visible = false;
             // 
+            // unidades_tb
+            // 
+            this.unidades_tb.Location = new System.Drawing.Point(557, 456);
+            this.unidades_tb.Name = "unidades_tb";
+            this.unidades_tb.ReadOnly = true;
+            this.unidades_tb.Size = new System.Drawing.Size(129, 33);
+            this.unidades_tb.TabIndex = 38;
+            this.unidades_tb.Text = "N/A";
+            // 
+            // total_unidades_label
+            // 
+            this.total_unidades_label.AutoSize = true;
+            this.total_unidades_label.Location = new System.Drawing.Point(552, 428);
+            this.total_unidades_label.Name = "total_unidades_label";
+            this.total_unidades_label.Size = new System.Drawing.Size(91, 25);
+            this.total_unidades_label.TabIndex = 37;
+            this.total_unidades_label.Text = "Unidades";
+            // 
+            // inversion_tb
+            // 
+            this.inversion_tb.Location = new System.Drawing.Point(692, 456);
+            this.inversion_tb.Name = "inversion_tb";
+            this.inversion_tb.ReadOnly = true;
+            this.inversion_tb.Size = new System.Drawing.Size(164, 33);
+            this.inversion_tb.TabIndex = 36;
+            this.inversion_tb.Text = "N/A";
+            // 
+            // inversion_label
+            // 
+            this.inversion_label.AutoSize = true;
+            this.inversion_label.Location = new System.Drawing.Point(687, 428);
+            this.inversion_label.Name = "inversion_label";
+            this.inversion_label.Size = new System.Drawing.Size(173, 25);
+            this.inversion_label.TabIndex = 35;
+            this.inversion_label.Text = "Inversión Unidades";
+            // 
+            // exportar_button
+            // 
+            this.exportar_button.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.exportar_button.Location = new System.Drawing.Point(758, 12);
+            this.exportar_button.Name = "exportar_button";
+            this.exportar_button.Size = new System.Drawing.Size(98, 37);
+            this.exportar_button.TabIndex = 39;
+            this.exportar_button.Text = "Exportar";
+            this.exportar_button.UseVisualStyleBackColor = true;
+            this.exportar_button.Click += new System.EventHandler(this.exportar_button_Click);
+            // 
             // InventarioForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(868, 502);
+            this.Controls.Add(this.exportar_button);
+            this.Controls.Add(this.unidades_tb);
+            this.Controls.Add(this.total_unidades_label);
+            this.Controls.Add(this.inversion_tb);
+            this.Controls.Add(this.inversion_label);
             this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.cargar_reporte_button);
@@ -149,5 +208,10 @@
         private System.Windows.Forms.Button limpiar_button;
         private System.Windows.Forms.Button cargar_reporte_button;
         private System.Windows.Forms.Label tarea_label;
+        private System.Windows.Forms.TextBox unidades_tb;
+        private System.Windows.Forms.Label total_unidades_label;
+        private System.Windows.Forms.TextBox inversion_tb;
+        private System.Windows.Forms.Label inversion_label;
+        private System.Windows.Forms.Button exportar_button;
     }
 }

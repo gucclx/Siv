@@ -45,12 +45,13 @@ namespace SivUI
         private void LimpiarForm()
         {
             unidades_tb.Focus();
-            unidades_tb.Text = "";
-            inversion_total_tb.Text = "";
+            unidades_tb.Clear();
+            inversion_total_tb.Clear();
             inversion_unidad_tb.Text = "N/A";
-            precio_venta_defecto_tb.Text = "";
+            precio_venta_defecto_tb.Clear();
             producto = null;
-            nombre_producto_tb.Text = "";
+            nombre_producto_tb.Clear();
+            descripcion_producto_tb.Clear();
         }
         private bool ValidarForm()
         {
@@ -112,11 +113,8 @@ namespace SivUI
             LoteModelo lote = new LoteModelo();
 
             lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
-            lote.UnidadesDisponibles = lote.UnidadesCompradas;
             lote.Inversion = decimal.Parse(inversion_total_tb.Text);
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
-
-            // todo - cambiar a tb
             lote.Producto = producto;
             
             try
@@ -126,6 +124,7 @@ namespace SivUI
             catch (OverflowException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
             catch (Exception ex)
             {
@@ -152,6 +151,7 @@ namespace SivUI
 
             this.producto = producto;
             nombre_producto_tb.Text = producto.Nombre;
+            descripcion_producto_tb.Text = producto.Descripcion;
         }
 
         private void buscar_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -45,7 +45,7 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.ForeColor = System.Drawing.Color.Black;
+            this.header_label.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.header_label.Location = new System.Drawing.Point(153, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(231, 30);
@@ -65,7 +65,7 @@
             // producto_nombre_label
             // 
             this.producto_nombre_label.AutoSize = true;
-            this.producto_nombre_label.ForeColor = System.Drawing.Color.Black;
+            this.producto_nombre_label.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.producto_nombre_label.Location = new System.Drawing.Point(17, 52);
             this.producto_nombre_label.Name = "producto_nombre_label";
             this.producto_nombre_label.Size = new System.Drawing.Size(194, 25);
@@ -103,7 +103,8 @@
             // remover_categoria_button
             // 
             this.remover_categoria_button.BackColor = System.Drawing.Color.White;
-            this.remover_categoria_button.ForeColor = System.Drawing.Color.Black;
+            this.remover_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.remover_categoria_button.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.remover_categoria_button.Location = new System.Drawing.Point(331, 290);
             this.remover_categoria_button.Name = "remover_categoria_button";
             this.remover_categoria_button.Size = new System.Drawing.Size(188, 37);
@@ -115,7 +116,8 @@
             // crear_producto_button
             // 
             this.crear_producto_button.BackColor = System.Drawing.Color.White;
-            this.crear_producto_button.ForeColor = System.Drawing.Color.Black;
+            this.crear_producto_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.crear_producto_button.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.crear_producto_button.Location = new System.Drawing.Point(331, 452);
             this.crear_producto_button.Name = "crear_producto_button";
             this.crear_producto_button.Size = new System.Drawing.Size(188, 37);
@@ -138,7 +140,7 @@
             // descripcion_label
             // 
             this.descripcion_label.AutoSize = true;
-            this.descripcion_label.ForeColor = System.Drawing.Color.Black;
+            this.descripcion_label.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.descripcion_label.Location = new System.Drawing.Point(17, 320);
             this.descripcion_label.Name = "descripcion_label";
             this.descripcion_label.Size = new System.Drawing.Size(111, 25);
@@ -148,7 +150,7 @@
             // categorias_seleccionadas_label
             // 
             this.categorias_seleccionadas_label.AutoSize = true;
-            this.categorias_seleccionadas_label.ForeColor = System.Drawing.Color.Black;
+            this.categorias_seleccionadas_label.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.categorias_seleccionadas_label.Location = new System.Drawing.Point(17, 149);
             this.categorias_seleccionadas_label.Name = "categorias_seleccionadas_label";
             this.categorias_seleccionadas_label.Size = new System.Drawing.Size(224, 25);
@@ -172,7 +174,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(537, 501);
             this.Controls.Add(this.buscar_categoria_linklabel);
             this.Controls.Add(this.categorias_seleccionadas_label);

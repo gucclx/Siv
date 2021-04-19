@@ -87,9 +87,9 @@
             this.apellido_cliente_label.AutoSize = true;
             this.apellido_cliente_label.Location = new System.Drawing.Point(9, 124);
             this.apellido_cliente_label.Name = "apellido_cliente_label";
-            this.apellido_cliente_label.Size = new System.Drawing.Size(82, 25);
+            this.apellido_cliente_label.Size = new System.Drawing.Size(175, 25);
             this.apellido_cliente_label.TabIndex = 19;
-            this.apellido_cliente_label.Text = "Apellido";
+            this.apellido_cliente_label.Text = "Apellido (Opcional)";
             // 
             // numero_contacto_cliente_tb
             // 

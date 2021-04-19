@@ -16,7 +16,6 @@ using SivUI.Filtros;
 
 namespace SivUI
 {
-    // TODO - paginar resultados de la base de datos y escribir el archivo por lotes.
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
         ReporteFiltroModelo reporteFiltro;
@@ -32,7 +31,7 @@ namespace SivUI
             reporteFiltro = filtro;
         }
 
-        private async void exportar_inventario_button_Click(object sender, EventArgs e)
+        private async void exportar_lotes_button_Click(object sender, EventArgs e)
         {
             var frm = new HistorialLotesFiltroForm(this);
             this.Hide();
@@ -152,8 +151,49 @@ namespace SivUI
         private void Exportando(bool trabajando)
         {
             tarea_label.Visible = trabajando;
-            exportar_inventario_button.Enabled = !trabajando;
+            header_label.Visible = !trabajando;
+            exportar_lotes_button.Enabled = !trabajando;
             exportar_ventas_button.Enabled = !trabajando;
+            exportar_inventario_button.Enabled = !trabajando;
+        }
+
+        private async void exportar_inventario_button_Click(object sender, EventArgs e)
+        {
+            var frm = new InventarioFiltroForm(this);
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+
+            var destino = GuardarDialogo();
+            if (destino == null) return;
+
+            Exportando(true);
+            CambiarTareaLabel("Exportando...");
+
+            List<ReporteInventarioModelo> inventario;
+            int? comienzo = 0;
+
+            try
+            {
+                do
+                {
+                    inventario = await Task.Run(() =>
+                        ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
+                    );
+                    await Ayudantes.GuardarCsvReporteAsync(inventario, destino);
+                    comienzo = inventario.LastOrDefault()?.IdProducto;
+                } while (inventario.Count > 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Exportando(false);
+                return;
+            }
+
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Exportando(false);
+            reporteFiltro = null;
         }
     }
 }

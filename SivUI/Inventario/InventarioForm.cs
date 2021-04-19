@@ -1,10 +1,12 @@
 ﻿using SivBiblioteca;
 using SivBiblioteca.Modelos;
+using SivUI.Filtros;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ using System.Windows.Forms;
 
 namespace SivUI.Inventario
 {
-    public partial class InventarioForm : Form
+    public partial class InventarioForm : Form, ISolicitudFiltro
     {
         BindingSource resultados;
         ReporteFiltroModelo reporteFiltro;
@@ -24,33 +26,32 @@ namespace SivUI.Inventario
 
             // Inicializar columnas
 
-            var nombreProductoColumna = new DataGridViewTextBoxColumn();
-            nombreProductoColumna.HeaderText = "Producto";
-            nombreProductoColumna.DataPropertyName = nameof(ReporteInventarioModelo.NombreProducto);
+            var nombreProducto = new DataGridViewTextBoxColumn();
+            nombreProducto.HeaderText = "Producto";
+            nombreProducto.DataPropertyName = nameof(ReporteInventarioModelo.NombreProducto);
 
-            var descripcionProductoColumna = new DataGridViewTextBoxColumn();
-            descripcionProductoColumna.HeaderText = "Descripción";
-            descripcionProductoColumna.DataPropertyName = nameof(ReporteInventarioModelo.DescripcionProducto);
+            var descripcionProducto = new DataGridViewTextBoxColumn();
+            descripcionProducto.HeaderText = "Descripción";
+            descripcionProducto.DataPropertyName = nameof(ReporteInventarioModelo.DescripcionProducto);
 
-            var unidadesDisponiblesColumna = new DataGridViewTextBoxColumn();
-            unidadesDisponiblesColumna.HeaderText = "Unidades disponibles";
-            unidadesDisponiblesColumna.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesDisponiblesProducto);
+            var unidades = new DataGridViewTextBoxColumn();
+            unidades.HeaderText = "Unidades disponibles";
+            unidades.DataPropertyName = nameof(ReporteInventarioModelo.UnidadesProducto);
 
-            // mucho texto
-            var valorUnidadesDisponiblesProductoColumna = new DataGridViewTextBoxColumn();
-            valorUnidadesDisponiblesProductoColumna.HeaderText = "Unidades disponibles";
-            valorUnidadesDisponiblesProductoColumna.DataPropertyName = nameof(ReporteInventarioModelo.ValorUnidadesDisponiblesProducto);
+            var inversionUnidades = new DataGridViewTextBoxColumn();
+            inversionUnidades.HeaderText = "Inversión Unidades";
+            inversionUnidades.DataPropertyName = nameof(ReporteInventarioModelo.InversionUnidadesProducto);
 
-            resultados_dtgv.Columns.Add(nombreProductoColumna);
-            resultados_dtgv.Columns.Add(descripcionProductoColumna);
-            resultados_dtgv.Columns.Add(unidadesDisponiblesColumna);
-            resultados_dtgv.Columns.Add(valorUnidadesDisponiblesProductoColumna);
+            resultados_dtgv.Columns.Add(nombreProducto);
+            resultados_dtgv.Columns.Add(descripcionProducto);
+            resultados_dtgv.Columns.Add(unidades);
+            resultados_dtgv.Columns.Add(inversionUnidades);
         }
 
         private async void cargar_reporte_button_Click(object sender, EventArgs e)
         {
             cargar_reporte_button.Enabled = false;
-            //LimpiarResultados();
+            LimpiarResultados();
 
             try
             {
@@ -66,6 +67,7 @@ namespace SivUI.Inventario
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
                 resultados_dtgv.DataSource = resultados;
+                CalcularResumen();
             }
             catch (Exception ex)
             {
@@ -87,9 +89,27 @@ namespace SivUI.Inventario
             resultados_dtgv.Rows.Clear();
             GC.Collect();
 
-            //total_unidades_tb.Text = "N/A";
-            //total_inversion_tb.Text = "N/A";
-            //valor_unidades_tb.Text = "N/A";
+            unidades_tb.Text = "N/A";
+            inversion_tb.Text = "N/A";
+        }
+
+        /// <summary>
+        /// Calcula las unidades totales e inversion total de todos los productos cargados
+        /// y actualiza los campos de textos.
+        /// </summary>
+        private void CalcularResumen()
+        {
+            int unidadesTotales = 0;
+            decimal inversionTotal = 0;
+
+            foreach (ReporteInventarioModelo reporte in resultados)
+            {
+                unidadesTotales += reporte.UnidadesProducto;
+                inversionTotal += reporte.InversionUnidadesProducto;
+            }
+
+            unidades_tb.Text = unidadesTotales.ToString();
+            inversion_tb.Text = inversionTotal.ToString();
         }
 
         private void ConfigTareaLabel(string s = "", bool visible = true)
@@ -99,6 +119,61 @@ namespace SivUI.Inventario
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;
+        }
+
+        private void filtros_button_Click(object sender, EventArgs e)
+        {
+            var frm = new InventarioFiltroForm(this);
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        public void FiltroCreado(ReporteFiltroModelo filtro)
+        {
+            this.reporteFiltro = filtro;
+        }
+
+        private void Exportando(bool trabajando)
+        {
+            tarea_label.Visible = trabajando;
+            exportar_button.Enabled = !trabajando;
+            cargar_reporte_button.Enabled = !trabajando;
+            limpiar_button.Enabled = !trabajando;
+            filtros_button.Enabled = !trabajando;
+        }
+
+        private async void exportar_button_Click(object sender, EventArgs e)
+        {
+            if (resultados == null || resultados.DataSource == null) return;
+
+            using (var dialogGuardar = new SaveFileDialog())
+            {
+                dialogGuardar.Filter = "CSV |*.csv";
+                dialogGuardar.OverwritePrompt = true;
+                if (dialogGuardar.ShowDialog() == DialogResult.OK)
+                {
+                    FileInfo archivo = new FileInfo(dialogGuardar.FileName);
+                    try
+                    {
+                        Exportando(true);
+                        ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
+                        MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            Exportando(false);
+            ConfigTareaLabel(visible: false);
+        }
+
+        private void limpiar_button_Click(object sender, EventArgs e)
+        {
+            LimpiarResultados();
         }
     }
 }

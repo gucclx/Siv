@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace SivBiblioteca.Modelos
 {
     /// <summary>
-    /// Representa un filtro para el reporte de ventas o inventario.
-    /// El filtro luego se utiliza para determinar las condiciones de los queries en la base de datos.
+    /// Representa un filtro para el historial de ventas, lotes, o inventario.
+    /// El filtro se utiliza para determinar las condiciones de los queries en la base de datos.
     /// </summary>
     public class ReporteFiltroModelo
     {
@@ -22,6 +22,8 @@ namespace SivBiblioteca.Modelos
         public bool FiltroPorCliente { get; set; } = false;
         public bool FiltroPorProducto { get; set; } = false;
         public bool FiltroPorCategoria { get; set; } = false;
+
+        public bool IncluirLotesSinUnidades = true;
 
     }
 }

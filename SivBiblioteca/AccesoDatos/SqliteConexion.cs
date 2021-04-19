@@ -10,10 +10,7 @@ using Dapper;
 
 namespace SivBiblioteca.AccesoDatos
 {
-    // TODO - validar que todos los datos esten correctos.
-    // todo - cargar_porNombre<type>(string nombre);
-    // todo - siempre revisar si una lista es nula antes de iterar en ella.
-    // todo - crear index en categoriaid en productocategoria
+    // TODO - preparar pruebas?
 
     // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     public class SqliteConexion : IConexionDatos
@@ -25,8 +22,6 @@ namespace SivBiblioteca.AccesoDatos
         // Si la precision es 2, todos los precios se deberan guardar en
         // centavos.
         // Ej. 5.55 cordobas se convierte a 555 centavos.
-        // De esta manera, trabajando con enteros, se preserva la precision
-        // sin tener problemas de redondeo cuando se realicen operaciones en los precios.
         // En este caso se conservan 4 digitos despues del decimal, por lo que
         // se trabaja con 'diezmilesimas' es decir 5.55 -> 55500, 6.7899 -> 67899.
         // Los digitos restantes seran truncados.
@@ -35,12 +30,10 @@ namespace SivBiblioteca.AccesoDatos
         // un precio x se representara en la base de datos como
         // x * (10^p)
         // una vez extraido de la base de datos se divide por (10^p) para obtener la representacion
-        // original de x
+        // original x
         const double MonedaPrecision = 4;
 
-        // Factor de conversion para obtener la representacion original de los precios.
-        // Se utiliza como parametro en los queries. El factor requiere '.0' para indicarle a
-        // sqlite que la division deberia ser decimal y no entera.
+        // Factor de conversion para convertir los precios.
         int FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         /// <summary>
@@ -50,25 +43,13 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> true si existe, false si no. </returns>
         public bool CategoriaExiste(string nombreCategoria)
         {
-            if (string.IsNullOrEmpty(nombreCategoria.Trim())) { return false; }
+            nombreCategoria = nombreCategoria.Trim();
+            if (string.IsNullOrEmpty(nombreCategoria)) { return false; }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                nombreCategoria = nombreCategoria.Trim();
+            {               
                 var q = "select exists (select 1 from Categorias where Nombre = @Nombre collate nocase)";
                 return conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
-            }
-        }
-
-        /// <summary>
-        /// Carga y retorna todas las categorias existentes en la base de datos.
-        /// </summary>
-        /// <returns> Todas las categorias en la base de datos. </returns>
-        public List<CategoriaModelo> CargarCategorias()
-        {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                return conexion.Query<CategoriaModelo>("select Id, Nombre from Categorias order by Nombre").ToList();                
             }
         }
 
@@ -87,9 +68,10 @@ namespace SivBiblioteca.AccesoDatos
 
             foreach (var categoria in categorias)
             {
-                if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
+                categoria.Nombre = categoria.Nombre.Trim();
+                if (string.IsNullOrEmpty(categoria.Nombre))
                 {
-                    throw new ArgumentException("Categoria sin nombre.");
+                    throw new ArgumentException("Al menos una categoria sin nombre.");
                 }
             }
 
@@ -99,7 +81,6 @@ namespace SivBiblioteca.AccesoDatos
                 
                 foreach (var categoria in categorias)
                 {
-                    categoria.Nombre = categoria.Nombre.Trim();
                     conexion.Execute(q, categoria);
                     categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
                 }
@@ -107,7 +88,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Elimina de la base de datos una lista de categorias.
+        ///     Elimina de la base de datos una lista de categorias.
         /// </summary>
         /// <param name="categorias"> Lista de categorias a eliminar. </param>
         public void EliminarCategorias(List<CategoriaModelo> categorias)
@@ -125,7 +106,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Guarda un producto en la base de datos.
+        ///     Guarda un producto en la base de datos.
         /// </summary>
         /// <param name="producto"> Producto a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
@@ -141,15 +122,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 throw new ArgumentException("El nombre del producto ya existe en la base de datos.");
             }
-            
-            foreach (var categoria in producto.Categorias)
-            {
-                if (string.IsNullOrEmpty(categoria.Nombre.Trim()))
-                {
-                    throw new ArgumentException("Al menos una categoria del producto no tiene nombre.");
-                }
-            }
-
+                     
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into productos (Nombre, FechaCreacion, Descripcion)
@@ -165,21 +138,24 @@ namespace SivBiblioteca.AccesoDatos
 
                 producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
 
-                q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
-                foreach (var categoria in producto.Categorias)
+                if (producto.Categorias != null)
                 {
-                    conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
+                    q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
+                    foreach (var categoria in producto.Categorias)
+                    {
+                        conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// x se multiplica por el factor de conversion para obtener 
-        /// la representacion de la moneda que se utilizara en la base de datos.
-        /// los decimales restantes se truncan. 
-        /// Si x * FactorConversion > decimal.MaxValue o x * FactorConversion > Int64.MaxValue se producira una excepcion.
+        ///     x se multiplica por el factor de conversion para obtener 
+        ///     la representacion de la moneda que se utilizara en la base de datos.
+        ///     los decimales restantes se truncan. 
+        ///     Si x * FactorConversion > decimal.MaxValue o x * FactorConversion > Int64.MaxValue se producira una excepcion.
         /// </summary>
-        /// <param name="x"> El valor de la moneda en su representacion original. </param>
+        /// <param name="x"> El valor de la moneda en su representacion actual. </param>
         /// <returns> El valor de la moneda en la representacion utilizada en la base de datos. </returns>
         private long ConvertirMonedaARepresentacionInterna(decimal x)
         {
@@ -187,7 +163,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Carga y retorna un lote de la base de datos
+        ///     Carga y retorna un lote de la base de datos.
         /// </summary>
         /// <param name="id"> Id del lote. </param>
         /// <returns> El lote. Si no se encontro se retorna un lote null. </returns>
@@ -216,7 +192,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Guarda una lista de ventas a la base de datos.
+        ///     Guarda una lista de ventas a la base de datos.
         /// </summary>
         /// <param name="ventas"> Lisa de ventas a guardar. </param>
         public void GuardarVentas(List<VentaModelo> ventas)
@@ -226,7 +202,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 if (venta.Unidades < 1)
                 {
-                    throw new Exception($"Unidades solicitadas invalidas: {venta.Unidades}, solo valores positivos");
+                    throw new Exception($"Unidades solicitadas invalidas: {venta.Unidades}, el valor debe ser positivo.");
                 }
                 else if (venta.Total < 0)
                 {
@@ -234,7 +210,7 @@ namespace SivBiblioteca.AccesoDatos
                 }
                 else if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
                 {
-                    throw new Exception($"El numero de unidades solicitadas sobrepasa las disponibles en el lote.");
+                    throw new Exception($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
                 }
             }
 
@@ -276,7 +252,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Retorna las unidades disponibles de un lote.
+        ///     Retorna las unidades disponibles de un lote.
         /// </summary>
         /// <param name="loteId"> Id del lote. </param>
         /// <returns> Unidades restantes del lote. </returns>
@@ -295,11 +271,12 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Guarda un cliente en la base de datos.
+        ///     Guarda un cliente en la base de datos.
         /// </summary>
         /// <param name="cliente"> El cliente. </param>
         public void GuardarCliente(ClienteModelo cliente)
         {
+            cliente.Nombre = cliente.Nombre.Trim();
             if (string.IsNullOrEmpty(cliente.Nombre))
             {
                 throw new ArgumentException("Nombre del cliente vacio.");
@@ -313,7 +290,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
+        ///     Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
         /// </summary>
         /// <param name="nombre"> El nombre a buscar. </param>
         /// <returns> Lista de clientes encontrados. </returns>
@@ -333,13 +310,53 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Genera y retorna reportes de ventas.
+        ///     Genera y retorna una lista de cada venta realizada con informacion pertinente.
+        ///     
+        ///     Nota: Se utiliza 'case' en algunas condiciones del query
+        ///     usualmente para obtener un 'mejor' query plan.
+        ///     
+        ///     ej. Si se filtra por fecha de venta y se tiene la condicion productos.id = @ProductoId
+        ///     el query plan es buscar aquellos lotes asociados con el producto indicado,
+        ///     luego obtener las ventas a partir de estos lotes y filtrarlas por fecha.
+        ///     El indice en la columna 'fecha' de la tabla ventas no se utiliza de primero.
+        ///     (es mas el query plan aparentemente ni lo usa).
+        ///     
+        ///     Sin embargo, esto es ineficiente si hay muchos lotes asociados con el producto especificado.
+        ///     
+        ///     Asumiendo que se proporciona un rango de fechas =>
+        ///     
+        ///     query plan sin case:
+        ///     SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
+        ///     SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
+        ///     SEARCH TABLE ventas USING INDEX idx_Ventas_LoteId(LoteId=?)
+        ///     
+        ///     query plan con case:
+        ///     SEARCH TABLE ventas USING INDEX idx_Ventas_Fecha (Fecha>? AND Fecha<?)
+        ///     SEARCH TABLE lotes USING INTEGER PRIMARY KEY(rowid=?)
+        ///     SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
+
+        //      https://stackoverflow.com/a/49861947
+
+        ///     Ni idea si el plan del query sin case se debe a una estructura del query pobre, o un diseno pobre de las tablas lol
+        ///     ¯\_(ツ)_/¯
         /// </summary>
         /// <param name="filtro"> 
-        ///     Objeto que contiene condiciones para generar el reporte. 
+        ///     Objeto que contiene condiciones que las ventas deben cumplir.
+        ///     ej. Tipo de producto, fecha de venta, etc.
         /// </param>
         /// <param name="limiteFilas"> 
-        ///     Limite de filas a retornar. Util si la informacion se presentara al usuario. 
+        ///     Limite de filas a retornar. Util si la informacion se presentara al usuario
+        ///     o para paginar las ventas.
+        /// </param>
+        /// <param name="comienzo">
+        ///     Impone la condicion ventas.id > comienzo.
+        ///     Util para cuando se paginan las ventas.
+        ///     Con este parametro y el parametro 'limiteFilas',
+        ///     se puede implementar paginacion de las ventas.
+        ///     ej. CargarReporteVentas(limiteFilas: 1000, comienzo: 0),
+        ///     carga las primeras 1000 ventas.
+        ///     Luego CargarReporteVentas(limiteFilas: 1000, comienzo: [id de la ultima venta])
+        ///     carga los siguientes 1000 resultados.
         /// </param>
         /// <returns> Lista de reportes. </returns>
         public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
@@ -365,14 +382,6 @@ namespace SivBiblioteca.AccesoDatos
 
             if (filtro != null)
             {
-                // Si se filtra por categorias del producto.
-                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
-                {
-                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
-                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
-                }
-
                 // Si se filtra por fecha de venta.
                 if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
                 {
@@ -383,29 +392,17 @@ namespace SivBiblioteca.AccesoDatos
 
                 // Si se filtra por tipo de producto.
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
-                {
-                    // Se utiliza case para forzar a sqlite
-                    // a buscar los lotes a partir de la columna loteId en la tabla ventas
-                    // (utilizando el index unico en la columna id de la tabla lotes)
-                    // y luego seleccionar solamente los lotes asociados con el producto especificado.
-                    // Sin case, sqlite decide buscar los lotes asociados con el producto especificado,
-                    // y luego buscar las ventas a partir de estos lotes.
-                    // Sin embargo, esto es ineficiente si hay muchos lotes asociados con el producto especificado.
-
-                    // query plan sin case:
-                    // SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
-                    // SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
-                    // SEARCH TABLE ventas USING INDEX idx_Ventas_LoteId(LoteId=?)
-
-                    // query plan con case:
-                    // SCAN / SEARCH TABLE ventas (search si se especifica un rango de fechas)
-                    // SEARCH TABLE lotes USING INTEGER PRIMARY KEY(rowid=?)
-                    // SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
-
-                    // https://stackoverflow.com/a/49861947
-
+                { 
                     condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
                     parametros.Add("@ProductoId", filtro.Producto.Id);
+                }
+
+                // Si se filtra por categorias del producto.
+                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                {
+                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
+                    condiciones.Add("(case when ProductoCategoria.CategoriaId = @CategoriaId then 1 end) = 1");
+                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
                 }
 
                 // Si se filtra por las compras de cierto cliente.
@@ -435,7 +432,7 @@ namespace SivBiblioteca.AccesoDatos
                 q += string.Join(" and ", condiciones);
             }
 
-            q += " order by ventas.id asc";
+            q += " order by ventas.Fecha";
 
             // Agregar el limite de filas a retornar.
             if (limiteFilas != null && limiteFilas > -1)
@@ -483,7 +480,6 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
-        // todo - set unidadesdisponibles aqui.
         /// <summary>
         /// Guarda un lote en la base de datos.
         /// </summary>
@@ -499,11 +495,6 @@ namespace SivBiblioteca.AccesoDatos
             if (lote.UnidadesCompradas < 1)
             {
                 throw new ArgumentException($"Unidades invalidas: {lote.UnidadesCompradas}, las unidades deben ser positivas.");
-            }
-
-            if (lote.UnidadesCompradas != lote.UnidadesDisponibles)
-            {
-                throw new ArgumentException($"Las unidades compradas y disponibles no deben diferir incialmente. Unidades compra: {lote.UnidadesCompradas}, Unidades disponibles: {lote.UnidadesDisponibles}");
             }
 
             if (lote.Inversion < 0)
@@ -543,6 +534,8 @@ namespace SivBiblioteca.AccesoDatos
                 {
                     throw new Exception("El precio de venta de la unidad es demasiado grande.");
                 }
+
+                lote.UnidadesDisponibles = lote.UnidadesCompradas;
 
                 // Guardar lote.
                 conexion.Execute(q, new
@@ -638,7 +631,7 @@ namespace SivBiblioteca.AccesoDatos
                 if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
+                    condiciones.Add("(case when ProductoCategoria.CategoriaId = @CategoriaId then 1 end) = 1");
                     parametros.Add("@CategoriaId", filtro.Categoria.Id);
                 }
 
@@ -681,6 +674,11 @@ namespace SivBiblioteca.AccesoDatos
                     }                    
                     parametros.Add("@ProductoId", filtro.Producto.Id);
                 }
+
+                if (filtro.IncluirLotesSinUnidades == false)
+                {
+                    condiciones.Add("lotes.UnidadesDisponibles > 0");
+                }
             }
 
             // Agregar joins necesarios al query.
@@ -702,7 +700,7 @@ namespace SivBiblioteca.AccesoDatos
                 q += string.Join(" and ", condiciones);
             }
 
-            q += " order by lotes.id asc";
+            q += " order by lotes.FechaCreacion";
 
             // Agregar el limte de filas a retornar.
             if (limiteFilas != null)
@@ -922,12 +920,12 @@ namespace SivBiblioteca.AccesoDatos
             SQLiteConnection con = new SQLiteConnection(stringConexion);
 
             SQLiteCommand cmd = new SQLiteCommand(@"insert into lotes(productoId, UnidadesDisponibles, UnidadesCompradas, FechaCreacion, inversion) 
-                                                    values(1, 1, 1, 1, 9323372036854775808)", con);
+                                                    values(1, 1, 1, 1, 9223372036854775807)", con);
 
             con.Open();
             var trans = con.BeginTransaction();
 
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 cmd.ExecuteNonQuery();
             }
@@ -936,12 +934,13 @@ namespace SivBiblioteca.AccesoDatos
             con.Close();
         }
 
-        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro)
+        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null)
         {
-            var q = @"select productos.nombre as 'NombreProducto', 
+            var q = @"select productos.id as 'IdProducto', 
+                        productos.nombre as 'NombreProducto', 
                         productos.Descripcion as 'DescripcionProducto', 
-                        total(lotes.inversion) as 'ValorUnidadesDisponiblesProducto', 
-                        sum(lotes.UnidadesDisponibles) as 'UnidadesDisponiblesProducto' 
+                        total(lotes.inversion / lotes.UnidadesCompradas * lotes.UnidadesDisponibles) as 'InversionUnidadesProducto', 
+                        sum(lotes.UnidadesDisponibles) as 'UnidadesProducto' 
                         from Productos
                         left join lotes on lotes.ProductoId = productos.Id";
 
@@ -961,7 +960,7 @@ namespace SivBiblioteca.AccesoDatos
                 if (filtro.FiltroPorCategoria && filtro.Categoria != null)
                 {
                     joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCateoria.CategoriaId = @CategoriaId");
+                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
                     parametros.Add("@CategoriaId", filtro.Categoria.Id);
                 }
             }
@@ -970,6 +969,14 @@ namespace SivBiblioteca.AccesoDatos
             if (joins.Count > 0)
             {
                 q += " " + string.Join(" ", joins);
+            }
+
+            condiciones.Add("lotes.UnidadesDisponibles > 0");
+
+            if (comienzo != null)
+            {
+                condiciones.Add("productos.id > @Comienzo");
+                parametros.Add("@Comienzo", comienzo);
             }
 
             // Agregar las condiciones al query.
@@ -981,13 +988,20 @@ namespace SivBiblioteca.AccesoDatos
 
             q += " group by productos.id";
 
+            // Agregar el limite de filas a retornar.
+            if (limiteFilas != null && limiteFilas > -1)
+            {
+                q += $" limit @Limite";
+                parametros.Add("@Limite", limiteFilas);
+            }
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var reportes = conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
 
                 foreach (var reporte in reportes)
                 {
-                    reporte.ValorUnidadesDisponiblesProducto = reporte.ValorUnidadesDisponiblesProducto / FactorConversion;
+                    reporte.InversionUnidadesProducto = reporte.InversionUnidadesProducto / FactorConversion;
                 }
 
                 return reportes;

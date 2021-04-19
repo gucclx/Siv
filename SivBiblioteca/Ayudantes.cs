@@ -48,7 +48,8 @@ namespace SivBiblioteca
         }
         
         /// <summary>
-        /// Guarda una lista de reportes de inventario o ventas como archivo .csv.
+        /// Se utiliza para exportar el inventario, historial de compras de lotes o historial de ventas.
+        /// El archivo es de extension .csv.
         /// Si el archivo seleccionado existe, la lista sera adjuntada al archivo.
         /// </summary>
         /// <typeparam name="T"></typeparam>

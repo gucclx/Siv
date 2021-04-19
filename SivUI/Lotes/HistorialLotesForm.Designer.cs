@@ -50,11 +50,11 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(405, 9);
+            this.header_label.Location = new System.Drawing.Point(387, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(174, 30);
+            this.header_label.Size = new System.Drawing.Size(211, 30);
             this.header_label.TabIndex = 16;
-            this.header_label.Text = "Historial de lotes";
+            this.header_label.Text = "Información de lotes";
             // 
             // tarea_label
             // 
@@ -190,7 +190,7 @@
             this.valor_unidades_label.TabIndex = 36;
             this.valor_unidades_label.Text = "Inversión unidades disp.";
             // 
-            // InventarioForm
+            // HistorialLotesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -214,7 +214,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
-            this.Name = "InventarioForm";
+            this.Name = "HistorialLotesForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Historial de lotes";
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).EndInit();

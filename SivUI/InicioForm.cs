@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SivBiblioteca.Modelos;
 using SivBiblioteca;
+using SivUI.Inventario;
 
 namespace SivUI
 {
@@ -67,14 +68,6 @@ namespace SivUI
             this.Show();
         }
 
-        private void historial_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var frm = new HistorialLotesForm();
-            this.Hide();
-            frm.ShowDialog();
-            this.Show();
-        }
-
         private void exportarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new ExportarForm();
@@ -118,6 +111,22 @@ namespace SivUI
         private void editar_cliente_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new EditarClienteForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void ver_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new InventarioForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void informacion_lotes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new HistorialLotesForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();

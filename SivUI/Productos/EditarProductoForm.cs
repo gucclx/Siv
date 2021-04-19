@@ -104,6 +104,9 @@ namespace SivUI
                 return;
             }
 
+            var resultado = MessageBox.Show("¿Desea realizar los cambios?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (resultado == DialogResult.No) return;
+
             producto.Nombre = nuevoNombre;
             producto.Descripcion = nueva_descripcion_tb.Text.Trim();
 

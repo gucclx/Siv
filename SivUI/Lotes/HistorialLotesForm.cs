@@ -14,7 +14,6 @@ using System.Windows.Forms;
 
 namespace SivUI
 {
-    // todo - agregar habilidad de filtrar por lote.unidadesdisponibles > 0
     public partial class HistorialLotesForm : Form, ISolicitudFiltro
     {
         BindingSource resultados;

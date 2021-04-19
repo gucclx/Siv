@@ -51,9 +51,10 @@ namespace SivUI
         }
 
         /// <summary>
-        /// valida que el nombre de la categoria no este en blanco, no este en la lista y no exista en la base de datos.
+        /// valida que el nombre de la categoria no este en blanco, 
+        /// no este en la lista y no exista en la base de datos.
         /// </summary>
-        /// <returns></returns>
+        /// <returns> true si es valida, false si no. </returns>
         private bool CategoriaEsValida()
         {
             // esta el nombre en blanco?
@@ -63,14 +64,14 @@ namespace SivUI
                 return false;
             }
 
-            // intentar encontrar la categoria en la lista de categorias
+            // existe la categoria en la lista?
             var resultado = categoriasSeleccionadas.Find(categoria => categoria.Nombre.ToLower() == categoriaNombre.ToLower());
             if (resultado != null)
             {               
                 return false;
             }
 
-            // revisar si la categoria existe en la base de datos
+            // existe la categoria en la base de datos?
             if (ConfigGlobal.conexion.CategoriaExiste(categoriaNombre))
             {
                 MessageBox.Show("La categoria ya existe en la base de datos", "Categoria existente", MessageBoxButtons.OK, MessageBoxIcon.Information);

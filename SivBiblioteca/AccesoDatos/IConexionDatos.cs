@@ -10,7 +10,6 @@ namespace SivBiblioteca.AccesoDatos
     public interface IConexionDatos
     {
         void GuardarCategorias(List<CategoriaModelo> categoria);
-        List<CategoriaModelo> CargarCategorias();
         List<CategoriaModelo> CargarCategorias_PorProductoId(int id);
         bool CategoriaExiste(string nombreCategoria);
         void EliminarCategorias(List<CategoriaModelo> categorias);
@@ -31,6 +30,6 @@ namespace SivBiblioteca.AccesoDatos
         void EditarProducto(ProductoModelo producto);
         void EditarLote(LoteModelo lote);
         void EditarCliente(ClienteModelo cliente);
-        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro);
+        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null);
     }
 }

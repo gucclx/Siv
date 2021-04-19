@@ -84,6 +84,12 @@
     <Compile Include="Filtros\HistorialLotesFiltroForm.Designer.cs">
       <DependentUpon>HistorialLotesFiltroForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Filtros\InventarioFiltroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Filtros\InventarioFiltroForm.Designer.cs">
+      <DependentUpon>InventarioFiltroForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\ISolicitudCategoria.cs" />
     <Compile Include="Inventario\InventarioForm.cs">
       <SubType>Form</SubType>
@@ -204,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Filtros\HistorialLotesFiltroForm.resx">
       <DependentUpon>HistorialLotesFiltroForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filtros\InventarioFiltroForm.resx">
+      <DependentUpon>InventarioFiltroForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inventario\InventarioForm.resx">
       <DependentUpon>InventarioForm.cs</DependentUpon>

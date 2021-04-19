@@ -44,12 +44,14 @@
             this.header_label = new System.Windows.Forms.Label();
             this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
             this.nombre_producto_tb = new System.Windows.Forms.TextBox();
+            this.descripcion_producto_tb = new System.Windows.Forms.TextBox();
+            this.descripcion_producto_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // unidades_label
             // 
             this.unidades_label.AutoSize = true;
-            this.unidades_label.Location = new System.Drawing.Point(42, 81);
+            this.unidades_label.Location = new System.Drawing.Point(17, 76);
             this.unidades_label.Name = "unidades_label";
             this.unidades_label.Size = new System.Drawing.Size(91, 25);
             this.unidades_label.TabIndex = 1;
@@ -57,7 +59,7 @@
             // 
             // unidades_tb
             // 
-            this.unidades_tb.Location = new System.Drawing.Point(47, 109);
+            this.unidades_tb.Location = new System.Drawing.Point(22, 104);
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(125, 33);
             this.unidades_tb.TabIndex = 2;
@@ -66,7 +68,7 @@
             // inversion_total_label
             // 
             this.inversion_total_label.AutoSize = true;
-            this.inversion_total_label.Location = new System.Drawing.Point(182, 81);
+            this.inversion_total_label.Location = new System.Drawing.Point(157, 76);
             this.inversion_total_label.Name = "inversion_total_label";
             this.inversion_total_label.Size = new System.Drawing.Size(132, 25);
             this.inversion_total_label.TabIndex = 3;
@@ -74,7 +76,7 @@
             // 
             // inversion_total_tb
             // 
-            this.inversion_total_tb.Location = new System.Drawing.Point(187, 109);
+            this.inversion_total_tb.Location = new System.Drawing.Point(162, 104);
             this.inversion_total_tb.Name = "inversion_total_tb";
             this.inversion_total_tb.Size = new System.Drawing.Size(127, 33);
             this.inversion_total_tb.TabIndex = 4;
@@ -83,7 +85,7 @@
             // inversion_unidad_label
             // 
             this.inversion_unidad_label.AutoSize = true;
-            this.inversion_unidad_label.Location = new System.Drawing.Point(324, 81);
+            this.inversion_unidad_label.Location = new System.Drawing.Point(299, 76);
             this.inversion_unidad_label.Name = "inversion_unidad_label";
             this.inversion_unidad_label.Size = new System.Drawing.Size(187, 25);
             this.inversion_unidad_label.TabIndex = 5;
@@ -91,7 +93,7 @@
             // 
             // inversion_unidad_tb
             // 
-            this.inversion_unidad_tb.Location = new System.Drawing.Point(329, 109);
+            this.inversion_unidad_tb.Location = new System.Drawing.Point(304, 104);
             this.inversion_unidad_tb.Name = "inversion_unidad_tb";
             this.inversion_unidad_tb.ReadOnly = true;
             this.inversion_unidad_tb.Size = new System.Drawing.Size(182, 33);
@@ -101,7 +103,7 @@
             // producto_label
             // 
             this.producto_label.AutoSize = true;
-            this.producto_label.Location = new System.Drawing.Point(42, 179);
+            this.producto_label.Location = new System.Drawing.Point(17, 162);
             this.producto_label.Name = "producto_label";
             this.producto_label.Size = new System.Drawing.Size(204, 25);
             this.producto_label.TabIndex = 8;
@@ -109,7 +111,7 @@
             // 
             // precio_venta_defecto_tb
             // 
-            this.precio_venta_defecto_tb.Location = new System.Drawing.Point(526, 109);
+            this.precio_venta_defecto_tb.Location = new System.Drawing.Point(501, 104);
             this.precio_venta_defecto_tb.Name = "precio_venta_defecto_tb";
             this.precio_venta_defecto_tb.Size = new System.Drawing.Size(217, 33);
             this.precio_venta_defecto_tb.TabIndex = 8;
@@ -117,7 +119,7 @@
             // precio_venta_defecto_label
             // 
             this.precio_venta_defecto_label.AutoSize = true;
-            this.precio_venta_defecto_label.Location = new System.Drawing.Point(521, 81);
+            this.precio_venta_defecto_label.Location = new System.Drawing.Point(496, 76);
             this.precio_venta_defecto_label.Name = "precio_venta_defecto_label";
             this.precio_venta_defecto_label.Size = new System.Drawing.Size(222, 25);
             this.precio_venta_defecto_label.TabIndex = 7;
@@ -126,7 +128,7 @@
             // agregar_al_inventario_button
             // 
             this.agregar_al_inventario_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_al_inventario_button.Location = new System.Drawing.Point(536, 301);
+            this.agregar_al_inventario_button.Location = new System.Drawing.Point(511, 391);
             this.agregar_al_inventario_button.Name = "agregar_al_inventario_button";
             this.agregar_al_inventario_button.Size = new System.Drawing.Size(207, 37);
             this.agregar_al_inventario_button.TabIndex = 17;
@@ -138,7 +140,7 @@
             // 
             this.nuevo_producto_linklabel.AutoSize = true;
             this.nuevo_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nuevo_producto_linklabel.Location = new System.Drawing.Point(311, 182);
+            this.nuevo_producto_linklabel.Location = new System.Drawing.Point(623, 165);
             this.nuevo_producto_linklabel.Name = "nuevo_producto_linklabel";
             this.nuevo_producto_linklabel.Size = new System.Drawing.Size(95, 21);
             this.nuevo_producto_linklabel.TabIndex = 9;
@@ -148,7 +150,7 @@
             // 
             // lote_id_tb
             // 
-            this.lote_id_tb.Location = new System.Drawing.Point(47, 305);
+            this.lote_id_tb.Location = new System.Drawing.Point(22, 395);
             this.lote_id_tb.Name = "lote_id_tb";
             this.lote_id_tb.ReadOnly = true;
             this.lote_id_tb.Size = new System.Drawing.Size(152, 33);
@@ -159,7 +161,7 @@
             // lote_id_label
             // 
             this.lote_id_label.AutoSize = true;
-            this.lote_id_label.Location = new System.Drawing.Point(42, 277);
+            this.lote_id_label.Location = new System.Drawing.Point(17, 367);
             this.lote_id_label.Name = "lote_id_label";
             this.lote_id_label.Size = new System.Drawing.Size(157, 25);
             this.lote_id_label.TabIndex = 16;
@@ -169,7 +171,7 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(285, 22);
+            this.header_label.Location = new System.Drawing.Point(260, 12);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(215, 30);
             this.header_label.TabIndex = 18;
@@ -179,7 +181,7 @@
             // 
             this.buscar_producto_linklabel.AutoSize = true;
             this.buscar_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buscar_producto_linklabel.Location = new System.Drawing.Point(249, 182);
+            this.buscar_producto_linklabel.Location = new System.Drawing.Point(224, 165);
             this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
             this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
             this.buscar_producto_linklabel.TabIndex = 19;
@@ -189,19 +191,41 @@
             // 
             // nombre_producto_tb
             // 
-            this.nombre_producto_tb.Location = new System.Drawing.Point(47, 207);
+            this.nombre_producto_tb.Location = new System.Drawing.Point(22, 190);
             this.nombre_producto_tb.Name = "nombre_producto_tb";
             this.nombre_producto_tb.ReadOnly = true;
             this.nombre_producto_tb.Size = new System.Drawing.Size(696, 33);
             this.nombre_producto_tb.TabIndex = 20;
             this.nombre_producto_tb.TabStop = false;
             // 
+            // descripcion_producto_tb
+            // 
+            this.descripcion_producto_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descripcion_producto_tb.Location = new System.Drawing.Point(22, 275);
+            this.descripcion_producto_tb.Multiline = true;
+            this.descripcion_producto_tb.Name = "descripcion_producto_tb";
+            this.descripcion_producto_tb.ReadOnly = true;
+            this.descripcion_producto_tb.Size = new System.Drawing.Size(696, 75);
+            this.descripcion_producto_tb.TabIndex = 22;
+            this.descripcion_producto_tb.TabStop = false;
+            // 
+            // descripcion_producto_label
+            // 
+            this.descripcion_producto_label.AutoSize = true;
+            this.descripcion_producto_label.Location = new System.Drawing.Point(17, 247);
+            this.descripcion_producto_label.Name = "descripcion_producto_label";
+            this.descripcion_producto_label.Size = new System.Drawing.Size(224, 25);
+            this.descripcion_producto_label.TabIndex = 21;
+            this.descripcion_producto_label.Text = "Descripción del producto";
+            // 
             // InventarioAgregarForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(784, 361);
+            this.ClientSize = new System.Drawing.Size(734, 440);
+            this.Controls.Add(this.descripcion_producto_tb);
+            this.Controls.Add(this.descripcion_producto_label);
             this.Controls.Add(this.nombre_producto_tb);
             this.Controls.Add(this.buscar_producto_linklabel);
             this.Controls.Add(this.header_label);
@@ -248,6 +272,8 @@
         private System.Windows.Forms.Label header_label;
         private System.Windows.Forms.LinkLabel buscar_producto_linklabel;
         private System.Windows.Forms.TextBox nombre_producto_tb;
+        private System.Windows.Forms.TextBox descripcion_producto_tb;
+        private System.Windows.Forms.Label descripcion_producto_label;
     }
 }
 
