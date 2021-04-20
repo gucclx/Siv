@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditarClienteForm));
             this.nombre_cliente_tb = new System.Windows.Forms.TextBox();
             this.buscar_cliente_linklabel = new System.Windows.Forms.LinkLabel();
             this.cliente_label = new System.Windows.Forms.Label();
@@ -162,6 +163,7 @@
             this.Controls.Add(this.cliente_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "EditarClienteForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

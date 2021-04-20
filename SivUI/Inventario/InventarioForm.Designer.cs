@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InventarioForm));
             this.contenedor_panel = new System.Windows.Forms.Panel();
             this.resultados_dtgv = new System.Windows.Forms.DataGridView();
             this.header_label = new System.Windows.Forms.Label();
@@ -48,9 +49,9 @@
             // 
             this.contenedor_panel.Controls.Add(this.resultados_dtgv);
             this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.contenedor_panel.Location = new System.Drawing.Point(12, 73);
+            this.contenedor_panel.Location = new System.Drawing.Point(12, 55);
             this.contenedor_panel.Name = "contenedor_panel";
-            this.contenedor_panel.Size = new System.Drawing.Size(844, 333);
+            this.contenedor_panel.Size = new System.Drawing.Size(844, 370);
             this.contenedor_panel.TabIndex = 0;
             // 
             // resultados_dtgv
@@ -64,7 +65,7 @@
             this.resultados_dtgv.Location = new System.Drawing.Point(0, 0);
             this.resultados_dtgv.Name = "resultados_dtgv";
             this.resultados_dtgv.ReadOnly = true;
-            this.resultados_dtgv.Size = new System.Drawing.Size(844, 333);
+            this.resultados_dtgv.Size = new System.Drawing.Size(844, 370);
             this.resultados_dtgv.TabIndex = 29;
             // 
             // header_label
@@ -187,6 +188,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "InventarioForm";

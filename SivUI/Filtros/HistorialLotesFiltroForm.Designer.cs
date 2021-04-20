@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buscar_categoria_label = new System.Windows.Forms.LinkLabel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistorialLotesFiltroForm));
             this.filtrar_por_producto_checkbox = new System.Windows.Forms.CheckBox();
             this.filtrar_por_producto_groupbox = new System.Windows.Forms.GroupBox();
             this.buscar_producto_linklabel = new System.Windows.Forms.LinkLabel();
@@ -41,36 +41,22 @@
             this.fecha_final_dtp = new System.Windows.Forms.DateTimePicker();
             this.fecha_inicial_dtp = new System.Windows.Forms.DateTimePicker();
             this.listo_button = new System.Windows.Forms.Button();
-            this.filtrar_por_categoria_checkbox = new System.Windows.Forms.CheckBox();
-            this.filtrar_por_categoria_groupbox = new System.Windows.Forms.GroupBox();
-            this.categoria_nombre_tb = new System.Windows.Forms.TextBox();
-            this.categoria_nombre_label = new System.Windows.Forms.Label();
             this.general_groupbox = new System.Windows.Forms.GroupBox();
             this.lotes_sin_unidades_checkbox = new System.Windows.Forms.CheckBox();
+            this.categorias_seleccionadas_label = new System.Windows.Forms.Label();
+            this.categorias_seleccionadas_listbox = new System.Windows.Forms.ListBox();
+            this.agregar_categorias_linklabel = new System.Windows.Forms.LinkLabel();
+            this.remover_categoria_button = new System.Windows.Forms.Button();
             this.filtrar_por_producto_groupbox.SuspendLayout();
             this.filtrar_por_fechas_groupbox.SuspendLayout();
-            this.filtrar_por_categoria_groupbox.SuspendLayout();
             this.general_groupbox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // buscar_categoria_label
-            // 
-            this.buscar_categoria_label.AutoSize = true;
-            this.buscar_categoria_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buscar_categoria_label.Location = new System.Drawing.Point(89, 34);
-            this.buscar_categoria_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.buscar_categoria_label.Name = "buscar_categoria_label";
-            this.buscar_categoria_label.Size = new System.Drawing.Size(56, 21);
-            this.buscar_categoria_label.TabIndex = 42;
-            this.buscar_categoria_label.TabStop = true;
-            this.buscar_categoria_label.Text = "Buscar";
-            this.buscar_categoria_label.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_categoria_label_LinkClicked);
             // 
             // filtrar_por_producto_checkbox
             // 
             this.filtrar_por_producto_checkbox.AutoSize = true;
             this.filtrar_por_producto_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_producto_checkbox.Location = new System.Drawing.Point(329, 137);
+            this.filtrar_por_producto_checkbox.Location = new System.Drawing.Point(331, 140);
             this.filtrar_por_producto_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_producto_checkbox.Name = "filtrar_por_producto_checkbox";
             this.filtrar_por_producto_checkbox.Size = new System.Drawing.Size(165, 25);
@@ -86,7 +72,7 @@
             this.filtrar_por_producto_groupbox.Controls.Add(this.producto_nombre_label);
             this.filtrar_por_producto_groupbox.Enabled = false;
             this.filtrar_por_producto_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_producto_groupbox.Location = new System.Drawing.Point(329, 13);
+            this.filtrar_por_producto_groupbox.Location = new System.Drawing.Point(331, 16);
             this.filtrar_por_producto_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_producto_groupbox.Name = "filtrar_por_producto_groupbox";
             this.filtrar_por_producto_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
@@ -131,7 +117,7 @@
             // 
             this.habilitar_fechas_checkbox.AutoSize = true;
             this.habilitar_fechas_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.habilitar_fechas_checkbox.Location = new System.Drawing.Point(13, 137);
+            this.habilitar_fechas_checkbox.Location = new System.Drawing.Point(15, 140);
             this.habilitar_fechas_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.habilitar_fechas_checkbox.Name = "habilitar_fechas_checkbox";
             this.habilitar_fechas_checkbox.Size = new System.Drawing.Size(146, 25);
@@ -148,7 +134,7 @@
             this.filtrar_por_fechas_groupbox.Controls.Add(this.fecha_inicial_dtp);
             this.filtrar_por_fechas_groupbox.Enabled = false;
             this.filtrar_por_fechas_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_fechas_groupbox.Location = new System.Drawing.Point(13, 13);
+            this.filtrar_por_fechas_groupbox.Location = new System.Drawing.Point(15, 16);
             this.filtrar_por_fechas_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.filtrar_por_fechas_groupbox.Name = "filtrar_por_fechas_groupbox";
             this.filtrar_por_fechas_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
@@ -198,7 +184,7 @@
             // listo_button
             // 
             this.listo_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.listo_button.Location = new System.Drawing.Point(544, 351);
+            this.listo_button.Location = new System.Drawing.Point(546, 329);
             this.listo_button.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.listo_button.Name = "listo_button";
             this.listo_button.Size = new System.Drawing.Size(118, 37);
@@ -207,60 +193,11 @@
             this.listo_button.UseVisualStyleBackColor = true;
             this.listo_button.Click += new System.EventHandler(this.listo_button_Click);
             // 
-            // filtrar_por_categoria_checkbox
-            // 
-            this.filtrar_por_categoria_checkbox.AutoSize = true;
-            this.filtrar_por_categoria_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_categoria_checkbox.Location = new System.Drawing.Point(13, 324);
-            this.filtrar_por_categoria_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.filtrar_por_categoria_checkbox.Name = "filtrar_por_categoria_checkbox";
-            this.filtrar_por_categoria_checkbox.Size = new System.Drawing.Size(166, 25);
-            this.filtrar_por_categoria_checkbox.TabIndex = 45;
-            this.filtrar_por_categoria_checkbox.Text = "Filtrar por categoria";
-            this.filtrar_por_categoria_checkbox.UseVisualStyleBackColor = true;
-            this.filtrar_por_categoria_checkbox.CheckedChanged += new System.EventHandler(this.filtrar_por_categoria_checkbox_CheckedChanged);
-            // 
-            // filtrar_por_categoria_groupbox
-            // 
-            this.filtrar_por_categoria_groupbox.Controls.Add(this.categoria_nombre_tb);
-            this.filtrar_por_categoria_groupbox.Controls.Add(this.categoria_nombre_label);
-            this.filtrar_por_categoria_groupbox.Controls.Add(this.buscar_categoria_label);
-            this.filtrar_por_categoria_groupbox.Enabled = false;
-            this.filtrar_por_categoria_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtrar_por_categoria_groupbox.Location = new System.Drawing.Point(13, 200);
-            this.filtrar_por_categoria_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.filtrar_por_categoria_groupbox.Name = "filtrar_por_categoria_groupbox";
-            this.filtrar_por_categoria_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.filtrar_por_categoria_groupbox.Size = new System.Drawing.Size(312, 118);
-            this.filtrar_por_categoria_groupbox.TabIndex = 46;
-            this.filtrar_por_categoria_groupbox.TabStop = false;
-            this.filtrar_por_categoria_groupbox.Text = "Categoria";
-            // 
-            // categoria_nombre_tb
-            // 
-            this.categoria_nombre_tb.Location = new System.Drawing.Point(18, 59);
-            this.categoria_nombre_tb.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.categoria_nombre_tb.Name = "categoria_nombre_tb";
-            this.categoria_nombre_tb.ReadOnly = true;
-            this.categoria_nombre_tb.Size = new System.Drawing.Size(277, 29);
-            this.categoria_nombre_tb.TabIndex = 29;
-            this.categoria_nombre_tb.TabStop = false;
-            // 
-            // categoria_nombre_label
-            // 
-            this.categoria_nombre_label.AutoSize = true;
-            this.categoria_nombre_label.Location = new System.Drawing.Point(17, 34);
-            this.categoria_nombre_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.categoria_nombre_label.Name = "categoria_nombre_label";
-            this.categoria_nombre_label.Size = new System.Drawing.Size(68, 21);
-            this.categoria_nombre_label.TabIndex = 9;
-            this.categoria_nombre_label.Text = "Nombre";
-            // 
             // general_groupbox
             // 
             this.general_groupbox.Controls.Add(this.lotes_sin_unidades_checkbox);
             this.general_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.general_groupbox.Location = new System.Drawing.Point(331, 200);
+            this.general_groupbox.Location = new System.Drawing.Point(333, 203);
             this.general_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.general_groupbox.Name = "general_groupbox";
             this.general_groupbox.Padding = new System.Windows.Forms.Padding(2, 4, 2, 4);
@@ -281,15 +218,65 @@
             this.lotes_sin_unidades_checkbox.Text = "Solo lotes con unidades disponibles";
             this.lotes_sin_unidades_checkbox.UseVisualStyleBackColor = true;
             // 
+            // categorias_seleccionadas_label
+            // 
+            this.categorias_seleccionadas_label.AutoSize = true;
+            this.categorias_seleccionadas_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_label.Location = new System.Drawing.Point(11, 184);
+            this.categorias_seleccionadas_label.Name = "categorias_seleccionadas_label";
+            this.categorias_seleccionadas_label.Size = new System.Drawing.Size(224, 25);
+            this.categorias_seleccionadas_label.TabIndex = 49;
+            this.categorias_seleccionadas_label.Text = "Categorias seleccionadas";
+            // 
+            // categorias_seleccionadas_listbox
+            // 
+            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_listbox.FormattingEnabled = true;
+            this.categorias_seleccionadas_listbox.HorizontalScrollbar = true;
+            this.categorias_seleccionadas_listbox.ItemHeight = 21;
+            this.categorias_seleccionadas_listbox.Location = new System.Drawing.Point(16, 212);
+            this.categorias_seleccionadas_listbox.Name = "categorias_seleccionadas_listbox";
+            this.categorias_seleccionadas_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.categorias_seleccionadas_listbox.Size = new System.Drawing.Size(312, 109);
+            this.categorias_seleccionadas_listbox.TabIndex = 48;
+            // 
+            // agregar_categorias_linklabel
+            // 
+            this.agregar_categorias_linklabel.AutoSize = true;
+            this.agregar_categorias_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.agregar_categorias_linklabel.Location = new System.Drawing.Point(261, 187);
+            this.agregar_categorias_linklabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.agregar_categorias_linklabel.Name = "agregar_categorias_linklabel";
+            this.agregar_categorias_linklabel.Size = new System.Drawing.Size(66, 21);
+            this.agregar_categorias_linklabel.TabIndex = 30;
+            this.agregar_categorias_linklabel.TabStop = true;
+            this.agregar_categorias_linklabel.Text = "Agregar";
+            this.agregar_categorias_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.agregar_categorias_linklabel_LinkClicked);
+            // 
+            // remover_categoria_button
+            // 
+            this.remover_categoria_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.remover_categoria_button.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.remover_categoria_button.Location = new System.Drawing.Point(16, 327);
+            this.remover_categoria_button.MaximumSize = new System.Drawing.Size(800, 600);
+            this.remover_categoria_button.Name = "remover_categoria_button";
+            this.remover_categoria_button.Size = new System.Drawing.Size(183, 37);
+            this.remover_categoria_button.TabIndex = 50;
+            this.remover_categoria_button.Text = "Remover selección";
+            this.remover_categoria_button.UseVisualStyleBackColor = true;
+            this.remover_categoria_button.Click += new System.EventHandler(this.remover_categoria_button_Click);
+            // 
             // HistorialLotesFiltroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(673, 401);
+            this.ClientSize = new System.Drawing.Size(675, 383);
+            this.Controls.Add(this.remover_categoria_button);
+            this.Controls.Add(this.agregar_categorias_linklabel);
+            this.Controls.Add(this.categorias_seleccionadas_label);
+            this.Controls.Add(this.categorias_seleccionadas_listbox);
             this.Controls.Add(this.general_groupbox);
-            this.Controls.Add(this.filtrar_por_categoria_checkbox);
-            this.Controls.Add(this.filtrar_por_categoria_groupbox);
             this.Controls.Add(this.listo_button);
             this.Controls.Add(this.filtrar_por_producto_checkbox);
             this.Controls.Add(this.filtrar_por_producto_groupbox);
@@ -298,6 +285,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "HistorialLotesFiltroForm";
@@ -307,8 +295,6 @@
             this.filtrar_por_producto_groupbox.PerformLayout();
             this.filtrar_por_fechas_groupbox.ResumeLayout(false);
             this.filtrar_por_fechas_groupbox.PerformLayout();
-            this.filtrar_por_categoria_groupbox.ResumeLayout(false);
-            this.filtrar_por_categoria_groupbox.PerformLayout();
             this.general_groupbox.ResumeLayout(false);
             this.general_groupbox.PerformLayout();
             this.ResumeLayout(false);
@@ -317,8 +303,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.LinkLabel buscar_categoria_label;
         private System.Windows.Forms.CheckBox filtrar_por_producto_checkbox;
         private System.Windows.Forms.GroupBox filtrar_por_producto_groupbox;
         private System.Windows.Forms.LinkLabel buscar_producto_linklabel;
@@ -331,11 +315,11 @@
         private System.Windows.Forms.DateTimePicker fecha_final_dtp;
         private System.Windows.Forms.DateTimePicker fecha_inicial_dtp;
         private System.Windows.Forms.Button listo_button;
-        private System.Windows.Forms.CheckBox filtrar_por_categoria_checkbox;
-        private System.Windows.Forms.GroupBox filtrar_por_categoria_groupbox;
-        private System.Windows.Forms.TextBox categoria_nombre_tb;
-        private System.Windows.Forms.Label categoria_nombre_label;
         private System.Windows.Forms.GroupBox general_groupbox;
         private System.Windows.Forms.CheckBox lotes_sin_unidades_checkbox;
+        private System.Windows.Forms.Label categorias_seleccionadas_label;
+        private System.Windows.Forms.ListBox categorias_seleccionadas_listbox;
+        private System.Windows.Forms.LinkLabel agregar_categorias_linklabel;
+        private System.Windows.Forms.Button remover_categoria_button;
     }
 }

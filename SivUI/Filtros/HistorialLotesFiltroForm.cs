@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace SivUI.Filtros
 {
-    public partial class HistorialLotesFiltroForm : Form, ISolicitudCategoria, ISolicitudProducto
+    public partial class HistorialLotesFiltroForm : Form, ISolicitudProducto, ISolicitudCategorias
     {
-        CategoriaModelo categoria;
+        List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ProductoModelo producto;
 
         ISolicitudFiltro solicitante;
@@ -46,13 +46,11 @@ namespace SivUI.Filtros
                 filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
                 filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
 
-                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                if (filtro.Categorias != null)
                 {
-                    categoria = filtro.Categoria;
-                    categoria_nombre_tb.Text = filtro.Categoria.Nombre;
+                    categoriasSeleccionadas = filtro.Categorias;
+                    ActualizarCategorias();
                 }
-                filtrar_por_categoria_checkbox.Checked = filtro.FiltroPorCategoria;
-                filtrar_por_categoria_groupbox.Enabled = filtro.FiltroPorCategoria;
             }
         }
 
@@ -77,8 +75,10 @@ namespace SivUI.Filtros
             filtro.Producto = producto;
             filtro.FiltroPorProducto = filtrar_por_producto_checkbox.Checked;
 
-            filtro.Categoria = categoria;
-            filtro.FiltroPorCategoria = filtrar_por_categoria_checkbox.Checked;
+            //filtro.Categoria = categoria;
+            //filtro.FiltroPorCategoria = filtrar_por_categoria_checkbox.Checked;
+
+            filtro.Categorias = categoriasSeleccionadas;
 
             filtro.IncluirLotesSinUnidades = !lotes_sin_unidades_checkbox.Checked;
 
@@ -99,23 +99,41 @@ namespace SivUI.Filtros
             var frm = new BuscarProductoForm(this);
             frm.ShowDialog();
         }
-
-        private void filtrar_por_categoria_checkbox_CheckedChanged(object sender, EventArgs e)
+        private void agregar_categorias_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            filtrar_por_categoria_groupbox.Enabled = filtrar_por_categoria_checkbox.Checked;
-        }
-
-        public void CategoriaLista(CategoriaModelo categoria)
-        {
-            if (categoria == null) return;
-            this.categoria = categoria;
-            categoria_nombre_tb.Text = categoria.Nombre;
-        }
-
-        private void buscar_categoria_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            var frm = new BuscarCategoriaForm(this);
+            var frm = new BuscarCategoriasForm(this);
             frm.ShowDialog();
+        }
+
+        public void CategoriasListas(List<CategoriaModelo> categorias)
+        {
+            if (categorias == null) return;
+            foreach (var categoria in categorias)
+            {
+                // Existe ya la categoria en la lista?
+                if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
+
+                categoriasSeleccionadas.Add(categoria);
+            }
+            ActualizarCategorias();
+        }
+
+        private void ActualizarCategorias()
+        {
+            categorias_seleccionadas_listbox.DataSource = null;
+            categorias_seleccionadas_listbox.DataSource = categoriasSeleccionadas;
+            categorias_seleccionadas_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
+        }
+
+        private void remover_categoria_button_Click(object sender, EventArgs e)
+        {
+            var categoriasARemover = categorias_seleccionadas_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
+            
+            foreach (var categoria in categoriasARemover)
+            {
+                categoriasSeleccionadas.Remove(categoria);
+            }
+            ActualizarCategorias();
         }
     }
 }

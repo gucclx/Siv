@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EliminarCategoriaForm));
             this.eliminar_categoria_button = new System.Windows.Forms.Button();
             this.categorias_listbox = new System.Windows.Forms.ListBox();
-            this.categorias_existentes_label = new System.Windows.Forms.Label();
             this.remover_button = new System.Windows.Forms.Button();
             this.buscar_categoria_linklabel = new System.Windows.Forms.LinkLabel();
+            this.header_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // eliminar_categoria_button
@@ -59,16 +60,6 @@
             this.categorias_listbox.Size = new System.Drawing.Size(500, 193);
             this.categorias_listbox.TabIndex = 17;
             // 
-            // categorias_existentes_label
-            // 
-            this.categorias_existentes_label.AutoSize = true;
-            this.categorias_existentes_label.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.categorias_existentes_label.Location = new System.Drawing.Point(158, 9);
-            this.categorias_existentes_label.Name = "categorias_existentes_label";
-            this.categorias_existentes_label.Size = new System.Drawing.Size(209, 30);
-            this.categorias_existentes_label.TabIndex = 16;
-            this.categorias_existentes_label.Text = "Categorias existentes";
-            // 
             // remover_button
             // 
             this.remover_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -92,20 +83,31 @@
             this.buscar_categoria_linklabel.Text = "Buscar";
             this.buscar_categoria_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_categoria_linklabel_LinkClicked);
             // 
+            // header_label
+            // 
+            this.header_label.AutoSize = true;
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Location = new System.Drawing.Point(165, 9);
+            this.header_label.Name = "header_label";
+            this.header_label.Size = new System.Drawing.Size(194, 30);
+            this.header_label.TabIndex = 31;
+            this.header_label.Text = "Eliminar categorias";
+            // 
             // EliminarCategoriaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(524, 376);
+            this.Controls.Add(this.header_label);
             this.Controls.Add(this.buscar_categoria_linklabel);
             this.Controls.Add(this.remover_button);
             this.Controls.Add(this.eliminar_categoria_button);
             this.Controls.Add(this.categorias_listbox);
-            this.Controls.Add(this.categorias_existentes_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "EliminarCategoriaForm";
@@ -120,8 +122,8 @@
 
         private System.Windows.Forms.Button eliminar_categoria_button;
         private System.Windows.Forms.ListBox categorias_listbox;
-        private System.Windows.Forms.Label categorias_existentes_label;
         private System.Windows.Forms.Button remover_button;
         private System.Windows.Forms.LinkLabel buscar_categoria_linklabel;
+        private System.Windows.Forms.Label header_label;
     }
 }

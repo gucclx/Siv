@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportarForm));
             this.exportar_lotes_button = new System.Windows.Forms.Button();
             this.exportar_ventas_button = new System.Windows.Forms.Button();
             this.tarea_label = new System.Windows.Forms.Label();
@@ -102,6 +103,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "ExportarForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

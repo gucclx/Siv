@@ -112,6 +112,12 @@ namespace SivUI.Inventario
             inversion_tb.Text = inversionTotal.ToString();
         }
 
+        /// <summary>
+        ///     Cambia el texto de tarea_label y hace visible o invisible este label.
+        ///     Util para indicar al usuario la tarea que se esta realizando.
+        /// </summary>
+        /// <param name="s"> Mensaje a mostrar. </param>
+        /// <param name="visible"> Si el label es visible o no. </param>
         private void ConfigTareaLabel(string s = "", bool visible = true)
         {
             tarea_label.Visible = visible;
@@ -123,7 +129,7 @@ namespace SivUI.Inventario
 
         private void filtros_button_Click(object sender, EventArgs e)
         {
-            var frm = new InventarioFiltroForm(this);
+            var frm = new InventarioFiltroForm(this, reporteFiltro);
             this.Hide();
             frm.ShowDialog();
             this.Show();

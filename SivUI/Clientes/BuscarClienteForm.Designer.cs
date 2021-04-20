@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuscarClienteForm));
             this.nombre_completo_tb = new System.Windows.Forms.TextBox();
             this.nombre_completo_cliente_label = new System.Windows.Forms.Label();
             this.resultados_listbox = new System.Windows.Forms.ListBox();
@@ -118,6 +119,7 @@
             this.Controls.Add(this.nombre_completo_cliente_label);
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "BuscarClienteForm";

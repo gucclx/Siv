@@ -382,8 +382,9 @@ namespace SivBiblioteca.AccesoDatos
 
             if (filtro != null)
             {
+                var filtrarPorFechas = filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas;
                 // Si se filtra por fecha de venta.
-                if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
+                if (filtrarPorFechas)
                 {
                     condiciones.Add("ventas.fecha BETWEEN @F1 AND @F2");
                     parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
@@ -393,16 +394,21 @@ namespace SivBiblioteca.AccesoDatos
                 // Si se filtra por tipo de producto.
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 { 
-                    condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
+                    if (filtrarPorFechas)
+                    {
+                        condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
+                    }
+                    else
+                    {
+                        condiciones.Add("productos.id = @ProductoId");
+                    }
                     parametros.Add("@ProductoId", filtro.Producto.Id);
                 }
 
                 // Si se filtra por categorias del producto.
-                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
                 {
-                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("(case when ProductoCategoria.CategoriaId = @CategoriaId then 1 end) = 1");
-                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
+                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
                 }
 
                 // Si se filtra por las compras de cierto cliente.
@@ -621,22 +627,22 @@ namespace SivBiblioteca.AccesoDatos
                     join lotes on lotes.ProductoId = productos.Id";
 
             // Contendran los joins y condiciones necesarios
-            // para cumplir con las condiciones del filtro.
+            // para cumplir con las condiciones del filtro y generar el query apropiado.
             var joins = new List<string>();
             var condiciones = new List<string>();
 
             if (filtro != null)
             {
-                // Si se filtra por las categorias de los productos en el inventario.
-                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
-                {
-                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("(case when ProductoCategoria.CategoriaId = @CategoriaId then 1 end) = 1");
-                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
+                // Si se filtra por las categorias de los productos asociados con los lotes.
+                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
+                {                    
+                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
                 }
 
+                var filtrarPorFechas = filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas;
+
                 // Si se filtra por fecha de agregado al inventario.
-                if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
+                if (filtrarPorFechas)
                 {
                     condiciones.Add("lotes.FechaCreacion BETWEEN @F1 AND @F2");
                     parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
@@ -646,7 +652,7 @@ namespace SivBiblioteca.AccesoDatos
                 // Si se filtra por el tipo de producto.
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
-                    if (filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas)
+                    if (filtrarPorFechas)
                     {
                         // Se utiliza case para forzar a sqlite
                         // a que en caso de que se provea un rango de fechas
@@ -743,8 +749,17 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
+        /// <summary>
+        ///     Edita un producto en la base de datos.
+        /// </summary>
+        /// <param name="producto">
+        ///     El producto a editar. Las propiedades de este producto se usaran
+        ///     para sobreescribir las columnas correspondientes en la base de datos
+        ///     de la fila correspondiente dada por la propiedad producto.Id.
+        /// </param>
         public void EditarProducto(ProductoModelo producto)
         {
+            // Verificar campos del producto.
             if (producto == null)
             {
                 throw new ArgumentException($"Producto nulo.");
@@ -762,6 +777,7 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("El nombre del producto no puede estar vacio.");
             }
 
+            // Editar producto.
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"update Productos set Nombre = @Nombre, Descripcion = @Descripcion where Id = @Id";
@@ -798,10 +814,10 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Carga y retorna las categorias de un producto especificando el id del producto.
-        /// Util cuando se carga un producto desde el metodo BuscarProducto_PorNombre
-        /// ya que es ineficiente cargar todas las categorias de todos los posibles
-        /// productos retornados por dicha funcion.
+        ///     Carga y retorna las categorias de un producto especificando el id del producto.
+        ///     Util cuando se carga un producto desde el metodo BuscarProducto_PorNombre
+        ///     ya que es ineficiente cargar todas las categorias de todos los posibles
+        ///     productos retornados por dicho metodo.
         /// </summary>
         /// <param name="id"> Id del producto. </param>
         /// <returns> Las categorias del producto cuyo id fue proporcionado. </returns>
@@ -934,6 +950,21 @@ namespace SivBiblioteca.AccesoDatos
             con.Close();
         }
 
+        /// <summary>
+        ///     Retorna un resumen de productos con informacion como Nombre, unidades disponible, y el valor de estas unidades disponibles.
+        /// </summary>
+        /// <param name="filtro"> 
+        ///     Objeto que contiene condiciones para generar los resumenes.
+        ///     Condiciones como tipo de producto y/o categoria(s) de/los producto(s).
+        /// </param>
+        /// <param name="limiteFilas"> 
+        ///     Limite de filas a retornar. Util para cuando se presenta la info al usuario o para paginar los resultados
+        /// </param>
+        /// <param name="comienzo"> 
+        ///     Impone la condicion en la columna Productos.Id > comienzo.
+        ///     Util para paginar los resultados.
+        /// </param>
+        /// <returns></returns>
         public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null)
         {
             var q = @"select productos.id as 'IdProducto', 
@@ -946,22 +977,24 @@ namespace SivBiblioteca.AccesoDatos
 
             var parametros = new DynamicParameters();
 
+            // Contrendan los joins de las tablas y la condiciones
+            // necesarias para la generacion de los resumenes.
             var joins = new List<string>();
             var condiciones = new List<string>();
 
             if (filtro != null)
             {
+                // Si se filtra por producto.
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
                     condiciones.Add("productos.id = @ProductoId");
                     parametros.Add("@ProductoId", filtro.Producto.Id);
                 }
 
-                if (filtro.FiltroPorCategoria && filtro.Categoria != null)
+                // Si se filtra por categorias.
+                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
                 {
-                    joins.Add("left join ProductoCategoria on ProductoCategoria.ProductoId = Productos.id");
-                    condiciones.Add("ProductoCategoria.CategoriaId = @CategoriaId");
-                    parametros.Add("@CategoriaId", filtro.Categoria.Id);
+                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
                 }
             }
 
@@ -1006,6 +1039,69 @@ namespace SivBiblioteca.AccesoDatos
 
                 return reportes;
             }
+        }
+
+        /// <summary>
+        ///     Magia negra para seleccionar solo productos
+        ///     asociados con todas las categorias solicitadas.
+        ///     https://stackoverflow.com/a/1330271
+        ///     
+        ///     Genera la condicion necesaria para encontrar los productos asociados
+        ///     con todas las categorias proveidas.
+        ///     Util cuando se generan reportes de ventas, lotes o inventario
+        ///     ya que todos estos reportes poseen un producto.
+        ///     Se tiene la intencion que la condicion generada se utilice como parte de otro query.
+        /// </summary>
+        /// <param name="parametros"> 
+        ///     Ya que se asume que la condcion generada es parte de otro query
+        ///     este objeto representa los parametros de tal query, el query principal por asi decir.
+        ///     Por lo tanto el objeto se pasa por referencia para agregar los parametros generados aqui.
+        /// </param>
+        /// <param name="categorias"> Lista de categorias por las cuales se desea filtrar. </param>
+        /// <returns> 
+        ///     Una string sql que representa la condicion necesaria para encontrar los productos asociados con todas las categorias proveidas.
+        /// </returns>
+        string CondicionFiltroCategorias(DynamicParameters parametros, List<CategoriaModelo> categorias)
+        {
+            // Esta seccion construye un commando sql
+            // del tipo 'select 1 as CategoriaId union select 2 union select 3...'
+            // para crear la lista de ids de las categorias por las que se deben filtrar los productos
+            // pero se utilizan parametros en vez de insertar los ids directamente en la string.
+            // Nota: El nombre de los parametros es extraño solo para evitar
+            // coliciones con algun otro parametro ya existente.
+
+            var partes = new List<string>();
+            partes.Add("select @FPCCATID0 as CategoriaId");
+            parametros.Add("@FPCCATID0", categorias[0].Id);
+
+            for (int i = 1; i < categorias.Count; i++)
+            {
+                var parametro = $"@FPCCATID{i}";
+                partes.Add($"union select {parametro}");
+                parametros.Add(parametro, categorias[i].Id);
+            }
+
+            return  $@"(case when productos.id in 
+                        (SELECT  *
+                        FROM (
+                                SELECT  DISTINCT ProductoCategoria.ProductoId
+                                FROM    ProductoCategoria
+                                ) mo
+                        WHERE NOT EXISTS
+                            (
+                            SELECT  NULL
+                            FROM (
+                                    {string.Join(" ", partes)}
+                                    ) filtro
+                            WHERE   NOT EXISTS
+                                    (
+                                    SELECT  NULL
+                                    FROM    ProductoCategoria
+                                    WHERE   ProductoCategoria.ProductoId = mo.ProductoId
+                                            AND ProductoCategoria.CategoriaId = filtro.CategoriaId
+                                    )
+                            )
+                        ) then 1 end) = 1";
         }
     }         
 }
