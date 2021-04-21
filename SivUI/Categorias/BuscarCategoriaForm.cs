@@ -21,6 +21,7 @@ namespace SivUI.Categorias
         {
             InitializeComponent();
             this.solicitante = solicitante;
+            nombre_categoria_tb.Focus();
         }
 
         private void buscar_button_Click(object sender, EventArgs e)

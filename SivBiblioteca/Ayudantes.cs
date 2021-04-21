@@ -17,7 +17,7 @@ namespace SivBiblioteca
         public static bool EsEnteroPositivo(string x)
         {
             x = x.Trim();
-            if (string.IsNullOrEmpty(x)) { return false; }
+            if (string.IsNullOrEmpty(x)) return false;
 
             int intX = 0;
             bool xEsEntero = int.TryParse(x, out intX);
@@ -28,7 +28,7 @@ namespace SivBiblioteca
         public static bool EsEnteroNonegativo(string x)
         {
             x = x.Trim();
-            if (string.IsNullOrEmpty(x)) { return false; }
+            if (string.IsNullOrEmpty(x)) return false;
 
             int intX = 0;
             bool xEsEntero = int.TryParse(x, out intX);
@@ -39,7 +39,7 @@ namespace SivBiblioteca
         public static bool EsDecimalNoNegativo(string x)
         {
             x = x.Trim();
-            if (string.IsNullOrEmpty(x)) { return false; }
+            if (string.IsNullOrEmpty(x)) return false;
 
             decimal decimalX = 0;
             bool xEsDecimal = decimal.TryParse(x, out decimalX);
@@ -49,8 +49,9 @@ namespace SivBiblioteca
         
         /// <summary>
         /// Se utiliza para exportar el inventario, historial de compras de lotes o historial de ventas.
-        /// El archivo es de extension .csv.
-        /// Si el archivo seleccionado existe, la lista sera adjuntada al archivo.
+        /// Los reportes se exportan a un archivo .csv utilizando la biblioteca CsvHelper.
+        /// Si el archivo seleccionado existe, los reportes seran adjuntados al archivo.
+        /// Esto es util se se exportan los reportes por paginacion.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="reportes"> Reportes a guardar. </param>

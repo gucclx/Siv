@@ -31,7 +31,8 @@ namespace SivUI
 
             try
             {
-                lote = ConfigGlobal.conexion.CargarLote_PorId(Convert.ToInt32(lote_id_tb.Text));
+                var loteId = Convert.ToInt32(lote_id_tb.Text);
+                lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
             }
             catch (Exception ex)
             {

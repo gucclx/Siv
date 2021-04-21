@@ -12,7 +12,40 @@ namespace SivBiblioteca.AccesoDatos
 {
     // TODO - preparar pruebas?
 
-    // Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
+    /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
+    /// Nota - Los precios se guardan en la base de datos como enteros.
+    ///          Esto se realiza para guardar los precios con una precision fija.
+    ///     
+    /// Nota - Se utiliza 'case' en algunas condiciones de algunos query
+    /// usualmente para obtener un 'mejor' query plan.
+    /// 
+    /// ej. En el metodo CargarReporteVentas, Si se filtra por fecha de venta 
+    /// y se tiene la condicion productos.id = @ProductoId
+    /// el query plan es buscar aquellos lotes asociados con el producto indicado,
+    /// luego obtener las ventas a partir de estos lotes y filtrarlas por fecha.
+    /// El indice en la columna 'fecha' de la tabla ventas no se utiliza de primero.
+    /// (es mas el query plan aparentemente ni lo usa).
+    /// 
+    /// Sin embargo, esto es ineficiente si hay muchos lotes asociados con el producto especificado.
+    /// 
+    /// Asumiendo que se proporciona un rango de fechas =>
+    /// 
+    /// query plan sin case:
+    /// SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
+    /// SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
+    /// SEARCH TABLE ventas USING INDEX idx_Ventas_LoteId(LoteId=?)
+    /// 
+    /// query plan con case:
+    /// SEARCH TABLE ventas USING INDEX idx_Ventas_Fecha (Fecha>? AND Fecha<?)
+    /// SEARCH TABLE lotes USING INTEGER PRIMARY KEY(rowid=?)
+    /// SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
+    /// 
+    /// Lo mismo sucede en el metodo CargarReporteLotes.
+
+    ///  https://stackoverflow.com/a/49861947
+
+    ///  Ni idea si el plan del query sin case se debe a una estructura del query pobre, o un diseno pobre de las tablas lol
+    ///  ¯\_(ツ)_/¯
     public class SqliteConexion : IConexionDatos
     {
         string stringConexion = ConfigGlobal.ConseguirStringConexion("SqliteBd");
@@ -34,7 +67,10 @@ namespace SivBiblioteca.AccesoDatos
         const double MonedaPrecision = 4;
 
         // Factor de conversion para convertir los precios.
-        int FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+        static int FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+
+        // El precio o valor maximo que se puede representar en la base de datos.
+        static decimal MonedaMaximo = Int64.MaxValue / FactorConversion;
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -68,7 +104,13 @@ namespace SivBiblioteca.AccesoDatos
 
             foreach (var categoria in categorias)
             {
+                if (categoria == null)
+                {
+                    throw new ArgumentException("Al menos una categoria en la lista fue null.");
+                }
+
                 categoria.Nombre = categoria.Nombre.Trim();
+
                 if (string.IsNullOrEmpty(categoria.Nombre))
                 {
                     throw new ArgumentException("Al menos una categoria sin nombre.");
@@ -111,6 +153,11 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="producto"> Producto a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
         {
+            if (producto == null)
+            {
+                throw new ArgumentException("El producto fue null.");
+            }
+
             producto.Nombre = producto.Nombre.Trim();
 
             if (string.IsNullOrEmpty(producto.Nombre))
@@ -163,7 +210,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Carga y retorna un lote de la base de datos.
+        ///     Carga y retorna un lote de la base de datos a partir de su id.
         /// </summary>
         /// <param name="id"> Id del lote. </param>
         /// <returns> El lote. Si no se encontro se retorna un lote null. </returns>
@@ -171,7 +218,10 @@ namespace SivBiblioteca.AccesoDatos
         {
             LoteModelo lote = null;
 
-            if (id < 1) { return lote; }
+            if (id < 1)
+            {
+                throw new ArgumentException($"Id del lote invalido. Id: { id }, el id no debe ser menor a 1");
+            }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -197,18 +247,31 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="ventas"> Lisa de ventas a guardar. </param>
         public void GuardarVentas(List<VentaModelo> ventas)
         {
-            // validar campos de la venta
+            if (ventas == null)
+            {
+                throw new ArgumentException("La lista de ventas fue null.");
+            }
+
+            // Validar campos de la venta
             foreach (var venta in ventas)
             {
+                if (venta == null)
+                {
+                    throw new ArgumentException("Al menos una venta en la lista fue null.");
+                }
                 if (venta.Unidades < 1)
                 {
                     throw new Exception($"Unidades solicitadas invalidas: {venta.Unidades}, el valor debe ser positivo.");
                 }
-                else if (venta.Total < 0)
+                if (venta.Total < 0)
                 {
                     throw new Exception($"Total de la venta invalido: {venta.Total}, solo valores no negativos.");
                 }
-                else if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
+                if (venta.Lote == null)
+                {
+                    throw new ArgumentException("El lote de la venta fue null.");
+                }
+                if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
                 {
                     throw new Exception($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
                 }
@@ -276,7 +339,13 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="cliente"> El cliente. </param>
         public void GuardarCliente(ClienteModelo cliente)
         {
+            if (cliente == null)
+            {
+                throw new ArgumentException("El cliente fue null.");
+            }
+
             cliente.Nombre = cliente.Nombre.Trim();
+
             if (string.IsNullOrEmpty(cliente.Nombre))
             {
                 throw new ArgumentException("Nombre del cliente vacio.");
@@ -311,34 +380,6 @@ namespace SivBiblioteca.AccesoDatos
 
         /// <summary>
         ///     Genera y retorna una lista de cada venta realizada con informacion pertinente.
-        ///     
-        ///     Nota: Se utiliza 'case' en algunas condiciones del query
-        ///     usualmente para obtener un 'mejor' query plan.
-        ///     
-        ///     ej. Si se filtra por fecha de venta y se tiene la condicion productos.id = @ProductoId
-        ///     el query plan es buscar aquellos lotes asociados con el producto indicado,
-        ///     luego obtener las ventas a partir de estos lotes y filtrarlas por fecha.
-        ///     El indice en la columna 'fecha' de la tabla ventas no se utiliza de primero.
-        ///     (es mas el query plan aparentemente ni lo usa).
-        ///     
-        ///     Sin embargo, esto es ineficiente si hay muchos lotes asociados con el producto especificado.
-        ///     
-        ///     Asumiendo que se proporciona un rango de fechas =>
-        ///     
-        ///     query plan sin case:
-        ///     SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
-        ///     SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
-        ///     SEARCH TABLE ventas USING INDEX idx_Ventas_LoteId(LoteId=?)
-        ///     
-        ///     query plan con case:
-        ///     SEARCH TABLE ventas USING INDEX idx_Ventas_Fecha (Fecha>? AND Fecha<?)
-        ///     SEARCH TABLE lotes USING INTEGER PRIMARY KEY(rowid=?)
-        ///     SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
-
-        //      https://stackoverflow.com/a/49861947
-
-        ///     Ni idea si el plan del query sin case se debe a una estructura del query pobre, o un diseno pobre de las tablas lol
-        ///     ¯\_(ツ)_/¯
         /// </summary>
         /// <param name="filtro"> 
         ///     Objeto que contiene condiciones que las ventas deben cumplir.
@@ -356,7 +397,7 @@ namespace SivBiblioteca.AccesoDatos
         ///     ej. CargarReporteVentas(limiteFilas: 1000, comienzo: 0),
         ///     carga las primeras 1000 ventas.
         ///     Luego CargarReporteVentas(limiteFilas: 1000, comienzo: [id de la ultima venta])
-        ///     carga los siguientes 1000 resultados.
+        ///     carga las siguientes 1000 ventas.
         /// </param>
         /// <returns> Lista de reportes. </returns>
         public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
@@ -383,9 +424,10 @@ namespace SivBiblioteca.AccesoDatos
             if (filtro != null)
             {
                 var filtrarPorFechas = filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas;
+
                 // Si se filtra por fecha de venta.
                 if (filtrarPorFechas)
-                {
+                {                  
                     condiciones.Add("ventas.fecha BETWEEN @F1 AND @F2");
                     parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
                     parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
@@ -455,8 +497,8 @@ namespace SivBiblioteca.AccesoDatos
                 // Convertir representacion interna de la moneda a la representacion original.
                 foreach (var reporte in reportes)
                 {
-                    reporte.InversionLote = reporte.InversionLote / FactorConversion;
-                    reporte.PrecioVentaUnidad = reporte.PrecioVentaUnidad / FactorConversion;
+                    reporte.InversionLote /= FactorConversion;
+                    reporte.PrecioVentaUnidad /= FactorConversion;
                 }
                 return reportes;
             }
@@ -475,24 +517,23 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Carga y retorna todos los productos en la base de datos.
-        /// </summary>
-        /// <returns> Todos los productos en la base de datos. </returns>
-        public List<ProductoModelo> CargarProductos()
-        {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                return conexion.Query<ProductoModelo>("select * from Productos").ToList();
-            }
-        }
-
-        /// <summary>
-        /// Guarda un lote en la base de datos.
+        ///     Guarda un lote en la base de datos.
         /// </summary>
         /// <param name="lote"> Lote a guardar. </param>
         public void GuardarLote(LoteModelo lote)
         {
-            // Validar campos del lote.
+            // Validar lote
+
+            if (lote == null)
+            {
+                throw new ArgumentException("El lote fue null.");
+            }
+
+            if (lote.Producto == null)
+            {
+                throw new ArgumentException("El producto del lote fue null.");
+            }
+
             if (lote.Producto.Id < 1)
             {
                 throw new ArgumentException($"Id de producto invalido: {lote.Producto.Id}, el id deber ser mayor a 0.");
@@ -528,7 +569,7 @@ namespace SivBiblioteca.AccesoDatos
                 }
                 catch (OverflowException)
                 {
-                    throw new Exception("El valor de la inversión es demasiado grande.");
+                    throw new Exception($"El valor de la inversión es demasiado grande. Valor máximo: { MonedaMaximo }");
                 }
 
                 // Validar que el precio de venta de las unidades no se demasiado grande.
@@ -538,7 +579,7 @@ namespace SivBiblioteca.AccesoDatos
                 }
                 catch (OverflowException)
                 {
-                    throw new Exception("El precio de venta de la unidad es demasiado grande.");
+                    throw new Exception($"El precio de venta de la unidad es demasiado grande. Precio máximo: { MonedaMaximo }");
                 }
 
                 lote.UnidadesDisponibles = lote.UnidadesCompradas;
@@ -559,7 +600,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Revisa si un producto existe en la base de datos a partir de un nombre proporcionado.
+        ///     Revisa si un producto existe en la base de datos a partir del nombre proporcionado.
         /// </summary>
         /// <param name="nombre"> El nombre del producto a buscar. </param>
         /// <returns> true si el producto existe, false si no. </returns>
@@ -579,8 +620,8 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Carga y retorna una lista de categorias de la base de datos
-        /// cuyos nombres contienen el parametro 'nombre'.
+        ///     Carga y retorna una lista de categorias de la base de datos
+        ///     cuyos nombres contienen el parametro 'nombre'.
         /// </summary>
         /// <param name="nombre"> Nombre a buscar. </param>
         /// <returns> Lista de categorias encontradas. </returns>
@@ -654,24 +695,6 @@ namespace SivBiblioteca.AccesoDatos
                 {
                     if (filtrarPorFechas)
                     {
-                        // Se utiliza case para forzar a sqlite
-                        // a que en caso de que se provea un rango de fechas
-                        // en la que los lotes fueron creados, sqlite utilize
-                        // el index en la columna lotes.FechaCreacion de primero
-                        // y luego escoga solo los lotes asociados con el producto especificado.
-
-                        // sin case, sqlite aparenta no utilizar el index de primero.
-                        // Asumiendo que se proporciona un rango de fechas, aqui los query plans:
-
-                        // query plan sin case:
-                        // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
-                        // SEARCH TABLE lotes USING INDEX idx_Lotes_ProductoId(ProductoId=?)
-
-                        // query plan con case:
-                        // SEARCH TABLE lotes USING INDEX idx_Lotes_FechaCreacion(FechaCreacion>? AND FechaCreacion <?)
-                        // SEARCH TABLE Productos USING INTEGER PRIMARY KEY(rowid =?)
-
-                        // https://stackoverflow.com/a/49861947
                         condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
                     }
                     else
@@ -759,11 +782,11 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarProducto(ProductoModelo producto)
         {
-            // Verificar campos del producto.
             if (producto == null)
             {
-                throw new ArgumentException($"Producto nulo.");
+                throw new ArgumentException($"El producto fue null.");
             }
+
             if (producto.Id < 1)
             {
                 throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1");
@@ -798,6 +821,7 @@ namespace SivBiblioteca.AccesoDatos
                         {
                             foreach (var categoria in producto.Categorias)
                             {
+                                if (categoria == null) continue;
                                 conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
                             }
                         }

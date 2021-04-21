@@ -20,6 +20,7 @@ namespace SivUI
         {
             InitializeComponent();
             this.solicitante = solicitante;
+            nombre_completo_tb.Focus();
         }
 
         private void ActualizarResultados()
@@ -29,7 +30,7 @@ namespace SivUI
             resultados_listbox.DisplayMember = nameof(ClienteModelo.NombreCompleto);
         }
 
-        private void buscar_cliente_button_Click(object sender, EventArgs e)
+        private async void buscar_cliente_button_Click(object sender, EventArgs e)
         {
             var nombre = nombre_completo_tb.Text.Trim();
 
@@ -38,11 +39,12 @@ namespace SivUI
                 return;
             }
 
-            seleccionar_button.Enabled = false;
-          
+            buscar_cliente_button.Enabled = false;
+            ConfigTareaLabel(mensaje: "Buscando clientes...", visible: true);
+
             try
             {
-                resultados = ConfigGlobal.conexion.BuscarCliente_PorNombre(nombre);
+                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarCliente_PorNombre(nombre));
                 ActualizarResultados();
             }
             catch (Exception ex)
@@ -50,7 +52,8 @@ namespace SivUI
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            seleccionar_button.Enabled = true;
+            buscar_cliente_button.Enabled = true;
+            ConfigTareaLabel(visible: false);
         }
 
         private void seleccionar_button_Click(object sender, EventArgs e)
@@ -58,6 +61,14 @@ namespace SivUI
             var clienteSeleccionado = (ClienteModelo)resultados_listbox.SelectedItem;
             solicitante.ClienteListo(clienteSeleccionado);
             this.Close();
+        }
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
+        {
+            tarea_label.Visible = visible;
+            tarea_label.Text = mensaje;
+            tarea_label.AutoSize = false;
+            tarea_label.TextAlign = ContentAlignment.MiddleCenter;
+            tarea_label.Dock = DockStyle.Fill;
         }
     }
 }

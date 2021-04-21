@@ -16,10 +16,11 @@ namespace SivUI
     {
         List<ProductoModelo> resultados;
         ISolicitudProducto solicitante;
-        public BuscarProductoForm(ISolicitudProducto solicitante = null)
+        public BuscarProductoForm(ISolicitudProducto solicitante)
         {
             InitializeComponent();
             this.solicitante = solicitante;
+            nombre_producto_tb.Focus();
         }
 
         private void ActualizarResultados()
@@ -33,19 +34,16 @@ namespace SivUI
         {
             seleccionar_button.Enabled = !trabajando;
             buscar_producto_button.Enabled = !trabajando;
-
         }
 
         private void buscar_producto_button_Click(object sender, EventArgs e)
         {
             var nombre = nombre_producto_tb.Text.Trim();
 
-            if (string.IsNullOrEmpty(nombre))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(nombre)) return;
 
             Trabajando(true);
+            ConfigTareaLabel(mensaje: "Buscando producto...", visible: true);
 
             try
             {
@@ -58,6 +56,7 @@ namespace SivUI
             }
 
             Trabajando(false);
+            ConfigTareaLabel(visible: false);
         }
 
         private void seleccionar_button_Click(object sender, EventArgs e)
@@ -65,6 +64,15 @@ namespace SivUI
             var producto = ((ProductoModelo)resultados_listbox.SelectedItem);
             solicitante.ProductoListo(producto);
             this.Close();
+        }
+
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
+        {
+            tarea_label.Visible = visible;
+            tarea_label.Text = mensaje;
+            tarea_label.AutoSize = false;
+            tarea_label.TextAlign = ContentAlignment.MiddleCenter;
+            tarea_label.Dock = DockStyle.Fill;
         }
     }
 }

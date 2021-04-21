@@ -21,6 +21,7 @@ namespace SivUI
             InitializeComponent();
             ActualizarCategorias();
             this.solicitante = solicitante;
+            nombre_producto_tb.Focus();
         }
 
         /// <summary>

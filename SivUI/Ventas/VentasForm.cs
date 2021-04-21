@@ -18,7 +18,7 @@ namespace SivUI
     {
         BindingSource resultados;
         ReporteFiltroModelo reporteFiltro;
-        const int LimiteFilasReporte = 1000;
+        const int LimiteFilas = 1000;
 
         public VentasForm()
         {
@@ -26,7 +26,7 @@ namespace SivUI
 
             resultados_dtgv.AutoGenerateColumns = false;
 
-            // inicializar columnas
+            // Inicializar columnas.
 
             var loteIdColumna = new DataGridViewTextBoxColumn();
             loteIdColumna.HeaderText = "ID Lote";
@@ -84,16 +84,13 @@ namespace SivUI
         {
             cargar_reporte_button.Enabled = false;
             LimpiarResultados();
+            ConfigTareaLabel(mensaje:"Extrayendo información de la base de datos...", visible: true);
 
             try
             {
-                ConfigTareaLabel("Extrayendo información de la base de datos...");
-                // cargar reportes
                 var reportes = await Task.Run(() =>
-                    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilasReporte)
+                    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas)
                 );
-
-                ConfigTareaLabel(visible: false);
 
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
@@ -102,10 +99,12 @@ namespace SivUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                cargar_reporte_button.Enabled = true;
                 return;
             }
             cargar_reporte_button.Enabled = true;
+            ConfigTareaLabel(visible: false);
         }
 
         private void LimpiarResultados()
@@ -130,7 +129,7 @@ namespace SivUI
         }
 
         /// <summary>
-        /// Calcula los campos inversion total, ingreso total y ganancia total.
+        ///     Calcula los campos inversion total, ingreso total y ganancia total.
         /// </summary>
         private void CalcularResumenReporte()
         {
@@ -169,10 +168,10 @@ namespace SivUI
             filtros_button.Enabled = !trabajando;
         }
 
-        private void ConfigTareaLabel(string s = "", bool visible = true)
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
         {
             tarea_label.Visible = visible;
-            tarea_label.Text = s;
+            tarea_label.Text = mensaje;
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;

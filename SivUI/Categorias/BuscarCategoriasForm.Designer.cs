@@ -40,6 +40,7 @@
             this.categorias_seleccionadas_label = new System.Windows.Forms.Label();
             this.buscar_button = new System.Windows.Forms.Button();
             this.listo_button = new System.Windows.Forms.Button();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // header_label
@@ -161,12 +162,23 @@
             this.listo_button.UseVisualStyleBackColor = true;
             this.listo_button.Click += new System.EventHandler(this.listo_button_Click);
             // 
+            // tarea_label
+            // 
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(705, 9);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 31;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
+            // 
             // BuscarCategoriasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(784, 407);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.listo_button);
             this.Controls.Add(this.buscar_button);
             this.Controls.Add(this.categorias_seleccionadas_label);
@@ -205,5 +217,6 @@
         private System.Windows.Forms.Label categorias_seleccionadas_label;
         private System.Windows.Forms.Button buscar_button;
         private System.Windows.Forms.Button listo_button;
+        private System.Windows.Forms.Label tarea_label;
     }
 }

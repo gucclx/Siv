@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace SivBiblioteca.Modelos
 {
     /// <summary>
-    /// Representa un producto en el inventario con informacion acerca de las unidades
-    /// disponibles totales y la inversion / costo de estas.
-    /// Los atributos representan los titulos y orden de las columnas a la hora de exportar.
-    /// El atributo ignore le pide a csv helper ignorar la propiedad.
-    /// una lista de estos objetos como archivo .csv usando la biblioteca CvsHelper.
+    ///     Representa un producto en el inventario con informacion acerca de las unidades
+    ///     disponibles totales y la inversion / costo de estas.
+    ///     Los atributos representan los titulos y orden de las columnas a la hora de exportar
+    ///     los reportes a un archivo .csv utilizando la biblioteca CvsHelper.
+    ///     El atributo ignore le pide a CsvHelper ignorar la propiedad.
     /// </summary>
     public class ReporteInventarioModelo
     {

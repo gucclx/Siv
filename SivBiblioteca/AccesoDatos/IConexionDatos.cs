@@ -22,7 +22,6 @@ namespace SivBiblioteca.AccesoDatos
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre);
         List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
         List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
-        List<ProductoModelo> CargarProductos();
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);
         List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre);

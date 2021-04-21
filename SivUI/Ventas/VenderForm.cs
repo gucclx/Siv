@@ -61,7 +61,9 @@ namespace SivUI
             ventas_dtgv.Columns.Add(unidadesColumna);
             ventas_dtgv.Columns.Add(totalVentaColumna);
 
-        }     
+            lote_id_tb.Focus();
+        }
+
         private void CalcularTotal()
         {
             decimal total = 0;
@@ -73,7 +75,8 @@ namespace SivUI
         }
         private void agregar_lote_button_Click(object sender, EventArgs e)
         {
-            // validar campos
+            // Validar campos.
+
             if (Ayudantes.EsEnteroPositivo(lote_id_tb.Text) == false)
             {
                 MessageBox.Show("ID del lote inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -86,9 +89,9 @@ namespace SivUI
                 return;
             }
 
-            // cargar lote y verificar que el lote se haya encontrado
+            // Cargar lote y verificar que el lote se haya encontrado.
 
-            var loteId = int.Parse(lote_id_tb.Text.Trim());
+            var loteId = int.Parse(lote_id_tb.Text);
             LoteModelo lote = null;
 
             try
@@ -107,16 +110,16 @@ namespace SivUI
                 return;
             }
 
-            // verificar que el lote no exista en la lista
+            // Verificar que el lote no exista en la lista.
 
-            var loteExistente = ventas.List.OfType<VentaModelo>().ToList().Find(x => x.LoteId == lote.Id);
+            var loteExistente = ventas.List.OfType<VentaModelo>().ToList().Find(l => l.LoteId == lote.Id);
             if (loteExistente != null)
             {
                 MessageBox.Show("El lote ya existe en la lista.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            // verificar que existan suficientes unidades en el lote
+            // Verificar que existan suficientes unidades en el lote.
 
             var unidadesAVender = int.Parse(unidades_tb.Text);
 
@@ -131,7 +134,7 @@ namespace SivUI
                 return;
             }
 
-            // crear venta
+            // Crear venta.
             var venta = new VentaModelo();
 
             venta.Unidades = unidadesAVender;
@@ -140,17 +143,16 @@ namespace SivUI
 
             ventas.Add(venta);
             CalcularTotal();
+            lote_id_tb.Clear();
+            lote_id_tb.Focus();
+            unidades_tb.Clear();
         }
 
         private void vender_button_Click(object sender, EventArgs e)
         {
-            // verificar que la lista no este vacia
             var listaVentas = ventas.List.OfType<VentaModelo>().ToList();
 
-            if (listaVentas.Count == 0)
-            {
-                return;
-            }
+            if (listaVentas.Count == 0) return;
 
             foreach (VentaModelo venta in ventas)
             {
@@ -174,24 +176,26 @@ namespace SivUI
 
         private void ventas_dtgv_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            // columna precio de venta
+            // Columna precio de venta.
             if (e.ColumnIndex == 3)
             {
-                if (Ayudantes.EsDecimalNoNegativo(e.FormattedValue.ToString()) == false)
+                var precioVenta = e.FormattedValue.ToString();
+                if (Ayudantes.EsDecimalNoNegativo(precioVenta) == false)
                 {
-                    MessageBox.Show("Precio de venta inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     e.Cancel = true;
+                    MessageBox.Show("Precio de venta inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
+
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
-                venta.PrecioVentaUnidad = decimal.Parse(e.FormattedValue.ToString().Trim());
+                venta.PrecioVentaUnidad = decimal.Parse(e.FormattedValue.ToString());
                 CalcularTotal();
             }
 
-            // columna unidades
+            // Columna unidades.
             else if (e.ColumnIndex == 4)
             {
-                var stringUnidadesAVender = e.FormattedValue.ToString().Trim();
+                var stringUnidadesAVender = e.FormattedValue.ToString();
                 if (Ayudantes.EsEnteroPositivo(stringUnidadesAVender) == false)
                 {
                     e.Cancel = true;

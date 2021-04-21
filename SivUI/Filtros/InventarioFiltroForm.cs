@@ -32,10 +32,10 @@ namespace SivUI.Filtros
                 {
                     producto = filtro.Producto;
                     nombre_producto_tb.Text = filtro.Producto.Nombre;
-                }
 
-                filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
-                filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+                    filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
+                    filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+                }
 
                 if (filtro.Categorias != null)
                 {

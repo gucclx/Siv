@@ -36,6 +36,7 @@
             this.resultados_listbox = new System.Windows.Forms.ListBox();
             this.nombre_producto_tb = new System.Windows.Forms.TextBox();
             this.nombre_producto_label = new System.Windows.Forms.Label();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // header_label
@@ -108,12 +109,23 @@
             this.nombre_producto_label.TabIndex = 25;
             this.nombre_producto_label.Text = "Nombre a buscar";
             // 
+            // tarea_label
+            // 
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(442, 9);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 33;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
+            // 
             // BuscarProductoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(521, 353);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.header_label);
             this.Controls.Add(this.resultados_label);
             this.Controls.Add(this.seleccionar_button);
@@ -143,5 +155,6 @@
         private System.Windows.Forms.ListBox resultados_listbox;
         private System.Windows.Forms.TextBox nombre_producto_tb;
         private System.Windows.Forms.Label nombre_producto_label;
+        private System.Windows.Forms.Label tarea_label;
     }
 }

@@ -17,8 +17,8 @@ namespace SivUI.Filtros
     {
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ProductoModelo producto;
-
         ISolicitudFiltro solicitante;
+
         public HistorialLotesFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();
@@ -32,19 +32,19 @@ namespace SivUI.Filtros
                 {
                     if (filtro.FechaInicial != null) { fecha_inicial_dtp.Value = filtro.FechaInicial; }
                     if (filtro.FechaFinal != null) { fecha_final_dtp.Value = filtro.FechaFinal; }
-                }
 
-                filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
-                habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
+                    filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
+                    habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
+                }
 
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {
                     producto = filtro.Producto;
                     nombre_producto_tb.Text = filtro.Producto.Nombre;
-                }
 
-                filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
-                filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+                    filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
+                    filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+                }
 
                 if (filtro.Categorias != null)
                 {
@@ -74,9 +74,6 @@ namespace SivUI.Filtros
 
             filtro.Producto = producto;
             filtro.FiltroPorProducto = filtrar_por_producto_checkbox.Checked;
-
-            //filtro.Categoria = categoria;
-            //filtro.FiltroPorCategoria = filtrar_por_categoria_checkbox.Checked;
 
             filtro.Categorias = categoriasSeleccionadas;
 

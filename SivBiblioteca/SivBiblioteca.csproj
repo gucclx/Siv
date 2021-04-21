@@ -103,7 +103,6 @@
     <Compile Include="Modelos\ReporteInventarioModelo.cs" />
     <Compile Include="Modelos\ReporteLoteModelo.cs" />
     <Compile Include="Modelos\ReporteVentaModelo.cs" />
-    <Compile Include="Modelos\UsuarioModelo.cs" />
     <Compile Include="Modelos\VentaModelo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

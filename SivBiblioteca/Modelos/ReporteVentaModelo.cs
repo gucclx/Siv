@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 namespace SivBiblioteca.Modelos
 {
     /// <summary>
-    /// Representa un reporte de ventas.
-    /// Los atributos especifican los titulos y el orden de las columnas
-    /// a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
+    ///     Representa un reporte de ventas.
+    ///     Los atributos especifican los titulos y el orden de las columnas
+    ///     a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
+    ///     El atributo Ignore le pide a CsvHelper ignorar la propiedad.
     /// </summary>
     public class ReporteVentaModelo
     {
@@ -46,7 +47,7 @@ namespace SivBiblioteca.Modelos
 
         [Name("Ingreso Venta")]
         [Index(6)]
-        public decimal IngresoVenta { get { return PrecioVentaUnidad * UnidadesVendidas; } }
+        public decimal IngresoVenta { get { return UnidadesVendidas * PrecioVentaUnidad; } }
 
         [Name("Ganancia Venta")]
         [Index(7)]

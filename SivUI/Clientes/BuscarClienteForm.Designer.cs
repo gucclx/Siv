@@ -36,6 +36,7 @@
             this.seleccionar_button = new System.Windows.Forms.Button();
             this.resultados_label = new System.Windows.Forms.Label();
             this.header_label = new System.Windows.Forms.Label();
+            this.tarea_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // nombre_completo_tb
@@ -48,7 +49,7 @@
             // nombre_completo_cliente_label
             // 
             this.nombre_completo_cliente_label.AutoSize = true;
-            this.nombre_completo_cliente_label.Location = new System.Drawing.Point(12, 70);
+            this.nombre_completo_cliente_label.Location = new System.Drawing.Point(7, 70);
             this.nombre_completo_cliente_label.Name = "nombre_completo_cliente_label";
             this.nombre_completo_cliente_label.Size = new System.Drawing.Size(157, 25);
             this.nombre_completo_cliente_label.TabIndex = 18;
@@ -104,12 +105,23 @@
             this.header_label.TabIndex = 23;
             this.header_label.Text = "Búsqueda de clientes";
             // 
+            // tarea_label
+            // 
+            this.tarea_label.AutoSize = true;
+            this.tarea_label.Location = new System.Drawing.Point(440, 9);
+            this.tarea_label.Name = "tarea_label";
+            this.tarea_label.Size = new System.Drawing.Size(67, 25);
+            this.tarea_label.TabIndex = 32;
+            this.tarea_label.Text = "[tarea]";
+            this.tarea_label.Visible = false;
+            // 
             // BuscarClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(521, 353);
+            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.header_label);
             this.Controls.Add(this.resultados_label);
             this.Controls.Add(this.seleccionar_button);
@@ -139,5 +151,6 @@
         private System.Windows.Forms.Button seleccionar_button;
         private System.Windows.Forms.Label resultados_label;
         private System.Windows.Forms.Label header_label;
+        private System.Windows.Forms.Label tarea_label;
     }
 }

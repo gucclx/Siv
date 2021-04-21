@@ -21,12 +21,6 @@ namespace SivUI
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            List<CategoriaModelo> cat = null;
-            foreach (var categoria in cat)
-            {
-                var n = categoria.Nombre;
-            }
-            return;
             var con = new SqliteConexion();
             con.lotes_insert_fast();
         }

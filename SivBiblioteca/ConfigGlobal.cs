@@ -12,7 +12,7 @@ namespace SivBiblioteca
     {
         public static IConexionDatos conexion;
 
-        public static void inicializarConexion()
+        public static void InicializarConexion()
         {
             conexion = new SqliteConexion();
         }

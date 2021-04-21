@@ -24,6 +24,9 @@ namespace SivUI
             this.solicitante = solicitante;
         }
 
+        /// <summary>
+        ///     Actualiza la lista de resultados.
+        /// </summary>
         private void ActualizarResultados()
         {
             resultados_listbox.DataSource = null;
@@ -31,6 +34,10 @@ namespace SivUI
             resultados_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
             resultados_listbox.ClearSelected();
         }
+
+        /// <summary>
+        ///     Actualiza la lista de categorias seleccionadas.
+        /// </summary>
         private void ActualizarCategorias()
         {
             categorias_seleccionadas_listbox.DataSource = null;
@@ -38,23 +45,28 @@ namespace SivUI
             categorias_seleccionadas_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
             categorias_seleccionadas_listbox.ClearSelected();
         }
-        private void buscar_button_Click(object sender, EventArgs e)
+        private async void buscar_button_Click(object sender, EventArgs e)
         {
             var nombreCategoria = nombre_categoria_tb.Text.Trim();
             if (string.IsNullOrEmpty(nombreCategoria)) return;
 
+            buscar_button.Enabled = false;
+            ConfigTareaLabel(mensaje: "Buscando categoria...", visible: true);
+
             try
             {
-                resultados = ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombreCategoria);
+                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombreCategoria));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                buscar_button.Enabled = true;
                 return;
             }
             ActualizarResultados();
+            ConfigTareaLabel(visible: false);
+            buscar_button.Enabled = true;
         }
-
         private void agregar_categoria_button_Click(object sender, EventArgs e)
         {
             var seleccion = resultados_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
@@ -82,6 +94,15 @@ namespace SivUI
         {
             solicitante.CategoriasListas(categoriasSeleccionadas);
             this.Close();
+        }
+
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
+        {
+            tarea_label.Visible = visible;
+            tarea_label.Text = mensaje;
+            tarea_label.AutoSize = false;
+            tarea_label.TextAlign = ContentAlignment.MiddleCenter;
+            tarea_label.Dock = DockStyle.Fill;
         }
     }
 }

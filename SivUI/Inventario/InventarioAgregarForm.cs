@@ -19,6 +19,7 @@ namespace SivUI
         {
             InitializeComponent();
             ActualizarUltimoLoteId();
+            unidades_tb.Focus();
         }
 
         /// <summary>
@@ -94,10 +95,10 @@ namespace SivUI
             if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false) return;
             if (Ayudantes.EsDecimalNoNegativo(inversion_total_tb.Text) == false) return;
 
-            int unidades = int.Parse(unidades_tb.Text.Trim());
+            int unidades = int.Parse(unidades_tb.Text);
             if (unidades == 0) return;
 
-            decimal inversion = decimal.Parse(inversion_total_tb.Text.Trim());
+            decimal inversion = decimal.Parse(inversion_total_tb.Text);
             inversion_unidad_tb.Text = (inversion / unidades).ToString();
         }
 

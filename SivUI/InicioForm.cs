@@ -44,22 +44,6 @@ namespace SivUI
             this.Show();
         }
 
-        private void gestionar_ventas_ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            var frm = new VentasForm();
-            this.Hide();
-            frm.ShowDialog();
-            this.Show();
-        }
-
-        private void crear_producto_ToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            var frm = new CrearProductoForm();
-            this.Hide();
-            frm.ShowDialog();
-            this.Show();
-        }
-
         private void historial_ventas_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new VentasForm();
@@ -124,9 +108,17 @@ namespace SivUI
             this.Show();
         }
 
-        private void informacion_lotes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void historial_lotes_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new HistorialLotesForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void crear_producto_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new CrearProductoForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();

@@ -19,6 +19,7 @@ namespace SivUI
         {
             InitializeComponent();
             this.solicitante = solicitante;
+            nombre_cliente_tb.Focus();
         }
 
         private bool ValidarForm()

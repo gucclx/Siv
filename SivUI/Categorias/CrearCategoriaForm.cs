@@ -19,6 +19,7 @@ namespace SivUI
         {
             InitializeComponent();
             this.solicitante = solicitante;
+            nombre_categoria_tb.Focus();
         }
 
         private void ActualizarListaCategorias()

@@ -38,8 +38,7 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
 
-
-            var destino = GuardarDialogo();
+            var destino = DialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);
@@ -50,6 +49,7 @@ namespace SivUI
 
             try
             {
+                // Exportar los resultados mediante paginacion
                 do
                 {
                     reportes = await Task.Run(() =>
@@ -72,7 +72,7 @@ namespace SivUI
         }
 
         /// <summary>
-        /// Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
+        ///     Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
         /// </summary>
         /// <param name="s"></param>
         private void CambiarTareaLabel(string s)
@@ -84,10 +84,10 @@ namespace SivUI
         }
 
         /// <summary>
-        /// Abre un dialogo donde el usuario escoge el destino a guardar la exportacion.
+        ///     Abre un dialogo donde el usuario escoge el destino a guardar la exportacion.
         /// </summary>
         /// <returns> La informacion del destino. Si el usuario no escoge uno se retorna null. </returns>
-        private FileInfo GuardarDialogo()
+        private FileInfo DialogoGuardar()
         {
             using (var dialogGuardar = new SaveFileDialog())
             {
@@ -100,7 +100,7 @@ namespace SivUI
                 {
                     return new FileInfo(dialogGuardar.FileName);
                 }
-                else { return null; }               
+                return null;              
             }           
         }
 
@@ -111,7 +111,7 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
 
-            var destino = GuardarDialogo();
+            var destino = DialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);
@@ -122,6 +122,7 @@ namespace SivUI
 
             try
             {
+                // Guardar los reportes utilizando paginacion.
                 do
                 {
                     reportes = await Task.Run(() =>
@@ -144,8 +145,8 @@ namespace SivUI
         }
 
         /// <summary>
-        /// Deshabilita o habilita los botones de la interfaz dependiendo si se esta exportando o no.
-        /// Hace visible el header label si se esta trabajando. Invisible si no.
+        ///     Deshabilita o habilita los botones de la interfaz dependiendo si se esta exportando o no.
+        ///     Hace visible el header label si se esta trabajando. Invisible si no.
         /// </summary>
         /// <param name="trabajando"> Indica si se esta exportando o no. </param>
         private void Exportando(bool trabajando)
@@ -164,7 +165,7 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
 
-            var destino = GuardarDialogo();
+            var destino = DialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);

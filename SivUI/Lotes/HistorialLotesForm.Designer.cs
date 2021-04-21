@@ -51,11 +51,11 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(387, 9);
+            this.header_label.Location = new System.Drawing.Point(405, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(211, 30);
+            this.header_label.Size = new System.Drawing.Size(174, 30);
             this.header_label.TabIndex = 16;
-            this.header_label.Text = "Información de lotes";
+            this.header_label.Text = "Historial de lotes";
             // 
             // tarea_label
             // 

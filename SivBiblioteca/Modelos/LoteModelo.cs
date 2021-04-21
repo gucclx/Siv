@@ -17,6 +17,5 @@ namespace SivBiblioteca.Modelos
         public decimal InversionUnidad { get { return Inversion / UnidadesCompradas; } }
         public decimal PrecioVentaUnidad { get; set; }
         public string FechaCreacion { get; set; }
-
     }
 }

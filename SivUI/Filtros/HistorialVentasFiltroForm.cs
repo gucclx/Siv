@@ -18,9 +18,7 @@ namespace SivUI
     {
         ProductoModelo producto;
         ClienteModelo cliente;
-        CategoriaModelo categoria;
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
-
         ISolicitudFiltro solicitante;
 
         public HistorialVentasFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
@@ -35,19 +33,19 @@ namespace SivUI
                 {
                     if (filtro.FechaInicial != null) { fecha_inicial_dtp.Value = filtro.FechaInicial; }
                     if (filtro.FechaFinal != null) { fecha_final_dtp.Value = filtro.FechaFinal; }
-                }
 
-                filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
-                habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
+                    filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
+                    habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
+                }
 
                 if (filtro.FiltroPorCliente && filtro.Cliente != null)
                 {
                     cliente = filtro.Cliente;
                     cliente_tb.Text = cliente.NombreCompleto;
-                }
 
-                filtrar_por_cliente_groupbox.Enabled = filtro.FiltroPorCliente;
-                filtrar_por_cliente_checkbox.Checked = filtro.FiltroPorCliente;
+                    filtrar_por_cliente_groupbox.Enabled = filtro.FiltroPorCliente;
+                    filtrar_por_cliente_checkbox.Checked = filtro.FiltroPorCliente;
+                }
 
                 if (filtro.FiltroPorProducto && filtro.Producto != null)
                 {

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace SivBiblioteca.Modelos
 {
     /// <summary>
-    /// Representa un reporte de lotes para presentar un historial 
-    /// de la adquisicion de estos con sus detalles.
-    /// Los atributos especifican los titulos y el orden de las columnas
-    /// a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
+    ///     Representa un reporte de lotes para presentar un historial 
+    ///     de la adquisicion de estos con sus detalles.
+    ///     Los atributos especifican los titulos y el orden de las columnas
+    ///     a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
     /// </summary>
     public class ReporteLoteModelo
     {
@@ -50,6 +50,5 @@ namespace SivBiblioteca.Modelos
         [Name("Fecha agregado")]
         [Index(8)]
         public string FechaAgregado { get; set; }
-
     }
 }

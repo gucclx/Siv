@@ -17,7 +17,7 @@ namespace SivUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ConfigGlobal.inicializarConexion();
+            ConfigGlobal.InicializarConexion();
             Application.Run(new InicioForm());
         }
     }
