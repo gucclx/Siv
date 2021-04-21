@@ -19,7 +19,7 @@ namespace SivBiblioteca.AccesoDatos
     /// Nota - Se utiliza 'case' en algunas condiciones de algunos query
     /// usualmente para obtener un 'mejor' query plan.
     /// 
-    /// ej. En el metodo CargarReporteVentas, Si se filtra por fecha de venta 
+    /// ej. En el metodo CargarReporteVentas, si se filtra por fecha de venta 
     /// y se tiene la condicion productos.id = @ProductoId
     /// el query plan es buscar aquellos lotes asociados con el producto indicado,
     /// luego obtener las ventas a partir de estos lotes y filtrarlas por fecha.
@@ -931,9 +931,13 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarCliente(ClienteModelo cliente)
         {
-            // Validar argumentos.
+           if (cliente == null)
+            {
+                throw new ArgumentException("El cliente fue null.");
+            }
 
             cliente.Nombre = cliente.Nombre.Trim();
+
             if (string.IsNullOrEmpty(cliente.Nombre))
             {
                 throw new ArgumentException("El nombre del cliente no puede estar vacio.");
