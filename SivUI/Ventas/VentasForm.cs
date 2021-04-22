@@ -84,7 +84,7 @@ namespace SivUI
         {
             cargar_reporte_button.Enabled = false;
             LimpiarResultados();
-            ConfigTareaLabel(mensaje:"Extrayendo información de la base de datos...", visible: true);
+            ConfigTareaLabel(mensaje: "Extrayendo información de la base de datos...", visible: true);
 
             try
             {

@@ -42,7 +42,7 @@ namespace SivUI
             if (destino == null) return;
 
             Exportando(true);
-            CambiarTareaLabel("Exportando...");
+            CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
             List<ReporteLoteModelo> reportes;
             int? comienzo = 0;
@@ -63,11 +63,14 @@ namespace SivUI
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Exportando(false);
+                reporteFiltro = null;
+                CambiarTareaLabel(visible: false);
                 return;
             }
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
+            CambiarTareaLabel(visible: false);
             reporteFiltro = null;
         }
 
@@ -75,9 +78,10 @@ namespace SivUI
         ///     Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
         /// </summary>
         /// <param name="s"></param>
-        private void CambiarTareaLabel(string s)
+        private void CambiarTareaLabel(string mensaje = "", bool visible = false)
         {
-            tarea_label.Text = s;
+            tarea_label.Visible = visible;
+            tarea_label.Text = mensaje;
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;
@@ -115,7 +119,7 @@ namespace SivUI
             if (destino == null) return;
 
             Exportando(true);
-            CambiarTareaLabel("Exportando...");
+            CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
             List<ReporteVentaModelo> reportes;
             int? comienzo = 0;
@@ -136,11 +140,14 @@ namespace SivUI
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Exportando(false);
+                reporteFiltro = null;
+                CambiarTareaLabel(visible: false);
                 return;
             }
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
+            CambiarTareaLabel(visible: false);
             reporteFiltro = null;
         }
 
@@ -151,7 +158,6 @@ namespace SivUI
         /// <param name="trabajando"> Indica si se esta exportando o no. </param>
         private void Exportando(bool trabajando)
         {
-            tarea_label.Visible = trabajando;
             header_label.Visible = !trabajando;
             exportar_lotes_button.Enabled = !trabajando;
             exportar_ventas_button.Enabled = !trabajando;
@@ -169,7 +175,7 @@ namespace SivUI
             if (destino == null) return;
 
             Exportando(true);
-            CambiarTareaLabel("Exportando...");
+            CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
             List<ReporteInventarioModelo> inventario;
             int? comienzo = 0;
@@ -189,11 +195,14 @@ namespace SivUI
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Exportando(false);
+                reporteFiltro = null;
+                CambiarTareaLabel(visible: false);
                 return;
             }
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
+            CambiarTareaLabel(visible: false);
             reporteFiltro = null;
         }
     }

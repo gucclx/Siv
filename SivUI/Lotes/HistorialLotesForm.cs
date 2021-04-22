@@ -77,16 +77,13 @@ namespace SivUI
             cargar_reporte_button.Enabled = false;
             LimpiarResultados();
 
+            ConfigTareaLabel(mensaje:"Extrayendo información de la base de datos...", visible: true);
+
             try
             {
-                ConfigTareaLabel("Extrayendo información de la base de datos...");
-
-                // cargar reportes
                 var reportes = await Task.Run(() =>
                     ConfigGlobal.conexion.CargarReporteLotes(reporteFiltro, limiteFilas: LimiteFilasReporte)
                 );
-
-                ConfigTareaLabel(visible: false);
 
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
@@ -99,6 +96,7 @@ namespace SivUI
                 return;
             }
             cargar_reporte_button.Enabled = true;
+            ConfigTareaLabel(visible: false);
         }
 
         private void LimpiarResultados()
@@ -162,10 +160,10 @@ namespace SivUI
             filtros_button.Enabled = !trabajando;
         }
 
-        private void ConfigTareaLabel(string s = "", bool visible = true)
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
         {
             tarea_label.Visible = visible;
-            tarea_label.Text = s;
+            tarea_label.Text = mensaje;
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;

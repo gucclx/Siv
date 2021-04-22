@@ -53,16 +53,13 @@ namespace SivUI.Inventario
             cargar_reporte_button.Enabled = false;
             LimpiarResultados();
 
+            ConfigTareaLabel(mensaje: "Extrayendo información de la base de datos...", visible: true);
+
             try
             {
-                ConfigTareaLabel("Extrayendo información de la base de datos...");
-
-                // cargar reportes
                 var reportes = await Task.Run(() =>
                     ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro)
                 );
-
-                ConfigTareaLabel(visible: false);
 
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
@@ -75,6 +72,7 @@ namespace SivUI.Inventario
                 return;
             }
             cargar_reporte_button.Enabled = true;
+            ConfigTareaLabel(visible: false);
         }
 
         private void LimpiarResultados()
@@ -116,12 +114,12 @@ namespace SivUI.Inventario
         ///     Cambia el texto de tarea_label y hace visible o invisible este label.
         ///     Util para indicar al usuario la tarea que se esta realizando.
         /// </summary>
-        /// <param name="s"> Mensaje a mostrar. </param>
+        /// <param name="mensaje"> Mensaje a mostrar. </param>
         /// <param name="visible"> Si el label es visible o no. </param>
-        private void ConfigTareaLabel(string s = "", bool visible = true)
+        private void ConfigTareaLabel(string mensaje = "", bool visible = true)
         {
             tarea_label.Visible = visible;
-            tarea_label.Text = s;
+            tarea_label.Text = mensaje;
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;
@@ -160,10 +158,12 @@ namespace SivUI.Inventario
                 if (dialogGuardar.ShowDialog() == DialogResult.OK)
                 {
                     FileInfo archivo = new FileInfo(dialogGuardar.FileName);
+
+                    Exportando(true);
+                    ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+
                     try
-                    {
-                        Exportando(true);
-                        ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+                    {       
                         await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
                         MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
