@@ -10,8 +10,6 @@ using Dapper;
 
 namespace SivBiblioteca.AccesoDatos
 {
-    // TODO - preparar pruebas?
-
     /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     /// Nota - Los precios se guardan en la base de datos como enteros.
     ///          Esto se realiza para guardar los precios con una precision fija.
@@ -44,7 +42,8 @@ namespace SivBiblioteca.AccesoDatos
 
     ///  https://stackoverflow.com/a/49861947
 
-    ///  Ni idea si el plan del query sin case se debe a una estructura del query pobre, o un diseno pobre de las tablas lol
+    ///  Ni idea si el plan del query sin case se debe a una estructura del query pobre, 
+    ///  o un diseno pobre de las tablas lol
     ///  ¯\_(ツ)_/¯
     public class SqliteConexion : IConexionDatos
     {
@@ -79,8 +78,12 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> true si existe, false si no. </returns>
         public bool CategoriaExiste(string nombreCategoria)
         {
+            if (string.IsNullOrWhiteSpace(nombreCategoria))
+            {
+                throw new ArgumentException("El nombre de la categoria no puede estar vacio.");
+            }
+
             nombreCategoria = nombreCategoria.Trim();
-            if (string.IsNullOrEmpty(nombreCategoria)) { return false; }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {               
@@ -102,33 +105,27 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("Lista de categorias es nula.");
             }
 
-            foreach (var categoria in categorias)
-            {
-                if (categoria == null)
-                {
-                    throw new ArgumentException("Al menos una categoria en la lista fue null.");
-                }
-
-                categoria.Nombre = categoria.Nombre.Trim();
-
-                if (string.IsNullOrEmpty(categoria.Nombre))
-                {
-                    throw new ArgumentException("Al menos una categoria sin nombre.");
-                }
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "insert into Categorias (Nombre) values (@Nombre)";
                 
                 foreach (var categoria in categorias)
                 {
+                    if (categoria == null)
+                    {
+                        throw new ArgumentException("Al menos una categoria en la lista fue null.");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(categoria.Nombre))
+                    {
+                        throw new ArgumentException("Al menos una categoria en la lista sin nombre.");
+                    }
+                    categoria.Nombre = categoria.Nombre.Trim();
                     conexion.Execute(q, categoria);
                     categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
                 }
             }
         }
-
         /// <summary>
         ///     Elimina de la base de datos una lista de categorias.
         /// </summary>
@@ -143,7 +140,14 @@ namespace SivBiblioteca.AccesoDatos
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "delete from Categorias where Id = @Id";
-                conexion.Execute(q, categorias);               
+                foreach (var categoria in categorias)
+                {
+                    if (categoria == null)
+                    {
+                        throw new ArgumentException("Al menos una categoria en la lista fue null.");
+                    }
+                    conexion.Execute(q, categoria);
+                }                              
             }
         }
 
@@ -158,16 +162,30 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("El producto fue null.");
             }
 
-            producto.Nombre = producto.Nombre.Trim();
-
-            if (string.IsNullOrEmpty(producto.Nombre))
+            if (string.IsNullOrWhiteSpace(producto.Nombre))
             {
                 throw new ArgumentException("El nombre del producto no puede estar vacio.");
             }
 
+            producto.Nombre = producto.Nombre.Trim();
+
             if (ProductoExiste(producto.Nombre))
             {
                 throw new ArgumentException("El nombre del producto ya existe en la base de datos.");
+            }
+
+            var guardarCategorias = false;
+
+            if (producto.Categorias != null)
+            {
+                foreach (var categoria in producto.Categorias)
+                {
+                    if (categoria == null)
+                    {
+                        throw new ArgumentException("Al menos una categoria del producto fue null.");
+                    }
+                }
+                guardarCategorias = true;
             }
                      
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
@@ -185,7 +203,7 @@ namespace SivBiblioteca.AccesoDatos
 
                 producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
 
-                if (producto.Categorias != null)
+                if (guardarCategorias)
                 {
                     q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
                     foreach (var categoria in producto.Categorias)
@@ -252,9 +270,9 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("La lista de ventas fue null.");
             }
 
-            // Validar campos de la venta
             foreach (var venta in ventas)
             {
+                // Validar campos de la venta
                 if (venta == null)
                 {
                     throw new ArgumentException("Al menos una venta en la lista fue null.");
@@ -279,14 +297,13 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, Comentario, ClienteId, Fecha)
-                            values (@LoteId, @Unidades, @PrecioVentaUnidad, @Comentario, @ClienteId, strftime('%s', 'now'))";
-
                 conexion.Open();
                 using (var transaccion = conexion.BeginTransaction())
                 {
                     try
                     {
+                        var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, Comentario, ClienteId, Fecha)
+                            values (@LoteId, @Unidades, @PrecioVentaUnidad, @Comentario, @ClienteId, strftime('%s', 'now'))";
                         foreach (var venta in ventas)
                         {
                             conexion.Execute(q,
@@ -295,7 +312,7 @@ namespace SivBiblioteca.AccesoDatos
                                     LoteId = venta.Lote.Id,
                                     Unidades = venta.Unidades,
                                     PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(venta.PrecioVentaUnidad),
-                                    Comentario = venta.Comentario,
+                                    Comentario = venta.Comentario?.Trim(),
                                     ClienteId = venta.ClienteId
                                 }
                             );
@@ -344,12 +361,13 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("El cliente fue null.");
             }
 
-            cliente.Nombre = cliente.Nombre.Trim();
-
-            if (string.IsNullOrEmpty(cliente.Nombre))
+            if (string.IsNullOrWhiteSpace(cliente.Nombre))
             {
                 throw new ArgumentException("Nombre del cliente vacio.");
             }
+
+            cliente.Nombre = cliente.Nombre.Trim();
+           
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
@@ -365,11 +383,12 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> Lista de clientes encontrados. </returns>
         public List<ClienteModelo> BuscarCliente_PorNombre(string nombre)
         {
-            nombre = nombre.Trim();
-            if (string.IsNullOrEmpty(nombre))
+            if (string.IsNullOrWhiteSpace(nombre))
             {
                 throw new ArgumentException("El nombre a buscar no puede estar vacio.");
             }
+
+            nombre = nombre.Trim();
             
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -606,17 +625,18 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> true si el producto existe, false si no. </returns>
         public bool ProductoExiste(string nombre)
         {
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new ArgumentException("El nombre a buscar no puede estar vacio.");
+            }
+
             nombre = nombre.Trim();
-            if (string.IsNullOrEmpty(nombre)) { return false; }
-
-            bool resultado = false;
-
+            
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select exists (select 1 from Productos where Nombre = @Nombre collate nocase)";
-                resultado = conexion.ExecuteScalar<bool>(q, new { Nombre = nombre });
+                return conexion.ExecuteScalar<bool>(q, new { Nombre = nombre });
             }
-            return resultado;
         }
 
         /// <summary>
@@ -627,12 +647,13 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> Lista de categorias encontradas. </returns>
         public List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre)
         {
-            nombre = nombre.Trim();
-            if (string.IsNullOrEmpty(nombre))
+            if (string.IsNullOrWhiteSpace(nombre))
             {
                 throw new ArgumentException("El nombre de la categoria a buscar no puede estar vacio.");
             }
-            
+
+            nombre = nombre.Trim();
+                      
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select * from Categorias where Nombre like @Nombre";
@@ -759,11 +780,12 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> Los productos encontrados. </returns>
         public List<ProductoModelo> BuscarProducto_PorNombre(string nombre)
         {
-            nombre = nombre.Trim();
-            if (string.IsNullOrEmpty(nombre))
+            if (string.IsNullOrWhiteSpace(nombre))
             {
                 throw new ArgumentException("El nombre del producto a buscar no puede estar vacio.");
             }
+
+            nombre = nombre.Trim();
             
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -789,15 +811,19 @@ namespace SivBiblioteca.AccesoDatos
 
             if (producto.Id < 1)
             {
-                throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1");
+                throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1.");
+            }
+
+            if (string.IsNullOrWhiteSpace(producto.Nombre))
+            {
+                throw new ArgumentException("El nombre del producto no puede estar vacio.");
             }
 
             producto.Nombre = producto.Nombre.Trim();
-            producto.Descripcion = producto.Descripcion.Trim();
 
-            if (string.IsNullOrEmpty(producto.Nombre))
+            if (producto.Descripcion != null)
             {
-                throw new ArgumentException("El nombre del producto no puede estar vacio.");
+                producto.Descripcion = producto.Descripcion.Trim();
             }
 
             // Editar producto.
@@ -821,11 +847,13 @@ namespace SivBiblioteca.AccesoDatos
                         {
                             foreach (var categoria in producto.Categorias)
                             {
-                                if (categoria == null) continue;
+                                if (categoria == null)
+                                {
+                                    throw new ArgumentException("Al menos una categoria del producto fue null.");
+                                }
                                 conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
                             }
-                        }
-                        
+                        }                       
                         transaccion.Commit();
                     }
                     catch
@@ -868,7 +896,8 @@ namespace SivBiblioteca.AccesoDatos
         ///     El lote a editar. Los valores lote.UnidadesDisponibles y lote.PrecioVentaUnidad
         ///     se usan para sobreescribir las respectivas columnas en la tabla lotes 
         ///     de la base de datos, en la respectiva fila identificada por lote.Id.
-        ///     No se permite agregar mas unidades al lote, por lo que lote.UnidadesDisponibles debe ser menor o igual
+        ///     No se permite agregar mas unidades al lote, 
+        ///     por lo que lote.UnidadesDisponibles debe ser menor o igual
         ///     al valor actual almacenado en la base de datos.
         /// </param>
         public void EditarLote(LoteModelo lote)
@@ -936,24 +965,30 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException("El cliente fue null.");
             }
 
-            cliente.Nombre = cliente.Nombre.Trim();
-
-            if (string.IsNullOrEmpty(cliente.Nombre))
-            {
-                throw new ArgumentException("El nombre del cliente no puede estar vacio.");
-            }
             if (cliente.Id < 1)
             {
                 throw new ArgumentException($"Id del cliente invalido: { cliente.Id }, el id no debe ser menor a 1.");
             }
 
+            if (string.IsNullOrWhiteSpace(cliente.Nombre))
+            {
+                throw new ArgumentException("El nombre del cliente no puede estar vacio.");
+            }
+
+            cliente.Nombre = cliente.Nombre.Trim();
+            
             // Editar cliente.
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"update clientes set Nombre = @Nombre, NumeroContacto = @NumeroContacto
                             where Id = @Id";
 
-                var parametros = new { Nombre = cliente.Nombre, NumeroContacto = cliente.NumeroContacto, Id = cliente.Id };
+                var parametros = new 
+                { 
+                    Nombre = cliente.Nombre, 
+                    NumeroContacto = cliente.NumeroContacto?.Trim(),
+                    Id = cliente.Id 
+                };
 
                 conexion.Execute(q, parametros);
             }
@@ -979,7 +1014,8 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Retorna un resumen de productos con informacion como Nombre, unidades disponible, y el valor de estas unidades disponibles.
+        ///     Retorna un resumen de productos con informacion como Nombre, unidades disponible, 
+        ///     y el valor de estas unidades disponibles.
         /// </summary>
         /// <param name="filtro"> 
         ///     Objeto que contiene condiciones para generar los resumenes.
@@ -992,7 +1028,7 @@ namespace SivBiblioteca.AccesoDatos
         ///     Impone la condicion en la columna Productos.Id > comienzo.
         ///     Util para paginar los resultados.
         /// </param>
-        /// <returns></returns>
+        /// <returns> La lista de los reportes generados. </returns>
         public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null)
         {
             var q = @"select productos.id as 'IdProducto', 
@@ -1087,7 +1123,8 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         /// <param name="categorias"> Lista de categorias por las cuales se desea filtrar. </param>
         /// <returns> 
-        ///     Una string sql que representa la condicion necesaria para encontrar los productos asociados con todas las categorias proveidas.
+        ///     Una string sql que representa la condicion necesaria 
+        ///     para encontrar los productos asociados con todas las categorias proveidas.
         /// </returns>
         string CondicionFiltroCategorias(DynamicParameters parametros, List<CategoriaModelo> categorias)
         {

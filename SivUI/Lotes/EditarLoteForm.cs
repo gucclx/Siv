@@ -68,7 +68,7 @@ namespace SivUI
         private void editar_button_Click(object sender, EventArgs e)
         {
             if (lote == null) return;
-            if (Ayudantes.EsEnteroNonegativo(unidades_disponibles_tb.Text) == false)
+            if (Ayudantes.EsEnteroNoNegativo(unidades_disponibles_tb.Text) == false)
             {
                 MessageBox.Show("Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
