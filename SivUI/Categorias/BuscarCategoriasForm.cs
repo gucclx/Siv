@@ -56,6 +56,7 @@ namespace SivUI
             try
             {
                 resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombreCategoria));
+                ActualizarResultados();
             }
             catch (Exception ex)
             {
@@ -63,16 +64,17 @@ namespace SivUI
                 buscar_button.Enabled = true;
                 return;
             }
-            ActualizarResultados();
+            
             ConfigTareaLabel(visible: false);
             buscar_button.Enabled = true;
         }
         private void agregar_categoria_button_Click(object sender, EventArgs e)
         {
             var seleccion = resultados_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
+
             foreach (var categoria in seleccion)
             {
-                if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
+                if (categoriasSeleccionadas.Count > 0 && categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
                 categoriasSeleccionadas.Add(categoria);
                 resultados.Remove(categoria);
             }

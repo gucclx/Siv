@@ -51,6 +51,8 @@ namespace SivUI.Filtros
                     categoriasSeleccionadas = filtro.Categorias;
                     ActualizarCategorias();
                 }
+
+                no_incluir_lotes_sin_unidades_checkbox.Checked = !filtro.IncluirLotesSinUnidades;
             }
         }
 
@@ -77,7 +79,7 @@ namespace SivUI.Filtros
 
             filtro.Categorias = categoriasSeleccionadas;
 
-            filtro.IncluirLotesSinUnidades = !lotes_sin_unidades_checkbox.Checked;
+            filtro.IncluirLotesSinUnidades = !no_incluir_lotes_sin_unidades_checkbox.Checked;
 
             solicitante.FiltroCreado(filtro);
             MessageBox.Show("Filtro configurado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);

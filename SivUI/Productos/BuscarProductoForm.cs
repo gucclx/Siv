@@ -36,7 +36,7 @@ namespace SivUI
             buscar_producto_button.Enabled = !trabajando;
         }
 
-        private void buscar_producto_button_Click(object sender, EventArgs e)
+        private async void buscar_producto_button_Click(object sender, EventArgs e)
         {
             var nombre = nombre_producto_tb.Text.Trim();
 
@@ -47,7 +47,7 @@ namespace SivUI
 
             try
             {
-                resultados = ConfigGlobal.conexion.BuscarProducto_PorNombre(nombre);
+                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarProducto_PorNombre(nombre));
                 ActualizarResultados();
             }
             catch (Exception ex)

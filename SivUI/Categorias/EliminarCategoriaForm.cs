@@ -29,7 +29,8 @@ namespace SivUI
 
         private void eliminar_categoria_button_Click(object sender, EventArgs e)
         {
-            
+            if (categoriasAEliminar.Count < 1) return;
+
             var mensaje = "Las categorias seleccionadas se eliminarán de la base de datos. Estas categorias ya no serán asociadas con ningún producto. ¿Desea continuar?";
             var continuar = MessageBox.Show(mensaje, "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -48,7 +49,7 @@ namespace SivUI
                 return;
             }
 
-            categoriasAEliminar = null;
+            categoriasAEliminar = new List<CategoriaModelo>();
             
             MessageBox.Show("Categorias eliminadas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ActualizarListaCategorias();

@@ -87,7 +87,7 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {               
-                var q = "select exists (select 1 from Categorias where Nombre = @Nombre collate nocase)";
+                var q = "select exists (select 1 from Categorias where Nombre = @Nombre)";
                 return conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
             }
         }
@@ -121,6 +121,12 @@ namespace SivBiblioteca.AccesoDatos
                         throw new ArgumentException("Al menos una categoria en la lista sin nombre.");
                     }
                     categoria.Nombre = categoria.Nombre.Trim();
+
+                    if (CategoriaExiste(categoria.Nombre))
+                    {
+                        throw new ArgumentException("El nombre de la categoria ya existe en la base de datos.");
+                    }
+
                     conexion.Execute(q, categoria);
                     categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
                 }
@@ -380,8 +386,9 @@ namespace SivBiblioteca.AccesoDatos
         ///     Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
         /// </summary>
         /// <param name="nombre"> El nombre a buscar. </param>
+        /// <param name="limiteFilas"> Limite de filas a retonar. </param>
         /// <returns> Lista de clientes encontrados. </returns>
-        public List<ClienteModelo> BuscarCliente_PorNombre(string nombre)
+        public List<ClienteModelo> BuscarCliente_PorNombre(string nombre, int limiteFilas = 10)
         {
             if (string.IsNullOrWhiteSpace(nombre))
             {
@@ -392,8 +399,9 @@ namespace SivBiblioteca.AccesoDatos
             
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre";
-                return conexion.Query<ClienteModelo>(q, new { Nombre = '%' + nombre + '%'}).ToList();
+                var q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre limit @limiteFilas";
+                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
+                return conexion.Query<ClienteModelo>(q, parametros).ToList();
             }
         }
 
@@ -644,8 +652,9 @@ namespace SivBiblioteca.AccesoDatos
         ///     cuyos nombres contienen el parametro 'nombre'.
         /// </summary>
         /// <param name="nombre"> Nombre a buscar. </param>
+        /// <param name="limiteFilas"> Limite de filas a retornar. </param>
         /// <returns> Lista de categorias encontradas. </returns>
-        public List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre)
+        public List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre, int limiteFilas = 10)
         {
             if (string.IsNullOrWhiteSpace(nombre))
             {
@@ -656,8 +665,11 @@ namespace SivBiblioteca.AccesoDatos
                       
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = "select * from Categorias where Nombre like @Nombre";
-                return conexion.Query<CategoriaModelo>(q, new { Nombre = '%' + nombre + '%' }).ToList();
+                var q = "select * from Categorias where Nombre like @Nombre limit @limiteFilas";
+
+                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
+
+                return conexion.Query<CategoriaModelo>(q, parametros).ToList();
             }
         }
 
@@ -777,8 +789,9 @@ namespace SivBiblioteca.AccesoDatos
         /// Carga y retorna una lista de productos cuyo nombre contiene el parametro 'nombre'.
         /// </summary>
         /// <param name="nombre"> Nombre del producto a buscar. </param>
+        /// <param name="limiteFilas"> Limite de filas a retornar. </param>
         /// <returns> Los productos encontrados. </returns>
-        public List<ProductoModelo> BuscarProducto_PorNombre(string nombre)
+        public List<ProductoModelo> BuscarProducto_PorNombre(string nombre, int limiteFilas = 10)
         {
             if (string.IsNullOrWhiteSpace(nombre))
             {
@@ -789,8 +802,9 @@ namespace SivBiblioteca.AccesoDatos
             
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = "select * from Productos where Nombre like @Nombre";
-                return conexion.Query<ProductoModelo>(q, new { Nombre = '%' + nombre + '%' }).ToList();
+                var q = "select * from Productos where Nombre like @Nombre limit @limiteFilas";
+                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
+                return conexion.Query<ProductoModelo>(q, parametros).ToList();
             }
         }
 
@@ -994,19 +1008,26 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
-        public void lotes_insert_fast()
+        public void populate()
         {
             SQLiteConnection con = new SQLiteConnection(stringConexion);
 
-            SQLiteCommand cmd = new SQLiteCommand(@"insert into lotes(productoId, UnidadesDisponibles, UnidadesCompradas, FechaCreacion, inversion) 
+            SQLiteCommand cmd1 = new SQLiteCommand(@"insert into lotes(productoId, UnidadesDisponibles, UnidadesCompradas, FechaCreacion, inversion) 
                                                     values(1, 1, 1, 1, 9223372036854775807)", con);
 
             con.Open();
             var trans = con.BeginTransaction();
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 10000; i++)
             {
-                cmd.ExecuteNonQuery();
+                cmd1.ExecuteNonQuery();
+                SQLiteCommand cmd2 = new SQLiteCommand($@"insert into productos (nombre, fechaCreacion) values ('producto{i}', 1) ", con);
+                cmd2.ExecuteNonQuery();
+                SQLiteCommand cmd3 = new SQLiteCommand($@"insert into categorias (nombre) values ('categoria{i}') ", con);
+                cmd3.ExecuteNonQuery();
+
+                SQLiteCommand cmd4 = new SQLiteCommand($@"insert into ventas (loteId, unidades, precioVentaUnidad, fecha) values (1, 1, 1, 1)", con);
+                cmd4.ExecuteNonQuery();
             }
 
             trans.Commit();

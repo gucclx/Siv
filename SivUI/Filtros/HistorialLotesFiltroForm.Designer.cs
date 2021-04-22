@@ -42,7 +42,7 @@
             this.fecha_inicial_dtp = new System.Windows.Forms.DateTimePicker();
             this.listo_button = new System.Windows.Forms.Button();
             this.general_groupbox = new System.Windows.Forms.GroupBox();
-            this.lotes_sin_unidades_checkbox = new System.Windows.Forms.CheckBox();
+            this.no_incluir_lotes_sin_unidades_checkbox = new System.Windows.Forms.CheckBox();
             this.categorias_seleccionadas_label = new System.Windows.Forms.Label();
             this.categorias_seleccionadas_listbox = new System.Windows.Forms.ListBox();
             this.agregar_categorias_linklabel = new System.Windows.Forms.LinkLabel();
@@ -195,7 +195,7 @@
             // 
             // general_groupbox
             // 
-            this.general_groupbox.Controls.Add(this.lotes_sin_unidades_checkbox);
+            this.general_groupbox.Controls.Add(this.no_incluir_lotes_sin_unidades_checkbox);
             this.general_groupbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.general_groupbox.Location = new System.Drawing.Point(333, 203);
             this.general_groupbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
@@ -206,17 +206,17 @@
             this.general_groupbox.TabStop = false;
             this.general_groupbox.Text = "Generales";
             // 
-            // lotes_sin_unidades_checkbox
+            // no_incluir_lotes_sin_unidades_checkbox
             // 
-            this.lotes_sin_unidades_checkbox.AutoSize = true;
-            this.lotes_sin_unidades_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lotes_sin_unidades_checkbox.Location = new System.Drawing.Point(16, 34);
-            this.lotes_sin_unidades_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.lotes_sin_unidades_checkbox.Name = "lotes_sin_unidades_checkbox";
-            this.lotes_sin_unidades_checkbox.Size = new System.Drawing.Size(276, 25);
-            this.lotes_sin_unidades_checkbox.TabIndex = 48;
-            this.lotes_sin_unidades_checkbox.Text = "Solo lotes con unidades disponibles";
-            this.lotes_sin_unidades_checkbox.UseVisualStyleBackColor = true;
+            this.no_incluir_lotes_sin_unidades_checkbox.AutoSize = true;
+            this.no_incluir_lotes_sin_unidades_checkbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.no_incluir_lotes_sin_unidades_checkbox.Location = new System.Drawing.Point(16, 34);
+            this.no_incluir_lotes_sin_unidades_checkbox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.no_incluir_lotes_sin_unidades_checkbox.Name = "no_incluir_lotes_sin_unidades_checkbox";
+            this.no_incluir_lotes_sin_unidades_checkbox.Size = new System.Drawing.Size(276, 25);
+            this.no_incluir_lotes_sin_unidades_checkbox.TabIndex = 48;
+            this.no_incluir_lotes_sin_unidades_checkbox.Text = "Solo lotes con unidades disponibles";
+            this.no_incluir_lotes_sin_unidades_checkbox.UseVisualStyleBackColor = true;
             // 
             // categorias_seleccionadas_label
             // 
@@ -316,7 +316,7 @@
         private System.Windows.Forms.DateTimePicker fecha_inicial_dtp;
         private System.Windows.Forms.Button listo_button;
         private System.Windows.Forms.GroupBox general_groupbox;
-        private System.Windows.Forms.CheckBox lotes_sin_unidades_checkbox;
+        private System.Windows.Forms.CheckBox no_incluir_lotes_sin_unidades_checkbox;
         private System.Windows.Forms.Label categorias_seleccionadas_label;
         private System.Windows.Forms.ListBox categorias_seleccionadas_listbox;
         private System.Windows.Forms.LinkLabel agregar_categorias_linklabel;

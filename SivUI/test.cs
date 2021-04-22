@@ -22,7 +22,7 @@ namespace SivUI
         private void button1_Click_1(object sender, EventArgs e)
         {
             var con = new SqliteConexion();
-            con.lotes_insert_fast();
+            con.populate();
         }
     }
 }

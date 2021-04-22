@@ -84,12 +84,13 @@
             // 
             // resultados_listbox
             // 
+            this.resultados_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resultados_listbox.FormattingEnabled = true;
-            this.resultados_listbox.ItemHeight = 25;
+            this.resultados_listbox.ItemHeight = 21;
             this.resultados_listbox.Location = new System.Drawing.Point(23, 177);
             this.resultados_listbox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.resultados_listbox.Name = "resultados_listbox";
-            this.resultados_listbox.Size = new System.Drawing.Size(479, 104);
+            this.resultados_listbox.Size = new System.Drawing.Size(479, 88);
             this.resultados_listbox.TabIndex = 26;
             // 
             // nombre_producto_tb
