@@ -68,8 +68,8 @@ namespace SivBiblioteca.AccesoDatos
         // Factor de conversion para convertir los precios.
         static int FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
-        // El precio o valor maximo que se puede representar en la base de datos.
-        static decimal MonedaMaximo = Int64.MaxValue / FactorConversion;
+        // Valor maximo de la moneda que se puede representar.
+        decimal MonedaMaximo = decimal.Divide(Int64.MaxValue, FactorConversion);
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -279,17 +279,18 @@ namespace SivBiblioteca.AccesoDatos
             foreach (var venta in ventas)
             {
                 // Validar campos de la venta
+
                 if (venta == null)
                 {
                     throw new ArgumentException("Al menos una venta en la lista fue null.");
                 }
                 if (venta.Unidades < 1)
                 {
-                    throw new Exception($"Unidades solicitadas invalidas: {venta.Unidades}, el valor debe ser positivo.");
+                    throw new ArgumentException($"Unidades solicitadas invalidas: {venta.Unidades}, el valor debe ser positivo.");
                 }
                 if (venta.Total < 0)
                 {
-                    throw new Exception($"Total de la venta invalido: {venta.Total}, solo valores no negativos.");
+                    throw new ArgumentException($"Total de la venta invalido: {venta.Total}, solo valores no negativos.");
                 }
                 if (venta.Lote == null)
                 {
@@ -297,7 +298,11 @@ namespace SivBiblioteca.AccesoDatos
                 }
                 if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
                 {
-                    throw new Exception($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
+                    throw new ArgumentException($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
+                }
+                if (venta.PrecioVentaUnidad > MonedaMaximo)
+                {
+                    throw new OverflowException("Precio de venta de la unidad demasiado grande.");
                 }
             }
 
@@ -576,38 +581,25 @@ namespace SivBiblioteca.AccesoDatos
                 throw new ArgumentException($"Inversion invalida: {lote.Inversion}, la inversion no debe ser negativa.");
             }
 
+            if (lote.Inversion > MonedaMaximo)
+            {
+                throw new OverflowException("El valor de la inversión del lote es demasiado grande.");
+            }
+
             if (lote.PrecioVentaUnidad < 0)
             {
                 throw new ArgumentException($"Precio de venta invalido: {lote.PrecioVentaUnidad}, el precio de venta por unidad no debe ser negativo.");
+            }
+
+            if (lote.PrecioVentaUnidad > MonedaMaximo)
+            {
+                throw new OverflowException("Precio de venta de la unidad demasiado grande.");
             }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, Inversion, PrecioVentaUnidad, FechaCreacion)
                             values (@ProductoId, @UnidadesCompradas, @UnidadesDisponibles, @Inversion, @PrecioVentaUnidad, strftime('%s', 'now'))";
-
-                long inversion;
-                long precioVenta;
-
-                // Validar que la inversion del lote no sea demasiado grande.
-                try
-                {
-                    inversion = ConvertirMonedaARepresentacionInterna(lote.Inversion);
-                }
-                catch (OverflowException)
-                {
-                    throw new Exception($"El valor de la inversión es demasiado grande. Valor máximo: { MonedaMaximo }");
-                }
-
-                // Validar que el precio de venta de las unidades no se demasiado grande.
-                try
-                {
-                    precioVenta = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad);
-                }
-                catch (OverflowException)
-                {
-                    throw new Exception($"El precio de venta de la unidad es demasiado grande. Precio máximo: { MonedaMaximo }");
-                }
 
                 lote.UnidadesDisponibles = lote.UnidadesCompradas;
 
@@ -617,8 +609,8 @@ namespace SivBiblioteca.AccesoDatos
                     ProductoId = lote.Producto.Id,
                     UnidadesCompradas = lote.UnidadesCompradas,
                     UnidadesDisponibles = lote.UnidadesDisponibles,
-                    Inversion = inversion,
-                    PrecioVentaUnidad = precioVenta
+                    Inversion = ConvertirMonedaARepresentacionInterna(lote.Inversion),
+                    PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad)
                 });
 
                 q = "select max(Id) from Lotes";
@@ -934,6 +926,10 @@ namespace SivBiblioteca.AccesoDatos
             {
                 throw new ArgumentException($"Precio de venta por unidad invalido: { lote.PrecioVentaUnidad}, el precio no puede ser negativo.");
             }
+            if (lote.PrecioVentaUnidad > MonedaMaximo)
+            {
+                throw new OverflowException("Precio de venta de la unidad demasiado grande.");
+            }
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -951,8 +947,10 @@ namespace SivBiblioteca.AccesoDatos
                 }
 
                 // Editar lote.
+
                 q = @"update lotes set UnidadesDisponibles = @UnidadesDisponibles, 
                         PrecioVentaUnidad = @PrecioVentaUnidad where Id = @Id";
+                
                 conexion.Execute(q, 
                     new
                     { UnidadesDisponibles = lote.UnidadesDisponibles,

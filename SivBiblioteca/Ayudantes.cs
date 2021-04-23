@@ -16,30 +16,38 @@ namespace SivBiblioteca
     {
         public static bool EsEnteroPositivo(string x)
         {
+            if (x == null) return false;
+
             x = string.Concat(x.Where(c => !char.IsWhiteSpace(c)));
 
             if (string.IsNullOrEmpty(x)) return false;
 
-            long intX = 0;
-            bool xEsEntero = long.TryParse(x, out intX);
+            int intX = 0;
+            bool xEsEntero = int.TryParse(x, out intX);
 
             return xEsEntero && (intX > 0);
         }
 
         public static bool EsEnteroNoNegativo(string x)
         {
+            if (x == null) return false;
+
             x = string.Concat(x.Where(c => !char.IsWhiteSpace(c)));
+
             if (string.IsNullOrEmpty(x)) return false;
 
-            long intX = 0;
-            bool xEsEntero = long.TryParse(x, out intX);
+            int intX = 0;
+            bool xEsEntero = int.TryParse(x, out intX);
 
             return xEsEntero && (intX >= 0);
         }
 
         public static bool EsDecimalNoNegativo(string x)
         {
-            x = x.Trim();
+            if (x == null) return false;
+
+            x = string.Concat(x.Where(c => !char.IsWhiteSpace(c)));
+
             if (string.IsNullOrEmpty(x)) return false;
 
             decimal decimalX = 0;

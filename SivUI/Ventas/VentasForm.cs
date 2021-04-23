@@ -118,6 +118,10 @@ namespace SivUI
             resultados_dtgv.DataSource = null;
             resultados_dtgv.Rows.Clear();
             GC.Collect();
+
+            total_ingreso_tb.Text = "N/A";
+            total_ganancia_tb.Text = "N/A";
+            total_inversion_tb.Text = "N/A";
         }
 
         private void filtros_button_Click(object sender, EventArgs e)

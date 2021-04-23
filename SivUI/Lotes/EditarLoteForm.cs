@@ -97,9 +97,15 @@ namespace SivUI
             {
                 ConfigGlobal.conexion.EditarLote(lote);
             }
-            catch (Exception ex)
+            catch (OverflowException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -58,7 +58,7 @@ namespace SivUI
         private void buscar_categoria_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarCategoriasForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         public void CategoriasListas(List<CategoriaModelo> categorias)

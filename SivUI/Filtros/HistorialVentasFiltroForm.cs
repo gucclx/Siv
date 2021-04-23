@@ -93,7 +93,7 @@ namespace SivUI
         private void buscar_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarClienteForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         public void ClienteListo(ClienteModelo cliente)

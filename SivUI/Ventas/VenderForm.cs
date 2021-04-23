@@ -164,7 +164,12 @@ namespace SivUI
             {
                 ConfigGlobal.conexion.GuardarVentas(listaVentas);
             }
-            catch (Exception ex)
+            catch (OverflowException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -228,7 +233,7 @@ namespace SivUI
         private void buscar_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new BuscarClienteForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         private void LimpiarForm()
@@ -254,7 +259,7 @@ namespace SivUI
         private void crear_nuevo_cliente_label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var frm = new CrearClienteForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         private void limpiar_cliente_button_Click(object sender, EventArgs e)
