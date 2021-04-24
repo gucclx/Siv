@@ -163,6 +163,12 @@
     <Compile Include="Lotes\HistorialLotesForm.Designer.cs">
       <DependentUpon>HistorialLotesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ventas\EliminarVentaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventas\EliminarVentaForm.Designer.cs">
+      <DependentUpon>EliminarVentaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ventas\VentasForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -249,6 +255,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Lotes\HistorialLotesForm.resx">
       <DependentUpon>HistorialLotesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventas\EliminarVentaForm.resx">
+      <DependentUpon>EliminarVentaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ventas\VentasForm.resx">
       <DependentUpon>VentasForm.cs</DependentUpon>

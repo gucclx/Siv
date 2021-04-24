@@ -20,7 +20,8 @@ namespace SivUI
     {
         ReporteFiltroModelo reporteFiltro;
 
-        const int LimiteFilas = 100_000;
+        // todo - cambiar a 100_000
+        const int LimiteFilas = 5;
         public ExportarForm()
         {
             InitializeComponent();
@@ -122,7 +123,7 @@ namespace SivUI
             CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
             List<ReporteVentaModelo> reportes;
-            int? comienzo = 0;
+            int? comienzo = null;
 
             try
             {
@@ -133,7 +134,7 @@ namespace SivUI
                         ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
                     );
                     await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
-                    comienzo = reportes.LastOrDefault()?.LoteId;
+                    comienzo = reportes.LastOrDefault()?.VentaId;
                 } while (reportes.Count > 0);
             }
             catch (Exception ex)
@@ -188,7 +189,7 @@ namespace SivUI
                         ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
                     );
                     await Ayudantes.GuardarCsvReporteAsync(inventario, destino);
-                    comienzo = inventario.LastOrDefault()?.IdProducto;
+                    comienzo = inventario.LastOrDefault()?.ProductoId;
                 } while (inventario.Count > 0);
             }
             catch (Exception ex)

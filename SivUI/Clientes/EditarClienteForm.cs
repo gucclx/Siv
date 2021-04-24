@@ -25,9 +25,10 @@ namespace SivUI
             if (cliente == null) return;
 
             this.cliente = cliente;
-            nombre_cliente_tb.Text = cliente.Nombre;
+            nombre_cliente_tb.Text = cliente.NombreCompleto;
             numero_actual_tb.Text = cliente.NumeroContacto;
             nuevo_nombre_tb.Text = cliente.Nombre;
+            nuevo_apellido_tb.Text = cliente.Apellido;
             nuevo_numero_tb.Text = cliente.NumeroContacto;
         }
 
@@ -43,6 +44,7 @@ namespace SivUI
 
             var nuevoNombre = nuevo_nombre_tb.Text.Trim();
             var nuevoNumero = nuevo_numero_tb.Text.Trim();
+            var nuevoApellido = nuevo_apellido_tb.Text.Trim();
 
             if (string.IsNullOrEmpty(nuevoNombre))
             {
@@ -51,6 +53,7 @@ namespace SivUI
             }
 
             cliente.Nombre = nuevoNombre;
+            cliente.Apellido = nuevoApellido;
             cliente.NumeroContacto = nuevoNumero;
 
             try
@@ -71,6 +74,7 @@ namespace SivUI
         {
             nombre_cliente_tb.Clear();
             nuevo_nombre_tb.Clear();
+            nuevo_apellido_tb.Clear();
             numero_actual_tb.Clear();
             nuevo_numero_tb.Clear();
             cliente = null;

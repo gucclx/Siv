@@ -17,7 +17,7 @@ namespace SivBiblioteca.Modelos
     public class ReporteInventarioModelo
     {
         [Ignore]
-        public int IdProducto { get; set; }
+        public int ProductoId { get; set; }
 
         [Name("Producto")]
         [Index(0)]

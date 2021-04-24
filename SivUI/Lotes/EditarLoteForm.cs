@@ -25,7 +25,7 @@ namespace SivUI
         {
             if (Ayudantes.EsEnteroPositivo(lote_id_tb.Text) == false)
             {
-                MessageBox.Show("ID del lote inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("ID del lote inválido", "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -37,6 +37,7 @@ namespace SivUI
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             if (lote == null)

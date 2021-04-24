@@ -30,5 +30,7 @@ namespace SivBiblioteca.AccesoDatos
         void EditarLote(LoteModelo lote);
         void EditarCliente(ClienteModelo cliente);
         List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null);
+        VentaModelo CargarVenta_PorId(int id);
+        void EliminarVenta(int id);
     }
 }

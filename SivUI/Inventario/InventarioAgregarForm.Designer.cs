@@ -122,9 +122,9 @@
             this.precio_venta_defecto_label.AutoSize = true;
             this.precio_venta_defecto_label.Location = new System.Drawing.Point(496, 76);
             this.precio_venta_defecto_label.Name = "precio_venta_defecto_label";
-            this.precio_venta_defecto_label.Size = new System.Drawing.Size(222, 25);
+            this.precio_venta_defecto_label.Size = new System.Drawing.Size(163, 25);
             this.precio_venta_defecto_label.TabIndex = 7;
-            this.precio_venta_defecto_label.Text = "Precio de venta (defecto)";
+            this.precio_venta_defecto_label.Text = "Precio por unidad";
             // 
             // agregar_al_inventario_button
             // 

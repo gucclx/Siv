@@ -23,7 +23,7 @@ namespace SivUI
         }
 
         /// <summary>
-        /// Actualiza el textbox que expone el id del ultimo producto insertado en la base de datos
+        /// Actualiza el textbox que expone el id del ultimo lote insertado en la base de datos.
         /// </summary>
         private void ActualizarUltimoLoteId()
         {
@@ -61,25 +61,25 @@ namespace SivUI
             if (producto == null)
             {
                 esFormValido = false;
-                MessageBox.Show($"Debe seleccionar un producto.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Debe seleccionar un producto.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             if (Ayudantes.EsEnteroPositivo(unidades_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Cantidad de unidades inválida.", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Information);
+                MessageBox.Show("Cantidad de unidades inválida.", "Cantidad inválida", MessageBoxButtons.OK,  MessageBoxIcon.Exclamation);
             }
 
             if (Ayudantes.EsDecimalNoNegativo(inversion_total_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Inversión total inválida.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Inversión total inválida.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             if (Ayudantes.EsDecimalNoNegativo(precio_venta_defecto_tb.Text) == false)
             {
                 esFormValido = false;
-                MessageBox.Show("Precio de venta inválido.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Precio de venta inválido.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             return esFormValido;
         }

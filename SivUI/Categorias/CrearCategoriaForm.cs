@@ -75,7 +75,7 @@ namespace SivUI
             // existe la categoria en la base de datos?
             if (ConfigGlobal.conexion.CategoriaExiste(categoriaNombre))
             {
-                MessageBox.Show("La categoria ya existe en la base de datos", "Categoria existente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("La categoria ya existe en la base de datos", "Categoria existente", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
             return true;

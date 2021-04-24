@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InicioForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.productosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.crear_producto_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +42,7 @@
             this.ventasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.venderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historial_ventas_ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.eliminar_venta_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.categoriasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.crear_categorias_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,14 +82,14 @@
             // crear_producto_ToolStripMenuItem
             // 
             this.crear_producto_ToolStripMenuItem.Name = "crear_producto_ToolStripMenuItem";
-            this.crear_producto_ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.crear_producto_ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.crear_producto_ToolStripMenuItem.Text = "Crear";
             this.crear_producto_ToolStripMenuItem.Click += new System.EventHandler(this.crear_producto_ToolStripMenuItem_Click);
             // 
             // editar_producto_ToolStripMenuItem
             // 
             this.editar_producto_ToolStripMenuItem.Name = "editar_producto_ToolStripMenuItem";
-            this.editar_producto_ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editar_producto_ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.editar_producto_ToolStripMenuItem.Text = "Editar";
             this.editar_producto_ToolStripMenuItem.Click += new System.EventHandler(this.editar_producto_ToolStripMenuItem_Click);
             // 
@@ -141,7 +143,8 @@
             // 
             this.ventasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.venderToolStripMenuItem,
-            this.historial_ventas_ToolStripMenuItem1});
+            this.historial_ventas_ToolStripMenuItem1,
+            this.eliminar_venta_ToolStripMenuItem});
             this.ventasToolStripMenuItem.Name = "ventasToolStripMenuItem";
             this.ventasToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.ventasToolStripMenuItem.Text = "Ventas";
@@ -159,6 +162,13 @@
             this.historial_ventas_ToolStripMenuItem1.Size = new System.Drawing.Size(118, 22);
             this.historial_ventas_ToolStripMenuItem1.Text = "Historial";
             this.historial_ventas_ToolStripMenuItem1.Click += new System.EventHandler(this.historial_ventas_ToolStripMenuItem_Click);
+            // 
+            // eliminar_venta_ToolStripMenuItem
+            // 
+            this.eliminar_venta_ToolStripMenuItem.Name = "eliminar_venta_ToolStripMenuItem";
+            this.eliminar_venta_ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.eliminar_venta_ToolStripMenuItem.Text = "Eliminar";
+            this.eliminar_venta_ToolStripMenuItem.Click += new System.EventHandler(this.eliminar_venta_ToolStripMenuItem_Click);
             // 
             // exportarToolStripMenuItem
             // 
@@ -223,6 +233,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "InicioForm";
@@ -257,5 +268,6 @@
         private System.Windows.Forms.ToolStripMenuItem editar_lotes_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ver_inventario_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem historial_lotes_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eliminar_venta_ToolStripMenuItem;
     }
 }

@@ -28,6 +28,10 @@ namespace SivUI
 
             // Inicializar columnas.
 
+            var ventaIdColumna = new DataGridViewTextBoxColumn();
+            ventaIdColumna.HeaderText = "ID venta";
+            ventaIdColumna.DataPropertyName = nameof(ReporteVentaModelo.VentaId);
+
             var loteIdColumna = new DataGridViewTextBoxColumn();
             loteIdColumna.HeaderText = "ID Lote";
             loteIdColumna.DataPropertyName = nameof(ReporteVentaModelo.LoteId);
@@ -68,6 +72,7 @@ namespace SivUI
             nombreClienteColumna.HeaderText = "Cliente";
             nombreClienteColumna.DataPropertyName = nameof(ReporteVentaModelo.NombreCliente);
 
+            resultados_dtgv.Columns.Add(ventaIdColumna);
             resultados_dtgv.Columns.Add(loteIdColumna);
             resultados_dtgv.Columns.Add(nombreProductoColumna);
             resultados_dtgv.Columns.Add(unidadesVendidasColumna);
@@ -122,6 +127,7 @@ namespace SivUI
             total_ingreso_tb.Text = "N/A";
             total_ganancia_tb.Text = "N/A";
             total_inversion_tb.Text = "N/A";
+            ventas_cantidad_tb.Text = "N/A";
         }
 
         private void filtros_button_Click(object sender, EventArgs e)
@@ -151,6 +157,7 @@ namespace SivUI
             total_ganancia_tb.Text = totalGanancia.ToString();
             total_ingreso_tb.Text = totalIngreso.ToString();
             total_inversion_tb.Text = totalInversion.ToString();
+            ventas_cantidad_tb.Text = resultados.List.Count.ToString();
         }
 
         public void FiltroCreado(ReporteFiltroModelo filtro)

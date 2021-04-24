@@ -38,6 +38,11 @@ namespace SivUI
 
         private async void buscar_producto_button_Click(object sender, EventArgs e)
         {
+            await BuscarProducto();
+        }
+
+        private async Task BuscarProducto()
+        {
             var nombre = nombre_producto_tb.Text.Trim();
 
             if (string.IsNullOrEmpty(nombre)) return;
@@ -73,6 +78,15 @@ namespace SivUI
             tarea_label.AutoSize = false;
             tarea_label.TextAlign = ContentAlignment.MiddleCenter;
             tarea_label.Dock = DockStyle.Fill;
+        }
+
+        private async void nombre_producto_tb_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                await BuscarProducto();
+                
+            }
         }
     }
 }

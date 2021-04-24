@@ -43,6 +43,8 @@
             this.exportar_button = new System.Windows.Forms.Button();
             this.limpiar_button = new System.Windows.Forms.Button();
             this.tarea_label = new System.Windows.Forms.Label();
+            this.ventas_cantidad_tb = new System.Windows.Forms.TextBox();
+            this.cantidad_ventas_label = new System.Windows.Forms.Label();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -118,7 +120,7 @@
             this.total_ganancia_label.Name = "total_ganancia_label";
             this.total_ganancia_label.Size = new System.Drawing.Size(134, 25);
             this.total_ganancia_label.TabIndex = 16;
-            this.total_ganancia_label.Text = "Total ganancia";
+            this.total_ganancia_label.Text = "Ganancia total";
             // 
             // total_ingreso_tb
             // 
@@ -134,9 +136,10 @@
             this.total_ingreso_label.AutoSize = true;
             this.total_ingreso_label.Location = new System.Drawing.Point(717, 388);
             this.total_ingreso_label.Name = "total_ingreso_label";
-            this.total_ingreso_label.Size = new System.Drawing.Size(120, 25);
+            this.total_ingreso_label.Size = new System.Drawing.Size(118, 25);
             this.total_ingreso_label.TabIndex = 18;
-            this.total_ingreso_label.Text = "Total ingreso";
+            this.total_ingreso_label.Text = "Ingreso total";
+            this.total_ingreso_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // total_inversion_tb
             // 
@@ -152,9 +155,9 @@
             this.total_inversion_label.AutoSize = true;
             this.total_inversion_label.Location = new System.Drawing.Point(582, 388);
             this.total_inversion_label.Name = "total_inversion_label";
-            this.total_inversion_label.Size = new System.Drawing.Size(134, 25);
+            this.total_inversion_label.Size = new System.Drawing.Size(132, 25);
             this.total_inversion_label.TabIndex = 20;
-            this.total_inversion_label.Text = "Total inversión";
+            this.total_inversion_label.Text = "Inversión total";
             // 
             // exportar_button
             // 
@@ -188,6 +191,24 @@
             this.tarea_label.Text = "[tarea]";
             this.tarea_label.Visible = false;
             // 
+            // ventas_cantidad_tb
+            // 
+            this.ventas_cantidad_tb.Location = new System.Drawing.Point(498, 416);
+            this.ventas_cantidad_tb.Name = "ventas_cantidad_tb";
+            this.ventas_cantidad_tb.ReadOnly = true;
+            this.ventas_cantidad_tb.Size = new System.Drawing.Size(83, 33);
+            this.ventas_cantidad_tb.TabIndex = 26;
+            this.ventas_cantidad_tb.Text = "N/A";
+            // 
+            // cantidad_ventas_label
+            // 
+            this.cantidad_ventas_label.AutoSize = true;
+            this.cantidad_ventas_label.Location = new System.Drawing.Point(493, 388);
+            this.cantidad_ventas_label.Name = "cantidad_ventas_label";
+            this.cantidad_ventas_label.Size = new System.Drawing.Size(68, 25);
+            this.cantidad_ventas_label.TabIndex = 25;
+            this.cantidad_ventas_label.Text = "Ventas";
+            // 
             // VentasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
@@ -196,6 +217,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
             this.Controls.Add(this.tarea_label);
+            this.Controls.Add(this.ventas_cantidad_tb);
+            this.Controls.Add(this.cantidad_ventas_label);
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.total_inversion_tb);
@@ -239,5 +262,7 @@
         private System.Windows.Forms.Button exportar_button;
         private System.Windows.Forms.Button limpiar_button;
         private System.Windows.Forms.Label tarea_label;
+        private System.Windows.Forms.TextBox ventas_cantidad_tb;
+        private System.Windows.Forms.Label cantidad_ventas_label;
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SivBiblioteca.Modelos;
 using SivBiblioteca;
 using SivUI.Inventario;
+using SivUI.Ventas;
 
 namespace SivUI
 {
@@ -119,6 +120,14 @@ namespace SivUI
         private void crear_producto_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new CrearProductoForm();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void eliminar_venta_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new EliminarVentaForm();
             this.Hide();
             frm.ShowDialog();
             this.Show();

@@ -21,6 +21,10 @@ namespace SivBiblioteca.Modelos
         [Ignore]
         public int UnidadesCompradasLote { get; set; }
 
+        [Name("ID venta")]
+        [Index(-1)]
+        public int VentaId { get; set; }
+
         [Name("ID lote")]
         [Index(0)]
         public int LoteId { get; set; }

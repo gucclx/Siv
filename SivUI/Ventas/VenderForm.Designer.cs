@@ -53,7 +53,7 @@
             // 
             // lote_id_tb
             // 
-            this.lote_id_tb.Location = new System.Drawing.Point(10, 37);
+            this.lote_id_tb.Location = new System.Drawing.Point(12, 37);
             this.lote_id_tb.Name = "lote_id_tb";
             this.lote_id_tb.Size = new System.Drawing.Size(136, 33);
             this.lote_id_tb.TabIndex = 1;
@@ -61,7 +61,7 @@
             // lote_id_label
             // 
             this.lote_id_label.AutoSize = true;
-            this.lote_id_label.Location = new System.Drawing.Point(5, 9);
+            this.lote_id_label.Location = new System.Drawing.Point(7, 9);
             this.lote_id_label.Name = "lote_id_label";
             this.lote_id_label.Size = new System.Drawing.Size(67, 25);
             this.lote_id_label.TabIndex = 0;
@@ -70,7 +70,7 @@
             // agregar_lote_button
             // 
             this.agregar_lote_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregar_lote_button.Location = new System.Drawing.Point(299, 34);
+            this.agregar_lote_button.Location = new System.Drawing.Point(301, 34);
             this.agregar_lote_button.Name = "agregar_lote_button";
             this.agregar_lote_button.Size = new System.Drawing.Size(101, 37);
             this.agregar_lote_button.TabIndex = 4;
@@ -123,7 +123,7 @@
             // unidades_label
             // 
             this.unidades_label.AutoSize = true;
-            this.unidades_label.Location = new System.Drawing.Point(147, 9);
+            this.unidades_label.Location = new System.Drawing.Point(149, 9);
             this.unidades_label.Name = "unidades_label";
             this.unidades_label.Size = new System.Drawing.Size(91, 25);
             this.unidades_label.TabIndex = 2;
@@ -131,10 +131,11 @@
             // 
             // unidades_tb
             // 
-            this.unidades_tb.Location = new System.Drawing.Point(152, 37);
+            this.unidades_tb.Location = new System.Drawing.Point(154, 37);
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(141, 33);
             this.unidades_tb.TabIndex = 3;
+            this.unidades_tb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.unidades_tb_KeyDown);
             // 
             // remover_venta_button
             // 
@@ -149,7 +150,7 @@
             // 
             // cliente_tb
             // 
-            this.cliente_tb.Location = new System.Drawing.Point(17, 403);
+            this.cliente_tb.Location = new System.Drawing.Point(12, 405);
             this.cliente_tb.Name = "cliente_tb";
             this.cliente_tb.ReadOnly = true;
             this.cliente_tb.Size = new System.Drawing.Size(276, 33);
@@ -159,7 +160,7 @@
             // cliente_label
             // 
             this.cliente_label.AutoSize = true;
-            this.cliente_label.Location = new System.Drawing.Point(10, 375);
+            this.cliente_label.Location = new System.Drawing.Point(7, 375);
             this.cliente_label.Name = "cliente_label";
             this.cliente_label.Size = new System.Drawing.Size(71, 25);
             this.cliente_label.TabIndex = 17;
@@ -169,7 +170,7 @@
             // 
             this.buscar_linklabel.AutoSize = true;
             this.buscar_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buscar_linklabel.Location = new System.Drawing.Point(87, 378);
+            this.buscar_linklabel.Location = new System.Drawing.Point(82, 378);
             this.buscar_linklabel.Name = "buscar_linklabel";
             this.buscar_linklabel.Size = new System.Drawing.Size(56, 21);
             this.buscar_linklabel.TabIndex = 19;
@@ -179,7 +180,7 @@
             // 
             // comentario_tb
             // 
-            this.comentario_tb.Location = new System.Drawing.Point(15, 474);
+            this.comentario_tb.Location = new System.Drawing.Point(12, 474);
             this.comentario_tb.Multiline = true;
             this.comentario_tb.Name = "comentario_tb";
             this.comentario_tb.Size = new System.Drawing.Size(385, 75);
@@ -188,7 +189,7 @@
             // comentario_label
             // 
             this.comentario_label.AutoSize = true;
-            this.comentario_label.Location = new System.Drawing.Point(12, 446);
+            this.comentario_label.Location = new System.Drawing.Point(7, 446);
             this.comentario_label.Name = "comentario_label";
             this.comentario_label.Size = new System.Drawing.Size(111, 25);
             this.comentario_label.TabIndex = 20;
@@ -198,7 +199,7 @@
             // 
             this.crear_nuevo_cliente_label.AutoSize = true;
             this.crear_nuevo_cliente_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(198, 378);
+            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(191, 378);
             this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
             this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(95, 21);
             this.crear_nuevo_cliente_label.TabIndex = 23;
@@ -209,7 +210,7 @@
             // limpiar_cliente_button
             // 
             this.limpiar_cliente_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.limpiar_cliente_button.Location = new System.Drawing.Point(299, 400);
+            this.limpiar_cliente_button.Location = new System.Drawing.Point(294, 402);
             this.limpiar_cliente_button.Name = "limpiar_cliente_button";
             this.limpiar_cliente_button.Size = new System.Drawing.Size(101, 37);
             this.limpiar_cliente_button.TabIndex = 24;

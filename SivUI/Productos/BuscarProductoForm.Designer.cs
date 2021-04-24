@@ -100,6 +100,7 @@
             this.nombre_producto_tb.Name = "nombre_producto_tb";
             this.nombre_producto_tb.Size = new System.Drawing.Size(368, 33);
             this.nombre_producto_tb.TabIndex = 24;
+            this.nombre_producto_tb.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nombre_producto_tb_KeyUp);
             // 
             // nombre_producto_label
             // 
@@ -122,6 +123,7 @@
             // 
             // BuscarProductoForm
             // 
+            this.AcceptButton = this.buscar_producto_button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
