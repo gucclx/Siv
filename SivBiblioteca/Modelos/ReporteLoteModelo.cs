@@ -15,33 +15,34 @@ namespace SivBiblioteca.Modelos
     /// </summary>
     public class ReporteLoteModelo
     {
-        [Name("Producto")]
+
+        [Name("ID lote")]
         [Index(0)]
+        public int LoteId { get; set; }
+
+        [Name("Producto")]
+        [Index(1)]
         public string NombreProducto { get; set; }
 
         [Name("Descripción")]
-        [Index(1)]
+        [Index(2)]
         public string DescripcionProducto { get; set; }
 
-        [Name("Precio Venta Unidad")]
-        [Index(2)]
-        public decimal PrecioVentaUnidad { get; set; }
-
-        [Name("ID lote")]
-        [Index(3)]
-        public int LoteId { get; set; }
-
         [Name("Unidades compradas")]
-        [Index(4)]
+        [Index(3)]
         public int UnidadesCompradasLote { get; set; }
 
         [Name("Unidades disponibles")]
-        [Index(5)]
+        [Index(4)]
         public int UnidadesDisponiblesLote { get; set; }
 
         [Name("Inversión Unidad")]
-        [Index(6)]
+        [Index(5)]
         public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
+
+        [Name("Precio Venta Unidad")]
+        [Index(6)]
+        public decimal PrecioVentaUnidad { get; set; }
 
         [Name("Inversión total")]
         [Index(7)]

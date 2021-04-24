@@ -90,6 +90,7 @@
             this.ventas_dtgv.Size = new System.Drawing.Size(760, 296);
             this.ventas_dtgv.TabIndex = 12;
             this.ventas_dtgv.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ventas_dtgv_CellValidating);
+            this.ventas_dtgv.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.ventas_dtgv_UserDeletedRow);
             // 
             // total_tb
             // 

@@ -52,7 +52,7 @@ namespace SivUI
             var productoNombre = nombre_producto_tb.Text.Trim();
             if (string.IsNullOrEmpty(productoNombre))
             {
-                MessageBox.Show("Nombre inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Nombre inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 

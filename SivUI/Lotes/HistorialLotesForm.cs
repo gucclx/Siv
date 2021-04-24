@@ -24,6 +24,12 @@ namespace SivUI
             InitializeComponent();
             resultados_dtgv.AutoGenerateColumns = false;
 
+            // Inicializar columnas.
+
+            var loteIdColumna = new DataGridViewTextBoxColumn();
+            loteIdColumna.HeaderText = "ID lote";
+            loteIdColumna.DataPropertyName = nameof(ReporteLoteModelo.LoteId);
+
             var nombreProductoColumna = new DataGridViewTextBoxColumn();
             nombreProductoColumna.HeaderText = "Producto";
             nombreProductoColumna.DataPropertyName = nameof(ReporteLoteModelo.NombreProducto);
@@ -31,14 +37,6 @@ namespace SivUI
             var descripcionProductoColumna = new DataGridViewTextBoxColumn();
             descripcionProductoColumna.HeaderText = "Descripción";
             descripcionProductoColumna.DataPropertyName = nameof(ReporteLoteModelo.DescripcionProducto);
-
-            var precioVentaUnidadColumna = new DataGridViewTextBoxColumn();
-            precioVentaUnidadColumna.HeaderText = "Precio Venta Unidad";
-            precioVentaUnidadColumna.DataPropertyName = nameof(ReporteLoteModelo.PrecioVentaUnidad);
-
-            var loteIdColumna = new DataGridViewTextBoxColumn();
-            loteIdColumna.HeaderText = "ID lote";
-            loteIdColumna.DataPropertyName = nameof(ReporteLoteModelo.LoteId);
 
             var unidadesCompradasColumna = new DataGridViewTextBoxColumn();
             unidadesCompradasColumna.HeaderText = "Unidades compradas";
@@ -52,6 +50,10 @@ namespace SivUI
             inversionUnidadColumna.HeaderText = "Inversión Unidad";
             inversionUnidadColumna.DataPropertyName = nameof(ReporteLoteModelo.InversionUnidad);
 
+            var precioVentaUnidadColumna = new DataGridViewTextBoxColumn();
+            precioVentaUnidadColumna.HeaderText = "Precio Venta Unidad";
+            precioVentaUnidadColumna.DataPropertyName = nameof(ReporteLoteModelo.PrecioVentaUnidad);
+
             var inversionTotalColumna = new DataGridViewTextBoxColumn();
             inversionTotalColumna.HeaderText = "Inversión total";
             inversionTotalColumna.DataPropertyName = nameof(ReporteLoteModelo.InversionLote);
@@ -60,16 +62,15 @@ namespace SivUI
             fechaAgregadocolumna.HeaderText = "Fecha Agregado";
             fechaAgregadocolumna.DataPropertyName = nameof(ReporteLoteModelo.FechaAgregado);
 
+            resultados_dtgv.Columns.Add(loteIdColumna);
             resultados_dtgv.Columns.Add(nombreProductoColumna);
             resultados_dtgv.Columns.Add(descripcionProductoColumna);
-            resultados_dtgv.Columns.Add(precioVentaUnidadColumna);
-            resultados_dtgv.Columns.Add(loteIdColumna);
             resultados_dtgv.Columns.Add(unidadesCompradasColumna);
             resultados_dtgv.Columns.Add(unidadesDisponiblesColumna);
             resultados_dtgv.Columns.Add(inversionUnidadColumna);
+            resultados_dtgv.Columns.Add(precioVentaUnidadColumna);
             resultados_dtgv.Columns.Add(inversionTotalColumna);
             resultados_dtgv.Columns.Add(fechaAgregadocolumna);
-
         }
 
         private async void cargar_reporte_button_Click(object sender, EventArgs e)

@@ -97,12 +97,20 @@ namespace SivUI
             return true;
         }
 
-        private void AgregarAlCarrito()
+        /// <summary>
+        /// Carga y agrega el lote especificado con las unidades especificadas
+        /// al datagridview.
+        /// </summary>
+        private void AgregarLote()
         {
             LoteModelo lote = null;
+
+            if (ValidarCampos() == false) return;
+            var loteId = int.Parse(lote_id_tb.Text);
+
             try
             {
-                lote = CargarLote();
+                lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
             }
             catch (ArgumentException ex)
             {
@@ -112,15 +120,16 @@ namespace SivUI
             if (lote == null)
             {
                 MessageBox.Show("El lote no existe.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                LimpiarCamposLote();
                 return;
             }
 
-
-            // Verificar que el lote no exista en la lista a vender.
+            // Verificar que el lote no exista en la lista de ventas.
             var loteExistente = ventas.List.OfType<VentaModelo>().ToList().Find(l => l.LoteId == lote.Id);
             if (loteExistente != null)
             {
                 MessageBox.Show("El lote ya existe en la lista.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                LimpiarCamposLote();
                 return;
             }
 
@@ -129,6 +138,7 @@ namespace SivUI
 
             if (unidadesAVender > lote.UnidadesDisponibles)
             {
+                LimpiarCamposLote();
                 if (lote.UnidadesDisponibles == 0)
                 {
                     MessageBox.Show($"El lote no contiene unidades.", "Lote vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -149,18 +159,6 @@ namespace SivUI
             lote_id_tb.Clear();
             lote_id_tb.Focus();
             unidades_tb.Clear();
-        }
-
-        private LoteModelo CargarLote()
-        {
-            if (ValidarCampos() == false) return null;
-
-            var loteId = int.Parse(lote_id_tb.Text);
-            return ConfigGlobal.conexion.CargarLote_PorId(loteId);
-        }
-        private void agregar_lote_button_Click(object sender, EventArgs e)
-        {
-            AgregarAlCarrito();
         }
 
         private void vender_button_Click(object sender, EventArgs e)
@@ -203,7 +201,7 @@ namespace SivUI
                 if (Ayudantes.EsDecimalNoNegativo(precioVenta) == false)
                 {
                     e.Cancel = true;
-                    MessageBox.Show("Precio de venta inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Precio de venta inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
@@ -219,7 +217,7 @@ namespace SivUI
                 if (Ayudantes.EsEnteroPositivo(stringUnidadesAVender) == false)
                 {
                     e.Cancel = true;
-                    MessageBox.Show($"Cantidad solicitada de unidades inválida.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"Cantidad solicitada de unidades inválida.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
@@ -243,6 +241,7 @@ namespace SivUI
             {
                 ventas_dtgv.Rows.RemoveAt(r.Index);
             }
+            CalcularTotal();
         }
 
         private void buscar_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -251,6 +250,9 @@ namespace SivUI
             frm.ShowDialog();
         }
 
+        /// <summary>
+        /// Limpia los campos de texto id lote y unidades.
+        /// </summary>
         private void LimpiarCamposLote()
         {
             lote_id_tb.Text = "";
@@ -261,7 +263,7 @@ namespace SivUI
         {
             LimpiarCamposLote();
             comentario_tb.Clear();
-            total_tb.Clear();
+            total_tb.Text = "0";
             ventas.DataSource = null;
             ventas.DataSource = typeof(VentaModelo);
             cliente = null;
@@ -291,10 +293,20 @@ namespace SivUI
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AgregarAlCarrito();
+                AgregarLote();
                 e.Handled = true;
                 e.SuppressKeyPress = true;               
             }           
+        }
+
+        private void agregar_lote_button_Click(object sender, EventArgs e)
+        {
+            AgregarLote();
+        }
+
+        private void ventas_dtgv_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            CalcularTotal();
         }
     }
 }

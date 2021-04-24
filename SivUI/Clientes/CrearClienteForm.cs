@@ -27,7 +27,7 @@ namespace SivUI
             bool resultado = true;
             if (string.IsNullOrEmpty(nombre_cliente_tb.Text.Trim()))
             {
-                MessageBox.Show("Nombre inválido", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Nombre inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 resultado = false;
             }
             return resultado;
@@ -52,7 +52,7 @@ namespace SivUI
                 return;
             }
 
-            MessageBox.Show("Cliente creado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             nombre_cliente_tb.Clear();
             nombre_cliente_tb.Focus();
             apellido_cliente_tb.Clear();
