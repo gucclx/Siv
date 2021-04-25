@@ -155,22 +155,22 @@ namespace SivUI.Inventario
             {
                 dialogGuardar.Filter = "CSV |*.csv";
                 dialogGuardar.OverwritePrompt = true;
-                if (dialogGuardar.ShowDialog() == DialogResult.OK)
+
+                if (dialogGuardar.ShowDialog() != DialogResult.OK) return;
+
+                FileInfo archivo = new FileInfo(dialogGuardar.FileName);
+
+                Exportando(true);
+                ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+
+                try
                 {
-                    FileInfo archivo = new FileInfo(dialogGuardar.FileName);
-
-                    Exportando(true);
-                    ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
-
-                    try
-                    {       
-                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
-                        MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (IOException ex)
-                    {
-                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
+                    MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             Exportando(false);

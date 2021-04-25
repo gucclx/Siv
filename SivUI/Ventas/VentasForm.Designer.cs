@@ -98,11 +98,11 @@
             // 
             this.header_label.AutoSize = true;
             this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header_label.Location = new System.Drawing.Point(379, 9);
+            this.header_label.Location = new System.Drawing.Point(397, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(227, 30);
+            this.header_label.Size = new System.Drawing.Size(190, 30);
             this.header_label.TabIndex = 15;
-            this.header_label.Text = "Información de ventas";
+            this.header_label.Text = "Historial de ventas";
             // 
             // total_ganancia_tb
             // 
@@ -239,7 +239,7 @@
             this.MaximizeBox = false;
             this.Name = "VentasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Información de ventas";
+            this.Text = "Historial de ventas";
             this.contenedor_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).EndInit();
             this.ResumeLayout(false);
