@@ -255,14 +255,15 @@ namespace SivBiblioteca.AccesoDatos
                             from lotes where id = @Id";
 
                 lote = conexion.QuerySingleOrDefault<LoteModelo>(q, new { Id = id });
-                if (lote != null)
-                {
-                    lote.Producto = conexion.QuerySingle<ProductoModelo>("select * from productos where id = @ID", new { ID = lote.ProductoId });
-                    lote.Inversion = lote.Inversion / FactorConversion;
-                    lote.PrecioVentaUnidad = lote.PrecioVentaUnidad / FactorConversion;
-                }       
-            }
-            return lote;
+
+                if (lote == null) return null;
+
+                lote.Producto = conexion.QuerySingle<ProductoModelo>("select * from productos where id = @ID", new { ID = lote.ProductoId });
+                lote.Inversion = lote.Inversion / FactorConversion;
+                lote.PrecioVentaUnidad = lote.PrecioVentaUnidad / FactorConversion;
+
+                return lote;
+            }            
         }
 
         /// <summary>
@@ -427,13 +428,13 @@ namespace SivBiblioteca.AccesoDatos
         /// Con este parametro y el parametro 'limiteFilas',
         /// se puede implementar paginacion de las ventas.
         /// ej. CargarReporteVentas(limiteFilas: 2, comienzo: null)
-        /// devuelve las primeras 2 ventas en orden descendente (ordenando por fecha)
+        /// devuelve las primeras 2 ventas en orden descendente (ordenando por id de venta)
         /// 
         /// venta #15
         /// venta #14
         /// 
         /// luego CargarReporteVentas(limiteFilas: 2, comienzo: 14)
-        /// devuelve las siguientes 2 ventas en orden descendente (ordenando por fecha)
+        /// devuelve las siguientes 2 ventas en orden descendente (ordenando por id de venta)
         /// 
         /// venta #13
         /// venta #12
@@ -1225,7 +1226,6 @@ namespace SivBiblioteca.AccesoDatos
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                // todo - convertir precios a representacion original
                 var q = @"select Id,
                         Unidades,
                         PrecioVentaUnidad,
