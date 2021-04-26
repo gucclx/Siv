@@ -7,8 +7,20 @@ using SivBiblioteca.Modelos;
 using System.Data;
 using System.Data.SQLite;
 using Dapper;
+using SivBiblioteca;
 
 namespace SivBiblioteca.AccesoDatos
+// todo - refactorizar codigo. Muchas veces se valida un producto en diferentes metodos,
+// esto podria ser un metodo en si. Lo mismo sucede con otros modelos.
+// los metodos reportes de ventas, inventarios, productos, contienen condigo similar.
+// se podria intentar agregar el codigo a funciones especificas.
+// agregarcondiciones(condiciones)
+// construirSql(condiciones)
+// las dos funciones de arriba podrian ser una refactorizacion del proceso de construccion de sql strings para los
+// metodos de generacion de reportes.
+// estos metodos se podrian poner en otra clase.
+// quiza sea util para reutilizar el codigo si se cambia de bd
+// no se son las 2:33 y tengo que despertar a las 5
 {
     /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     /// Nota - Los precios se guardan en la base de datos como enteros.
@@ -47,7 +59,7 @@ namespace SivBiblioteca.AccesoDatos
     ///  ¯\_(ツ)_/¯
     public class SqliteConexion : IConexionDatos
     {
-        string stringConexion = ConfigGlobal.ConseguirStringConexion("SqliteBd");
+        string stringConexion = ConfigGlobal.ConseguirStringConexion(id:"SqliteBd");
 
         // Describe cuantos digitos se consideran despues del punto decimal
         // en todos los precios que se guardan en la base de datos.
@@ -163,15 +175,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="producto"> Producto a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
         {
-            if (producto == null)
-            {
-                throw new ArgumentException("El producto fue null.");
-            }
-
-            if (string.IsNullOrWhiteSpace(producto.Nombre))
-            {
-                throw new ArgumentException("El nombre del producto no puede estar vacio.");
-            }
+            Ayudantes.ValidarProductoCreado(producto);
 
             producto.Nombre = producto.Nombre.Trim();
 
@@ -179,43 +183,27 @@ namespace SivBiblioteca.AccesoDatos
             {
                 throw new ArgumentException("El nombre del producto ya existe en la base de datos.");
             }
-
-            var guardarCategorias = false;
-
-            if (producto.Categorias != null)
-            {
-                foreach (var categoria in producto.Categorias)
-                {
-                    if (categoria == null)
-                    {
-                        throw new ArgumentException("Al menos una categoria del producto fue null.");
-                    }
-                }
-                guardarCategorias = true;
-            }
                      
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into productos (Nombre, FechaCreacion, Descripcion)
                             values (@Nombre, strftime('%s', 'now'), @Descripcion)";
 
-                conexion.Execute(q, 
-                    new
-                    {
-                        Nombre = producto.Nombre,
-                        Descripcion = producto.Descripcion
-                    }
-                );
+                var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion };
+
+                conexion.Execute(q, parametros);
 
                 producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
 
-                if (guardarCategorias)
+                if (producto.Categorias == null) return;
+
+                Ayudantes.ValidarCategoriasExistentes(producto.Categorias);
+
+                q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
+
+                foreach (var categoria in producto.Categorias)
                 {
-                    q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
-                    foreach (var categoria in producto.Categorias)
-                    {
-                        conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
-                    }
+                    conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
                 }
             }
         }
@@ -828,33 +816,17 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarProducto(ProductoModelo producto)
         {
-            if (producto == null)
-            {
-                throw new ArgumentException($"El producto fue null.");
-            }
-
-            if (producto.Id < 1)
-            {
-                throw new ArgumentException($"Id del producto invalido: {producto.Id}, el id no puede ser menor a 1.");
-            }
-
-            if (string.IsNullOrWhiteSpace(producto.Nombre))
-            {
-                throw new ArgumentException("El nombre del producto no puede estar vacio.");
-            }
+            Ayudantes.ValidarProductoExistente(producto);
 
             producto.Nombre = producto.Nombre.Trim();
+            producto.Descripcion = producto.Descripcion?.Trim();
 
-            if (producto.Descripcion != null)
-            {
-                producto.Descripcion = producto.Descripcion.Trim();
-            }
-
-            // Editar producto.
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"update Productos set Nombre = @Nombre, Descripcion = @Descripcion where Id = @Id";
-                conexion.Execute(q, new { Nombre = producto.Nombre, Descripcion = producto.Descripcion, Id = producto.Id });
+                var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion, Id = producto.Id };
+
+                conexion.Execute(q, parametros);
 
                 conexion.Open();
                 using (var transaccion = conexion.BeginTransaction())

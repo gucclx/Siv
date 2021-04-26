@@ -16,10 +16,6 @@ using SivUI.Filtros;
 
 namespace SivUI
 {
-    // todo - refactorizar codigo. Muchas veces se valida un producto en diferentes metodos,
-    // esto podria ser un metodo en si. Lo mismo sucede con otros modelos.
-    // los metodos reportes de ventas, inventarios, productos, contienen condigo similar.
-    // se podria intentar agregar el codigo a funciones especificas.
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
         ReporteFiltroModelo reporteFiltro;

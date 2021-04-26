@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SivBiblioteca
 {
+    // todo - validacion para categorias.
     public static class Ayudantes
     {
         public static bool EsEnteroPositivo(string x)
@@ -77,6 +78,68 @@ namespace SivBiblioteca
             using (var csv = new CsvWriter(writer, config))
             {
                 await csv.WriteRecordsAsync(reportes);
+            }
+        }
+
+        // todo - probar desde el formulario o metodo sqlite
+        /// <summary>
+        /// Verifica que un producto recien creado sea valido.
+        /// Util para verificar el producto antes de guardarlo en la base de datos.
+        /// </summary>
+        /// <param name="producto"> El producto a guardar. </param>
+        public static void ValidarProductoCreado(ProductoModelo producto)
+        {
+            if (producto == null)
+            {
+                throw new ArgumentException("El producto fue null.");
+            }
+
+            if (string.IsNullOrWhiteSpace(producto.Nombre))
+            {
+                throw new ArgumentException("El nombre del producto no puede estar vacio o ser null.");
+            }
+        }
+
+        public static void ValidarProductoExistente(ProductoModelo producto)
+        {
+            ValidarProductoCreado(producto);
+
+            if (producto.Id < 1)
+            {
+                throw new ArgumentException($"Id de producto invalido: { producto.Id } El id del producto no puede ser menor a 1.");
+            }
+        }
+
+        public static void ValidarCategoriasCreadas(List<CategoriaModelo> categorias)
+        {
+            if (categorias == null)
+            {
+                throw new ArgumentException("La lista de categorias fue null.");
+            }
+
+            foreach (var categoria in categorias)
+            {
+                if (categoria == null)
+                {
+                    throw new ArgumentException(@"Al menos una categoria fue null.");
+                }
+                if (string.IsNullOrWhiteSpace(categoria.Nombre))
+                {
+                    throw new ArgumentException(@"Al menos una categoria no tiene nombre o el nombre es null.");
+                }
+            }
+        }
+
+        public static void ValidarCategoriasExistentes(List<CategoriaModelo> categorias)
+        {
+            ValidarCategoriasCreadas(categorias);
+
+            foreach (var categoria in categorias)
+            {
+                if (categoria.Id < 1)
+                {
+                    throw new ArgumentException($@"El id de al menos una categoria fue menor a 1. Id: { categoria.Id }. El id no debe ser menor a 1.");
+                }
             }
         }
     }

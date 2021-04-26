@@ -48,7 +48,8 @@ namespace SivUI
 
         private void crear_producto_button_Click(object sender, EventArgs e)
         {
-            // validar nombre
+            // Validar nombre del producto.
+
             var productoNombre = nombre_producto_tb.Text.Trim();
             if (string.IsNullOrEmpty(productoNombre))
             {
@@ -56,7 +57,7 @@ namespace SivUI
                 return;
             }
 
-            // verificar que el nombre del producto no exista en la base de datos
+            // Verificar que el nombre del producto no exista en la base de datos
 
             bool productoExiste = false;
             
@@ -64,7 +65,7 @@ namespace SivUI
             {
                 productoExiste = ConfigGlobal.conexion.ProductoExiste(productoNombre);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -76,7 +77,7 @@ namespace SivUI
                 return;
             }
 
-            // crear producto y guardar en la base de datos
+            // Crear producto y guardar en la base de datos.
 
             var producto = new ProductoModelo();
             producto.Nombre = productoNombre;
@@ -87,13 +88,13 @@ namespace SivUI
             {
                 ConfigGlobal.conexion.GuardarProducto(producto);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // limpiar form
+            // Limpiar form.
             nombre_producto_tb.Clear();
             nombre_producto_tb.Focus();
             descripcion_tb.Clear();
