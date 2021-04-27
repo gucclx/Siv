@@ -10,9 +10,11 @@ namespace SivBiblioteca.Modelos
     /// <summary>
     ///     Representa un reporte de lotes para presentar un historial 
     ///     de la adquisicion de estos con sus detalles.
-    ///     Los atributos especifican los titulos y el orden de las columnas
-    ///     a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
     /// </summary>
+    /// <remarks>
+    /// Los atributos especifican los titulos y el orden de las columnas
+    /// a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
+    /// </remarks>
     public class ReporteLoteModelo
     {
 

@@ -94,6 +94,7 @@
     <Compile Include="AccesoDatos\IConexionDatos.cs" />
     <Compile Include="AccesoDatos\SqliteConexion.cs" />
     <Compile Include="Ayudantes.cs" />
+    <Compile Include="ValidacionModelosExtensiones.cs" />
     <Compile Include="ConfigGlobal.cs" />
     <Compile Include="Modelos\CategoriaModelo.cs" />
     <Compile Include="Modelos\ClienteModelo.cs" />

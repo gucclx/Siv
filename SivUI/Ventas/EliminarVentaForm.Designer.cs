@@ -105,7 +105,7 @@ namespace SivUI.Ventas
             this.fecha_venta_tb.Name = "fecha_venta_tb";
             this.fecha_venta_tb.ReadOnly = true;
             this.fecha_venta_tb.Size = new System.Drawing.Size(144, 29);
-            this.fecha_venta_tb.TabIndex = 35;
+            this.fecha_venta_tb.TabIndex = 36;
             this.fecha_venta_tb.TabStop = false;
             this.fecha_venta_tb.Text = "N/A";
             // 
@@ -164,7 +164,7 @@ namespace SivUI.Ventas
             this.venta_id_tb.Location = new System.Drawing.Point(21, 259);
             this.venta_id_tb.Name = "venta_id_tb";
             this.venta_id_tb.Size = new System.Drawing.Size(123, 29);
-            this.venta_id_tb.TabIndex = 43;
+            this.venta_id_tb.TabIndex = 0;
             this.venta_id_tb.TabStop = false;
             // 
             // venta_id_label
@@ -183,7 +183,7 @@ namespace SivUI.Ventas
             this.eliminar_venta_button.Location = new System.Drawing.Point(764, 253);
             this.eliminar_venta_button.Name = "eliminar_venta_button";
             this.eliminar_venta_button.Size = new System.Drawing.Size(154, 37);
-            this.eliminar_venta_button.TabIndex = 45;
+            this.eliminar_venta_button.TabIndex = 2;
             this.eliminar_venta_button.Text = "Eliminar venta";
             this.eliminar_venta_button.UseVisualStyleBackColor = true;
             this.eliminar_venta_button.Click += new System.EventHandler(this.eliminar_venta_button_Click);
@@ -194,7 +194,7 @@ namespace SivUI.Ventas
             this.cargar_venta_button.Location = new System.Drawing.Point(150, 253);
             this.cargar_venta_button.Name = "cargar_venta_button";
             this.cargar_venta_button.Size = new System.Drawing.Size(139, 37);
-            this.cargar_venta_button.TabIndex = 46;
+            this.cargar_venta_button.TabIndex = 1;
             this.cargar_venta_button.Text = "Cargar venta";
             this.cargar_venta_button.UseVisualStyleBackColor = true;
             this.cargar_venta_button.Click += new System.EventHandler(this.cargar_venta_button_Click);
@@ -206,7 +206,7 @@ namespace SivUI.Ventas
             this.total_tb.Name = "total_tb";
             this.total_tb.ReadOnly = true;
             this.total_tb.Size = new System.Drawing.Size(125, 29);
-            this.total_tb.TabIndex = 47;
+            this.total_tb.TabIndex = 35;
             this.total_tb.TabStop = false;
             this.total_tb.Text = "N/A";
             // 

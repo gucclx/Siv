@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Dapper;
 using SivBiblioteca.Modelos;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using Dapper;
-using SivBiblioteca;
+using System.Linq;
 
 namespace SivBiblioteca.AccesoDatos
-// todo - refactorizar codigo. Muchas veces se valida un producto en diferentes metodos,
-// esto podria ser un metodo en si. Lo mismo sucede con otros modelos.
-// los metodos reportes de ventas, inventarios, productos, contienen condigo similar.
-// se podria intentar agregar el codigo a funciones especificas.
-// agregarcondiciones(condiciones)
-// construirSql(condiciones)
-// las dos funciones de arriba podrian ser una refactorizacion del proceso de construccion de sql strings para los
-// metodos de generacion de reportes.
-// estos metodos se podrian poner en otra clase.
-// quiza sea util para reutilizar el codigo si se cambia de bd
-// no se son las 2:33 y tengo que despertar a las 5
 {
     /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     /// Nota - Los precios se guardan en la base de datos como enteros.
@@ -29,7 +15,7 @@ namespace SivBiblioteca.AccesoDatos
     /// Nota - Se utiliza 'case' en algunas condiciones de algunos query
     /// usualmente para obtener un 'mejor' query plan.
     /// 
-    /// ej. En el metodo CargarReporteVentas, si se filtra por fecha de venta 
+    /// ej. Cuando se genera un reporte de venta, si se filtra por fecha de venta 
     /// y se tiene la condicion productos.id = @ProductoId
     /// el query plan es buscar aquellos lotes asociados con el producto indicado,
     /// luego obtener las ventas a partir de estos lotes y filtrarlas por fecha.
@@ -50,7 +36,7 @@ namespace SivBiblioteca.AccesoDatos
     /// SEARCH TABLE lotes USING INTEGER PRIMARY KEY(rowid=?)
     /// SEARCH TABLE productos USING INTEGER PRIMARY KEY(rowid =?)
     /// 
-    /// Lo mismo sucede en el metodo CargarReporteLotes.
+    /// Lo mismo sucede en otros casos como el de generar reportes de lotes.
 
     ///  https://stackoverflow.com/a/49861947
 
@@ -59,7 +45,7 @@ namespace SivBiblioteca.AccesoDatos
     ///  ¯\_(ツ)_/¯
     public class SqliteConexion : IConexionDatos
     {
-        string stringConexion = ConfigGlobal.ConseguirStringConexion(id:"SqliteBd");
+        string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
 
         // Describe cuantos digitos se consideran despues del punto decimal
         // en todos los precios que se guardan en la base de datos.
@@ -78,10 +64,12 @@ namespace SivBiblioteca.AccesoDatos
         const double MonedaPrecision = 4;
 
         // Factor de conversion para convertir los precios.
-        static int FactorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+        int factorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         // Valor maximo de la moneda que se puede representar.
-        decimal MonedaMaximo = decimal.Divide(Int64.MaxValue, FactorConversion);
+        decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+
+        public decimal MonedaMaximo { get { return monedaMaximo; } }
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -92,13 +80,13 @@ namespace SivBiblioteca.AccesoDatos
         {
             if (string.IsNullOrWhiteSpace(nombreCategoria))
             {
-                throw new ArgumentException("El nombre de la categoria no puede estar vacio.");
+                throw new ArgumentException("El nombre de la categoria esta vacio o fue null.");
             }
 
             nombreCategoria = nombreCategoria.Trim();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {               
+            {
                 var q = "select exists (select 1 from Categorias where Nombre = @Nombre)";
                 return conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
             }
@@ -112,60 +100,32 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void GuardarCategorias(List<CategoriaModelo> categorias)
         {
-            if (categorias == null)
-            {
-                throw new ArgumentException("Lista de categorias es nula.");
-            }
+            categorias.ValidarCategorias(verificarQueNoExistan: true);
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "insert into Categorias (Nombre) values (@Nombre)";
-                
+
                 foreach (var categoria in categorias)
                 {
-                    if (categoria == null)
-                    {
-                        throw new ArgumentException("Al menos una categoria en la lista fue null.");
-                    }
-
-                    if (string.IsNullOrWhiteSpace(categoria.Nombre))
-                    {
-                        throw new ArgumentException("Al menos una categoria en la lista sin nombre.");
-                    }
-                    categoria.Nombre = categoria.Nombre.Trim();
-
-                    if (CategoriaExiste(categoria.Nombre))
-                    {
-                        throw new ArgumentException("El nombre de la categoria ya existe en la base de datos.");
-                    }
-
                     conexion.Execute(q, categoria);
                     categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
                 }
             }
         }
+
         /// <summary>
         ///     Elimina de la base de datos una lista de categorias.
         /// </summary>
         /// <param name="categorias"> Lista de categorias a eliminar. </param>
         public void EliminarCategorias(List<CategoriaModelo> categorias)
         {
-            if (categorias == null)
-            {
-                throw new ArgumentException("Lista de categorias es nula.");
-            }
+            categorias.ValidarCategorias();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "delete from Categorias where Id = @Id";
-                foreach (var categoria in categorias)
-                {
-                    if (categoria == null)
-                    {
-                        throw new ArgumentException("Al menos una categoria en la lista fue null.");
-                    }
-                    conexion.Execute(q, categoria);
-                }                              
+                conexion.Execute(q, categorias);
             }
         }
 
@@ -175,15 +135,8 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="producto"> Producto a guardar. </param>
         public void GuardarProducto(ProductoModelo producto)
         {
-            Ayudantes.ValidarProductoCreado(producto);
+            producto.ValidarProducto(verificarQueNoExista: true);
 
-            producto.Nombre = producto.Nombre.Trim();
-
-            if (ProductoExiste(producto.Nombre))
-            {
-                throw new ArgumentException("El nombre del producto ya existe en la base de datos.");
-            }
-                     
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"insert into productos (Nombre, FechaCreacion, Descripcion)
@@ -197,7 +150,7 @@ namespace SivBiblioteca.AccesoDatos
 
                 if (producto.Categorias == null) return;
 
-                Ayudantes.ValidarCategoriasExistentes(producto.Categorias);
+                producto.Categorias.ValidarCategorias();
 
                 q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
 
@@ -218,82 +171,48 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> El valor de la moneda en la representacion utilizada en la base de datos. </returns>
         private long ConvertirMonedaARepresentacionInterna(decimal x)
         {
-            return Convert.ToInt64(decimal.Truncate(x * FactorConversion));
+            return Convert.ToInt64(decimal.Truncate(x * factorConversion));
         }
 
         /// <summary>
         ///     Carga y retorna un lote de la base de datos a partir de su id.
         /// </summary>
         /// <param name="id"> Id del lote. </param>
-        /// <returns> El lote. Si no se encontro se retorna un lote null. </returns>
+        /// <returns> El lote. Si no se encontro se retorna null. </returns>
         public LoteModelo CargarLote_PorId(int id)
         {
-            LoteModelo lote = null;
-
-            if (id < 1)
-            {
-                throw new ArgumentException($"Id del lote invalido. Id: { id }, el id no debe ser menor a 1");
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = $@"select Id, ProductoId, UnidadesCompradas, UnidadesDisponibles, 
-                            Inversion, PrecioVentaUnidad,
-                            datetime(FechaCreacion, 'unixepoch', 'localtime') as 'FechaCreacion'
-                            from lotes where id = @Id";
+                var q = $@"select lotes.Id,
+                            lotes.UnidadesCompradas,
+                            lotes.UnidadesDisponibles,
+                            lotes.Inversion,
+                            lotes.PrecioVentaUnidad,
+                            datetime(lotes.FechaCreacion, 'unixepoch', 'localtime') as 'FechaCreacion',
+                            p.*
+                            from Lotes
+                            join productos p on p.id = lotes.ProductoId
+                            where lotes.id = @loteId";
 
-                lote = conexion.QuerySingleOrDefault<LoteModelo>(q, new { Id = id });
+                Func<LoteModelo, ProductoModelo, LoteModelo> f = (l, p) => { l.Producto = p; return l; };
+                var lote = conexion.Query<LoteModelo, ProductoModelo, LoteModelo>(q, f, new { loteId = id }).FirstOrDefault();
 
                 if (lote == null) return null;
 
-                lote.Producto = conexion.QuerySingle<ProductoModelo>("select * from productos where id = @ID", new { ID = lote.ProductoId });
-                lote.Inversion = lote.Inversion / FactorConversion;
-                lote.PrecioVentaUnidad = lote.PrecioVentaUnidad / FactorConversion;
+                lote.Inversion = lote.Inversion / factorConversion;
+                lote.PrecioVentaUnidad = lote.PrecioVentaUnidad / factorConversion;
 
                 return lote;
-            }            
+            }
         }
 
         /// <summary>
-        ///     Guarda una lista de ventas a la base de datos.
+        /// Guarda una lista de ventas a la base de datos.
         /// </summary>
-        /// <param name="ventas"> Lisa de ventas a guardar. </param>
+        /// <param name="ventas"> Lista de ventas a guardar. </param>
         public void GuardarVentas(List<VentaModelo> ventas)
         {
-            if (ventas == null)
-            {
-                throw new ArgumentException("La lista de ventas fue null.");
-            }
-
-            foreach (var venta in ventas)
-            {
-                // Validar campos de la venta
-
-                if (venta == null)
-                {
-                    throw new ArgumentException("Al menos una venta en la lista fue null.");
-                }
-                if (venta.Unidades < 1)
-                {
-                    throw new ArgumentException($"Unidades solicitadas invalidas: {venta.Unidades}, el valor debe ser positivo.");
-                }
-                if (venta.Total < 0)
-                {
-                    throw new ArgumentException($"Total de la venta invalido: {venta.Total}, solo valores no negativos.");
-                }
-                if (venta.Lote == null)
-                {
-                    throw new ArgumentException("El lote de la venta fue null.");
-                }
-                if (venta.Unidades > UnidadesDisponiblesLote(venta.Lote.Id))
-                {
-                    throw new ArgumentException($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
-                }
-                if (venta.PrecioVentaUnidad > MonedaMaximo)
-                {
-                    throw new OverflowException("Precio de venta de la unidad demasiado grande.");
-                }
-            }
+            ventas.ValidarVentas();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -304,18 +223,21 @@ namespace SivBiblioteca.AccesoDatos
                     {
                         var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, Comentario, ClienteId, Fecha)
                             values (@LoteId, @Unidades, @PrecioVentaUnidad, @Comentario, @ClienteId, strftime('%s', 'now'))";
+
                         foreach (var venta in ventas)
                         {
-                            conexion.Execute(q,
-                                new
-                                {
-                                    LoteId = venta.Lote.Id,
-                                    Unidades = venta.Unidades,
-                                    PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(venta.PrecioVentaUnidad),
-                                    Comentario = venta.Comentario?.Trim(),
-                                    ClienteId = venta.Cliente?.Id
-                                }
-                            ); ;
+
+                            var parametros = new
+                            {
+                                LoteId = venta.Lote.Id,
+                                Unidades = venta.Unidades,
+                                PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(venta.PrecioVentaUnidad),
+                                Comentario = venta.Comentario?.Trim(),
+                                ClienteId = venta.Cliente?.Id
+                            };
+
+                            conexion.Execute(q, parametros);
+
                             conexion.Execute("update Lotes set UnidadesDisponibles = UnidadesDisponibles - @UnidadesVendidas where Id = @Id",
                                 new { UnidadesVendidas = venta.Unidades, Id = venta.Lote.Id }
                             );
@@ -326,7 +248,7 @@ namespace SivBiblioteca.AccesoDatos
                     {
                         transaccion.Rollback();
                         throw;
-                    }                 
+                    }
                 }
             }
         }
@@ -335,39 +257,24 @@ namespace SivBiblioteca.AccesoDatos
         ///     Retorna las unidades disponibles de un lote.
         /// </summary>
         /// <param name="loteId"> Id del lote. </param>
-        /// <returns> Unidades restantes del lote. </returns>
-        public int UnidadesDisponiblesLote(int loteId)
+        /// <returns> Unidades restantes del lote. Si el lote no existe se retorna null. </returns>
+        public int? UnidadesDisponiblesLote(int loteId)
         {
-            if (loteId < 1)
-            {
-                throw new ArgumentException($"Id del lote invalido: { loteId }, el id no debe ser menor a 1.");
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select UnidadesDisponibles from Lotes where Id = @Id";
-                return conexion.ExecuteScalar<int>(q, new { Id = loteId });
+                return conexion.ExecuteScalar<int?>(q, new { Id = loteId });
             }
         }
 
         /// <summary>
         ///     Guarda un cliente en la base de datos.
         /// </summary>
-        /// <param name="cliente"> El cliente. </param>
+        /// <param name="cliente"> El cliente a guardar. </param>
         public void GuardarCliente(ClienteModelo cliente)
         {
-            if (cliente == null)
-            {
-                throw new ArgumentException("El cliente fue null.");
-            }
+            cliente.ValidarCliente();
 
-            if (string.IsNullOrWhiteSpace(cliente.Nombre))
-            {
-                throw new ArgumentException("Nombre del cliente vacio.");
-            }
-
-            cliente.Nombre = cliente.Nombre.Trim();
-           
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
@@ -379,7 +286,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <summary>
         ///     Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
         /// </summary>
-        /// <param name="nombre"> El nombre a buscar. </param>
+        /// <param name="nombre"> El nombre del cliente a buscar. </param>
         /// <param name="limiteFilas"> Limite de filas a retonar. </param>
         /// <returns> Lista de clientes encontrados. </returns>
         public List<ClienteModelo> BuscarCliente_PorNombre(string nombre, int limiteFilas = 10)
@@ -390,7 +297,7 @@ namespace SivBiblioteca.AccesoDatos
             }
 
             nombre = nombre.Trim();
-            
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre limit @limiteFilas";
@@ -408,135 +315,44 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         /// <param name="limiteFilas"> 
         ///     Limite de filas a retornar. Util si la informacion se presentara al usuario
-        ///     o para paginar las ventas.
+        ///     o para paginar los resultados.
         /// </param>
         /// <param name="comienzo">
-        /// Impone la condicion ventas.id < comienzo.
-        /// Util para cuando se paginan las ventas.
-        /// Con este parametro y el parametro 'limiteFilas',
-        /// se puede implementar paginacion de las ventas.
-        /// ej. CargarReporteVentas(limiteFilas: 2, comienzo: null)
-        /// devuelve las primeras 2 ventas en orden descendente (ordenando por id de venta)
-        /// 
-        /// venta #15
-        /// venta #14
-        /// 
-        /// luego CargarReporteVentas(limiteFilas: 2, comienzo: 14)
-        /// devuelve las siguientes 2 ventas en orden descendente (ordenando por id de venta)
-        /// 
-        /// venta #13
-        /// venta #12
-        /// 
-        /// Nota: la forma de paginar los resultados en este metodo es al reves que
-        /// en los metodos CargarReporteInventario y CargarReporteLotes.
-        /// En estos metodos se ordena de forma ascendente ya que no
-        /// es de mucha importancia el orden descendente.
-        /// En este caso el orden es importante
-        /// ya que una venta se puede eliminar, por lo que es util presentar
-        /// al usuario las ultimas ventas de primero.
+        ///     Impone la condicion (ventas.id < comienzo.)
+        ///     Util para paginar los resultados.
         /// </param>
         /// <returns> Lista de reportes. </returns>
+        /// <example>
+        /// <code>
+        /// // Ejemplo para paginacion de resultados.
+        /// var reportes1 = CargarReporteVentas(limiteFilas: 1, comienzo: null); // Carga la ultima venta.
+        /// var reportes2 = CargarReporteVentas(limiteFilas: 1, comienzo: reportes1.LastOrDefault()?.Id); // Carga la penultima venta.
+        /// var reportes3 = CargarReporteVentas(limiteFilas: 1, comienzo: reportes2.LastOrDefault()?.Id); // Carga la antepenultima venta.
+        /// ...
+        /// </code>
+        /// </example>
         public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
 
-            var q = @"select ventas.id as 'VentaId',
-                            lotes.id as 'LoteId', 
-                            productos.nombre as 'NombreProducto', 
-                            ventas.Unidades as 'UnidadesVendidas',
-                            lotes.Inversion 'InversionLote',
-                            lotes.UnidadesCompradas as 'UnidadesCompradasLote',
-                            ventas.PrecioVentaUnidad as 'PrecioVentaUnidad',
-                            datetime(ventas.fecha, 'unixepoch', 'localtime') as 'FechaVenta',
-                            clientes.Nombre || ' ' || coalesce(clientes.apellido, '') as 'NombreCliente'
-                            from ventas
-                            join lotes on lotes.id = ventas.LoteId
-                            join productos on productos.id = lotes.ProductoId
-                            left join Clientes on clientes.id = ventas.ClienteId";
+            var q = ConstruirQueryReporte
+            (
+                reporteTipo: typeof(ReporteVentaModelo),
+                filtro: filtro,
+                parametros: parametros,
+                comienzo: comienzo,
+                limiteFilas: limiteFilas
+            );
 
-            // Contendran los joins y condiciones necesarios
-            // para cumplir con las condiciones del filtro.
-            var joins = new List<string>();
-            var condiciones = new List<string>();
-
-            if (filtro != null)
-            {
-                var filtrarPorFechas = filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas;
-
-                // Si se filtra por fecha de venta.
-                if (filtrarPorFechas)
-                {                  
-                    condiciones.Add("ventas.fecha BETWEEN @F1 AND @F2");
-                    parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
-                    parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
-                }
-
-                // Si se filtra por tipo de producto.
-                if (filtro.FiltroPorProducto && filtro.Producto != null)
-                { 
-                    if (filtrarPorFechas)
-                    {
-                        condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
-                    }
-                    else
-                    {
-                        condiciones.Add("productos.id = @ProductoId");
-                    }
-                    parametros.Add("@ProductoId", filtro.Producto.Id);
-                }
-
-                // Si se filtra por categorias del producto.
-                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
-                {
-                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
-                }
-
-                // Si se filtra por las compras de cierto cliente.
-                if (filtro.FiltroPorCliente && filtro.Cliente != null)
-                {
-                    condiciones.Add("clientes.id = @ClienteId");
-                    parametros.Add("@ClienteId", filtro.Cliente.Id);
-                }
-            }
-
-            // Agregar los diferentes joins al query.
-            if (joins.Count > 0)
-            {
-                q += " " + string.Join(" ", joins);
-            }
-
-            if (comienzo != null)
-            {
-                condiciones.Add("ventas.id < @Comienzo");
-                parametros.Add("@Comienzo", comienzo);
-            }
-
-            // Agregar las condiciones al query.
-            if (condiciones.Count > 0)
-            {
-                q += " where ";
-                q += string.Join(" and ", condiciones);
-            }
-
-            q += " order by ventas.Id desc";
-
-            // Agregar el limite de filas a retornar.
-            if (limiteFilas != null && limiteFilas > -1)
-            {
-                q += $" limit @Limite";
-                parametros.Add("@Limite", limiteFilas);
-            }
-
-            // Generar reporte.
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {                
+            {
                 var reportes = conexion.Query<ReporteVentaModelo>(q, parametros).ToList();
 
                 // Convertir representacion interna de la moneda a la representacion original.
                 foreach (var reporte in reportes)
                 {
-                    reporte.InversionLote /= FactorConversion;
-                    reporte.PrecioVentaUnidad /= FactorConversion;
+                    reporte.InversionLote /= factorConversion;
+                    reporte.PrecioVentaUnidad /= factorConversion;
                 }
                 return reportes;
             }
@@ -560,47 +376,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="lote"> Lote a guardar. </param>
         public void GuardarLote(LoteModelo lote)
         {
-            // Validar lote
-
-            if (lote == null)
-            {
-                throw new ArgumentException("El lote fue null.");
-            }
-
-            if (lote.Producto == null)
-            {
-                throw new ArgumentException("El producto del lote fue null.");
-            }
-
-            if (lote.Producto.Id < 1)
-            {
-                throw new ArgumentException($"Id de producto invalido: {lote.Producto.Id}, el id deber ser mayor a 0.");
-            }
-
-            if (lote.UnidadesCompradas < 1)
-            {
-                throw new ArgumentException($"Unidades invalidas: {lote.UnidadesCompradas}, las unidades deben ser positivas.");
-            }
-
-            if (lote.Inversion < 0)
-            {
-                throw new ArgumentException($"Inversion invalida: {lote.Inversion}, la inversion no debe ser negativa.");
-            }
-
-            if (lote.Inversion > MonedaMaximo)
-            {
-                throw new OverflowException("El valor de la inversión del lote es demasiado grande.");
-            }
-
-            if (lote.PrecioVentaUnidad < 0)
-            {
-                throw new ArgumentException($"Precio de venta invalido: {lote.PrecioVentaUnidad}, el precio de venta por unidad no debe ser negativo.");
-            }
-
-            if (lote.PrecioVentaUnidad > MonedaMaximo)
-            {
-                throw new OverflowException("Precio de venta de la unidad demasiado grande.");
-            }
+            lote.ValidarLote();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -609,15 +385,16 @@ namespace SivBiblioteca.AccesoDatos
 
                 lote.UnidadesDisponibles = lote.UnidadesCompradas;
 
-                // Guardar lote.
-                conexion.Execute(q, new
+                var parametros = new
                 {
                     ProductoId = lote.Producto.Id,
                     UnidadesCompradas = lote.UnidadesCompradas,
                     UnidadesDisponibles = lote.UnidadesDisponibles,
                     Inversion = ConvertirMonedaARepresentacionInterna(lote.Inversion),
                     PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad)
-                });
+                };
+
+                conexion.Execute(q, parametros);
 
                 q = "select max(Id) from Lotes";
                 lote.Id = conexion.ExecuteScalar<int>(q);
@@ -633,11 +410,11 @@ namespace SivBiblioteca.AccesoDatos
         {
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                throw new ArgumentException("El nombre a buscar no puede estar vacio.");
+                throw new ArgumentException("El nombre a buscar esta vacio o fue null.");
             }
 
             nombre = nombre.Trim();
-            
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select exists (select 1 from Productos where Nombre = @Nombre collate nocase)";
@@ -656,11 +433,11 @@ namespace SivBiblioteca.AccesoDatos
         {
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                throw new ArgumentException("El nombre de la categoria a buscar no puede estar vacio.");
+                throw new ArgumentException("El nombre de la categoria a buscar esta vacio o fue null.");
             }
 
             nombre = nombre.Trim();
-                      
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select * from Categorias where Nombre like @Nombre limit @limiteFilas";
@@ -680,103 +457,44 @@ namespace SivBiblioteca.AccesoDatos
         ///     Objeto que contiene condiciones para generar los reportes. 
         /// </param>
         /// <param name="limiteFilas"> 
-        ///     Limite de filas a retonar. 
+        ///     Limite de filas a retonar.
+        ///     Util si los resultados se presentan al usuario.
+        ///     Util si los para paginar los resultados.
         /// </param>
-        /// <returns> Una lista de reportes. </returns>
+        /// <param name="comienzo">
+        ///  Impone la condicion (Lotes.Id > comienzo) en el query.
+        ///  Util para paginar los resultados.
+        /// </param>
+        /// <example>
+        /// <code>
+        /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: null); // Carga los primeros dos lotes.
+        /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: reportes1.LastOrDefault()?.Id); // Carga los siguientes dos lotes.
+        /// ...
+        /// </code>
+        /// </example>
+        /// <returns> Una lista de reportes de lotes. </returns>
         public List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
 
-            var q = @"select productos.Nombre as 'NombreProducto',
-                    productos.Descripcion as 'DescripcionProducto',
-                    lotes.PrecioVentaUnidad as 'PrecioVentaUnidad',
-                    lotes.id as 'LoteId',
-                    lotes.UnidadesCompradas as 'UnidadesCompradasLote',
-                    lotes.UnidadesDisponibles as 'UnidadesDisponiblesLote',
-                    lotes.Inversion as 'InversionLote',
-                    datetime(lotes.FechaCreacion, 'unixepoch', 'localtime') as 'FechaAgregado'
-                    from Productos
-                    join lotes on lotes.ProductoId = productos.Id";
-
-            // Contendran los joins y condiciones necesarios
-            // para cumplir con las condiciones del filtro y generar el query apropiado.
-            var joins = new List<string>();
-            var condiciones = new List<string>();
-
-            if (filtro != null)
-            {
-                // Si se filtra por las categorias de los productos asociados con los lotes.
-                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
-                {                    
-                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
-                }
-
-                var filtrarPorFechas = filtro.FechaInicial != null && filtro.FechaFinal != null && filtro.FiltroPorFechas;
-
-                // Si se filtra por fecha de agregado al inventario.
-                if (filtrarPorFechas)
-                {
-                    condiciones.Add("lotes.FechaCreacion BETWEEN @F1 AND @F2");
-                    parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
-                    parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
-                }
-
-                // Si se filtra por el tipo de producto.
-                if (filtro.FiltroPorProducto && filtro.Producto != null)
-                {
-                    if (filtrarPorFechas)
-                    {
-                        condiciones.Add("(case when productos.id = @ProductoId then 1 end) = 1");
-                    }
-                    else
-                    {
-                        condiciones.Add("productos.id = @ProductoId");
-                    }                    
-                    parametros.Add("@ProductoId", filtro.Producto.Id);
-                }
-
-                if (filtro.IncluirLotesSinUnidades == false)
-                {
-                    condiciones.Add("lotes.UnidadesDisponibles > 0");
-                }
-            }
-
-            // Agregar joins necesarios al query.
-            if (joins.Count > 0)
-            {
-                q += " " + string.Join(" ", joins);
-            }
-
-            if (comienzo != null)
-            {
-                condiciones.Add("lotes.id > @Comienzo");
-                parametros.Add("@Comienzo", comienzo);
-            }
-
-            // Agregar condiciones necesarias al query.
-            if (condiciones.Count > 0)
-            {
-                q += " where ";
-                q += string.Join(" and ", condiciones);
-            }
-
-            q += " order by lotes.Id asc";
-
-            // Agregar el limte de filas a retornar.
-            if (limiteFilas != null)
-            {
-                q += $" limit @Limite";
-                parametros.Add("@Limite", limiteFilas);
-            }
+            var q = ConstruirQueryReporte
+            (
+                reporteTipo: typeof(ReporteLoteModelo),
+                filtro: filtro,
+                parametros: parametros,
+                comienzo: comienzo,
+                limiteFilas: limiteFilas
+            );
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var reportes = conexion.Query<ReporteLoteModelo>(q, parametros).ToList();
 
+                // Convertir representacion interna de la moneda a la representacion original.
                 foreach (var reporte in reportes)
                 {
-                    reporte.InversionLote = reporte.InversionLote / FactorConversion;
-                    reporte.PrecioVentaUnidad = reporte.PrecioVentaUnidad / FactorConversion;
+                    reporte.InversionLote /= factorConversion;
+                    reporte.PrecioVentaUnidad /= factorConversion;
                 }
 
                 return reportes;
@@ -797,7 +515,7 @@ namespace SivBiblioteca.AccesoDatos
             }
 
             nombre = nombre.Trim();
-            
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = "select * from Productos where Nombre like @Nombre limit @limiteFilas";
@@ -816,10 +534,7 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarProducto(ProductoModelo producto)
         {
-            Ayudantes.ValidarProductoExistente(producto);
-
-            producto.Nombre = producto.Nombre.Trim();
-            producto.Descripcion = producto.Descripcion?.Trim();
+            producto.ValidarProducto();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
@@ -828,35 +543,33 @@ namespace SivBiblioteca.AccesoDatos
 
                 conexion.Execute(q, parametros);
 
+                if (producto.Categorias == null) return;
+
+                producto.Categorias.ValidarCategorias();
+
                 conexion.Open();
                 using (var transaccion = conexion.BeginTransaction())
                 {
                     try
                     {
-                        q = "delete from ProductoCategoria where ProductoId = @Id";
-                        conexion.Execute(q, new { Id = producto.Id});
+                        q = "delete from ProductoCategoria where ProductoId = @ProductoId";
+                        conexion.Execute(q, new { ProductoId = producto.Id });
 
                         q = @"insert into ProductoCategoria (productoId, CategoriaId)
-                                values (@ProductoId, @CategoriaId)";
+                                        values (@ProductoId, @CategoriaId)";
 
-                        if (producto.Categorias != null)
+                        foreach (var categoria in producto.Categorias)
                         {
-                            foreach (var categoria in producto.Categorias)
-                            {
-                                if (categoria == null)
-                                {
-                                    throw new ArgumentException("Al menos una categoria del producto fue null.");
-                                }
-                                conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
-                            }
-                        }                       
+                            conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
+                        }
+
                         transaccion.Commit();
                     }
                     catch
                     {
                         transaccion.Rollback();
                         throw;
-                    }                   
+                    }
                 }
             }
         }
@@ -871,11 +584,6 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> Las categorias del producto cuyo id fue proporcionado. </returns>
         public List<CategoriaModelo> CargarCategorias_PorProductoId(int id)
         {
-            if (id < 1)
-            {
-                throw new ArgumentException($"Id del producto invalido: { id }, el id no debe ser menor a 1.");
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"select categorias.nombre, categorias.id from Categorias 
@@ -898,55 +606,21 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarLote(LoteModelo lote)
         {
-            // Validar argumentos.
-
-            if (lote == null)
-            {
-                throw new ArgumentException("El lote proporcionado fue null.");
-            }
-            if (lote.Id < 1)
-            {
-                throw new ArgumentException($"Id del lote invalido: { lote.Id }, el id no puede ser menor a 1.");
-            }
-            if (lote.UnidadesDisponibles < 0)
-            {
-                throw new ArgumentException($"Unidades disponibles invalidas: { lote.UnidadesDisponibles }, la cantidad no puede ser negativa.");
-            }
-            if (lote.PrecioVentaUnidad < 0)
-            {
-                throw new ArgumentException($"Precio de venta por unidad invalido: { lote.PrecioVentaUnidad}, el precio no puede ser negativo.");
-            }
-            if (lote.PrecioVentaUnidad > MonedaMaximo)
-            {
-                throw new OverflowException("Precio de venta de la unidad demasiado grande.");
-            }
+            lote.ValidarLote();
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                // Cargar unidades disponibles del lote desde la base de datos.
-                var q = @"select UnidadesDisponibles from lotes where Id = @Id";
-                var unidadesDisponibles = conexion.ExecuteScalar<int>(q, new { Id = lote.Id });
-
-                // Validar que no se agreguen mas unidades al lote.
-                if (lote.UnidadesDisponibles > unidadesDisponibles)
-                {
-                    throw new ArgumentException($@"Unidades disponibles solicitadas invalidas.
-                                                    La cantidad de unidades disponibles solicitada es mayor a la cantidad de unidades disponibles en la base de datos.
-                                                    Cantidad solicitada: { lote.UnidadesDisponibles }, cantidad en la base de datos: { unidadesDisponibles }.
-                                                    No se permite agregar unidades al lote.");
-                }
-
-                // Editar lote.
-
-                q = @"update lotes set UnidadesDisponibles = @UnidadesDisponibles, 
+                var q = @"update lotes set UnidadesDisponibles = @UnidadesDisponibles, 
                         PrecioVentaUnidad = @PrecioVentaUnidad where Id = @Id";
-                
-                conexion.Execute(q, 
-                    new
-                    { UnidadesDisponibles = lote.UnidadesDisponibles,
-                        PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad),
-                        Id = lote.Id
-                    });               
+
+                var parametros = new
+                {
+                    UnidadesDisponibles = lote.UnidadesDisponibles,
+                    PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad),
+                    Id = lote.Id
+                };
+
+                conexion.Execute(q, parametros);
             }
         }
 
@@ -962,38 +636,22 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         public void EditarCliente(ClienteModelo cliente)
         {
-           if (cliente == null)
-            {
-                throw new ArgumentException("El cliente fue null.");
-            }
+            cliente.ValidarCliente();
 
-            if (cliente.Id < 1)
-            {
-                throw new ArgumentException($"Id del cliente invalido: { cliente.Id }, el id no debe ser menor a 1.");
-            }
-
-            if (string.IsNullOrWhiteSpace(cliente.Nombre))
-            {
-                throw new ArgumentException("El nombre del cliente no puede estar vacio.");
-            }
-
-            cliente.Nombre = cliente.Nombre.Trim();
-            
-            // Editar cliente.
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var q = @"update clientes 
-                            set Nombre = @Nombre, 
-                                Apellido = @Apellido, 
-                                NumeroContacto = @NumeroContacto
-                            where Id = @Id";
+                          set Nombre = @Nombre, 
+                              Apellido = @Apellido, 
+                              NumeroContacto = @NumeroContacto
+                          where Id = @Id";
 
-                var parametros = new 
-                { 
+                var parametros = new
+                {
                     Nombre = cliente.Nombre,
-                    Apellido = cliente.Apellido?.Trim(),
-                    NumeroContacto = cliente.NumeroContacto?.Trim(),
-                    Id = cliente.Id 
+                    Apellido = cliente.Apellido,
+                    NumeroContacto = cliente.NumeroContacto,
+                    Id = cliente.Id
                 };
 
                 conexion.Execute(q, parametros);
@@ -1012,7 +670,7 @@ namespace SivBiblioteca.AccesoDatos
 
             for (int i = 0; i < 10000; i++)
             {
-                
+
                 SQLiteCommand cmd2 = new SQLiteCommand($@"insert into productos (nombre, fechaCreacion) values ('producto{i}', 1) ", con);
                 cmd2.ExecuteNonQuery();
 
@@ -1045,75 +703,26 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         /// <returns> La lista de los reportes generados. </returns>
         public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null)
-        {
-            var q = @"select productos.id as 'ProductoId', 
-                        productos.nombre as 'NombreProducto', 
-                        productos.Descripcion as 'DescripcionProducto', 
-                        total(lotes.inversion / lotes.UnidadesCompradas * lotes.UnidadesDisponibles) as 'InversionUnidadesProducto', 
-                        sum(lotes.UnidadesDisponibles) as 'UnidadesProducto' 
-                        from Productos
-                        left join lotes on lotes.ProductoId = productos.Id";
-
+        { 
             var parametros = new DynamicParameters();
 
-            // Contrendan los joins de las tablas y la condiciones
-            // necesarias para la generacion de los resumenes.
-            var joins = new List<string>();
-            var condiciones = new List<string>();
-
-            if (filtro != null)
-            {
-                // Si se filtra por producto.
-                if (filtro.FiltroPorProducto && filtro.Producto != null)
-                {
-                    condiciones.Add("productos.id = @ProductoId");
-                    parametros.Add("@ProductoId", filtro.Producto.Id);
-                }
-
-                // Si se filtra por categorias.
-                if (filtro.Categorias != null && filtro.Categorias.Count > 0)
-                {
-                    condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
-                }
-            }
-
-            // Agregar los diferentes joins al query.
-            if (joins.Count > 0)
-            {
-                q += " " + string.Join(" ", joins);
-            }
-
-            condiciones.Add("lotes.UnidadesDisponibles > 0");
-
-            if (comienzo != null)
-            {
-                condiciones.Add("productos.id > @Comienzo");
-                parametros.Add("@Comienzo", comienzo);
-            }
-
-            // Agregar las condiciones al query.
-            if (condiciones.Count > 0)
-            {
-                q += " where ";
-                q += string.Join(" and ", condiciones);
-            }
-
-            q += " group by productos.id order by productos.id";
-
-            // Agregar el limite de filas a retornar.
-            if (limiteFilas != null && limiteFilas > -1)
-            {
-                q += $" limit @Limite";
-                parametros.Add("@Limite", limiteFilas);
-            }
+            var q = ConstruirQueryReporte
+            (
+                reporteTipo: typeof(ReporteInventarioModelo),
+                filtro: filtro,
+                parametros: parametros,
+                comienzo: comienzo,
+                limiteFilas: limiteFilas
+            );
 
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 var reportes = conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
 
+                // Convertir representacion interna de la moneda a la representacion original.
                 foreach (var reporte in reportes)
                 {
-                    reporte.InversionUnidadesProducto = reporte.InversionUnidadesProducto / FactorConversion;
+                    reporte.InversionUnidadesProducto /= factorConversion;
                 }
 
                 return reportes;
@@ -1121,10 +730,219 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Magia negra para seleccionar solo productos
-        ///     asociados con todas las categorias solicitadas.
-        ///     https://stackoverflow.com/a/1330271
-        ///     
+        /// Construye las condiciones necesarias de un query
+        /// para generar el reporte de tipo <paramref name="reporteTipo"/>.
+        /// </summary>
+        /// <param name="reporteTipo"> Tipo de reporte. (ReporteVentaModelo, ReporteLoteModelo, ...)</param>
+        /// <param name="filtro">
+        /// Objeto principal de donde se generan las condiciones.
+        /// Contiene condiciones para generar el query.
+        /// </param>
+        /// <param name="parametros">
+        /// Objeto de la biblioteca Dapper que contiene los parametros del query.
+        /// </param>
+        /// <param name="comienzo">
+        /// Util para paginar los resultados.
+        /// </param>
+        /// <returns> 
+        /// Una string con el formato "where [condicion1] and [condicion2] and..."
+        /// que representa las condiciones necesarias para generar un reporte de tipo <paramref name="reporteTipo"/>
+        /// Si el filtro es null o no tiene condiciones, se retorna String.Empty.
+        /// </returns>
+        public string ConstruirCondicionesReporte(Type reporteTipo, ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo)
+        {
+            var condiciones = new List<string>();
+
+            if (filtro == null) return string.Empty;
+
+            // Si se filtra por categorias del producto.
+            if (filtro.Categorias != null && filtro.Categorias.Count > 0)
+            {
+                condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
+            }
+
+            var filtrarPorFechas = filtro.FechaInicial != null &&
+                                    filtro.FechaFinal != null &&
+                                    filtro.FiltroPorFechas &&
+                                    reporteTipo != typeof(ReporteInventarioModelo);
+
+            // Si se filtra por fecha de creacion.
+            if (filtrarPorFechas)
+            {
+                if (reporteTipo == typeof(ReporteLoteModelo))
+                {
+                    condiciones.Add("Lotes.FechaCreacion BETWEEN @F1 AND @F2");
+                }
+                else if (reporteTipo == typeof(ReporteVentaModelo))
+                {
+                    condiciones.Add("Ventas.Fecha BETWEEN @F1 AND @F2");
+                }
+                parametros.Add("@F1", ((DateTimeOffset)filtro.FechaInicial).ToUnixTimeSeconds());
+                parametros.Add("@F2", ((DateTimeOffset)filtro.FechaFinal).ToUnixTimeSeconds());
+            }
+
+            // Si se filtra por el tipo de producto.
+            if (filtro.FiltroPorProducto && filtro.Producto != null)
+            {
+                if (filtrarPorFechas)
+                {
+                    condiciones.Add("(case when Productos.Id = @ProductoId then 1 end) = 1");
+                }
+                else
+                {
+                    condiciones.Add("Productos.Id = @ProductoId");
+                }
+                parametros.Add("@ProductoId", filtro.Producto.Id);
+            }
+
+            // Si solo se incluyen lotes con unidades disponibles.
+            if (filtro.IncluirLotesSinUnidades == false && reporteTipo == typeof(ReporteLoteModelo))
+            {
+                condiciones.Add("Lotes.UnidadesDisponibles > 0");
+            }
+
+            // Si se filtra por las compras de cierto cliente.
+            var filtrarPorCliente = filtro.FiltroPorCliente &&
+                                    filtro.Cliente != null &&
+                                    reporteTipo == typeof(ReporteVentaModelo);
+
+            if (filtrarPorCliente)
+            {
+                condiciones.Add("Clientes.Id = @ClienteId");
+                parametros.Add("@ClienteId", filtro.Cliente.Id);
+            }
+
+            // Util para paginar los resultados.
+            if (comienzo != null)
+            {
+                if (reporteTipo == typeof(ReporteVentaModelo))
+                {
+                    // En el caso de reportes de ventas, se paginan los resultados
+                    // en forma ascendente (ordenado por ventas.id).
+                    // Util para presentar las ultimas ventas al usuario,
+                    // en caso de que el usuario se haya equivocado en la venta.
+                    // De esta manera el usuario obtiene facilmente el id de la ultima venta por ejemplo.
+                    condiciones.Add("Ventas.Id < @Comienzo");
+                }
+                else if (reporteTipo == typeof(ReporteLoteModelo))
+                {
+                    condiciones.Add("Lotes.Id > @Comienzo");
+                }
+                else if (reporteTipo == typeof(ReporteInventarioModelo))
+                {
+                    condiciones.Add("Productos.Id > @Comienzo");
+                }
+                parametros.Add("@Comienzo", comienzo);
+            }
+
+            if (condiciones.Count < 1) return string.Empty;
+
+            return " where " + string.Join(" and ", condiciones);
+        }
+
+        /// <summary>
+        /// Construye el query final para generar un reporte de ventas,
+        /// lotes o inventario.
+        /// </summary>
+        /// <param name="reporteTipo"> 
+        /// Tipo de reporte. (ReporteVentaModelo, ReporteLoteModelo, ...) 
+        /// </param>
+        /// <param name="filtro"> 
+        /// Objeto principal de donde se generan las condiciones.
+        /// Contiene condiciones para generar el query.
+        /// </param>
+        /// <param name="parametros"> 
+        /// Objeto de la biblioteca Dapper que contiene los parametros del query.
+        /// </param>
+        /// <param name="comienzo">
+        /// Util para paginar los resultados.
+        /// </param>
+        /// <param name="limiteFilas">
+        /// Limite de filas a retornar. 
+        /// Util si los resultados se presentan al usuario.
+        /// Util si se paginan los resultados.
+        /// </param>
+        /// <returns>
+        /// El query final para generar el repote de tipo <paramref name="reporteTipo"/>
+        /// </returns>
+        public string ConstruirQueryReporte(Type reporteTipo, ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo, int? limiteFilas)
+        {
+            string select = "";
+            string ordenacion = "";
+            string agrupacion = "";
+            string limite = "-1";
+            string condiciones = "";
+
+            if (reporteTipo == typeof(ReporteLoteModelo))
+            {
+                select = @"select productos.Nombre as 'NombreProducto',
+                                productos.Descripcion as 'DescripcionProducto',
+                                lotes.PrecioVentaUnidad as 'PrecioVentaUnidad',
+                                lotes.id as 'LoteId',
+                                lotes.UnidadesCompradas as 'UnidadesCompradasLote',
+                                lotes.UnidadesDisponibles as 'UnidadesDisponiblesLote',
+                                lotes.Inversion as 'InversionLote',
+                                datetime(lotes.FechaCreacion, 'unixepoch', 'localtime') as 'FechaAgregado'
+                                from Productos
+                                join lotes on lotes.ProductoId = productos.Id";
+
+                ordenacion = "order by Lotes.Id asc";
+            }
+            else if (reporteTipo == typeof(ReporteVentaModelo))
+            {
+                select = @"select ventas.id as 'VentaId',
+                            lotes.id as 'LoteId',
+                            productos.nombre as 'NombreProducto',
+                            ventas.Unidades as 'UnidadesVendidas',
+                            lotes.Inversion 'InversionLote',
+                            lotes.UnidadesCompradas as 'UnidadesCompradasLote',
+                            ventas.PrecioVentaUnidad as 'PrecioVentaUnidad',
+                            datetime(ventas.fecha, 'unixepoch', 'localtime') as 'FechaVenta',
+                            clientes.Nombre || ' ' || coalesce(clientes.apellido, '') as 'NombreCliente'
+                            from ventas
+                            join lotes on lotes.id = ventas.LoteId
+                            join productos on productos.id = lotes.ProductoId
+                            left join Clientes on clientes.id = ventas.ClienteId";
+
+                ordenacion = "order by Ventas.Id desc";
+            }
+            else if (reporteTipo == typeof(ReporteInventarioModelo))
+            {
+                select = @"select productos.id as 'ProductoId',
+                        productos.nombre as 'NombreProducto',
+                        productos.Descripcion as 'DescripcionProducto',
+                        total(lotes.inversion / lotes.UnidadesCompradas * lotes.UnidadesDisponibles) as 'InversionUnidadesProducto',
+                        sum(lotes.UnidadesDisponibles) as 'UnidadesProducto'
+                        from Productos
+                        left join lotes on lotes.ProductoId = productos.Id";
+
+                agrupacion = "group by Productos.Id";
+                ordenacion = "order by Productos.Id asc";
+            }
+
+            condiciones = ConstruirCondicionesReporte
+            (
+                reporteTipo: reporteTipo,
+                filtro: filtro,
+                parametros: parametros,
+                comienzo: comienzo
+            );
+
+            if (limiteFilas != null)
+            {
+                limite = "limit @limiteFilas";
+                parametros.Add("@limiteFilas", limiteFilas);
+            }
+
+            return $@"
+                    { select }
+                    { condiciones }
+                    { agrupacion }
+                    { ordenacion }
+                    { limite }";
+        }
+
+        /// <summary>
         ///     Genera la condicion necesaria para encontrar los productos asociados
         ///     con todas las categorias proveidas.
         ///     Util cuando se generan reportes de ventas, lotes o inventario
@@ -1161,12 +979,15 @@ namespace SivBiblioteca.AccesoDatos
                 parametros.Add(parametro, categorias[i].Id);
             }
 
-            return  $@"(case when productos.id in 
+            ///     Magia negra para seleccionar solo productos
+            ///     asociados con todas las categorias solicitadas.
+            ///     https://stackoverflow.com/a/1330271
+            return $@"(case when productos.id in 
                         (SELECT  *
                         FROM (
                                 SELECT  DISTINCT ProductoCategoria.ProductoId
                                 FROM    ProductoCategoria
-                                ) mo
+                             ) mo
                         WHERE NOT EXISTS
                             (
                             SELECT  NULL
@@ -1191,43 +1012,39 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns> La venta si existe, null si no. </returns>
         public VentaModelo CargarVenta_PorId(int ventaId)
         {
-            if (ventaId < 1)
-            {
-                throw new ArgumentException($"Id de la venta invalido: { ventaId }, el id no puede ser menor a 1.");
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var q = @"select Id,
-                        Unidades,
-                        PrecioVentaUnidad,
-                        Comentario,
-                        ClienteId,
-                        datetime(fecha, 'unixepoch', 'localtime') as 'Fecha',
-                        LoteId
-                        from ventas where id = @ventaId";
+                var q = @"select v.Id,
+                            v.Unidades,
+                            v.PrecioVentaUnidad,
+                            v.Comentario,
+                            v.LoteId,
+                            datetime(v.Fecha, 'unixepoch', 'localtime') as 'Fecha',
+                            l.*,
+                            p.*,
+                            c.*
+                            from ventas v
+                            join lotes l on l.id = v.LoteId
+                            join productos p on p.id = l.ProductoId
+                            left join clientes c on c.id = v.ClienteId
+                            where v.id = @ventaId";
 
-                var venta = conexion.QuerySingleOrDefault<VentaModelo>(q, new { ventaId = ventaId });
+                Func<VentaModelo, LoteModelo, ProductoModelo, ClienteModelo, VentaModelo> map =
+                    (v, l, p, c) => { l.Producto = p; v.Lote = l; v.Cliente = c;  return v; };
 
-                if (venta == null) return venta;
+                var parametros = new { ventaId = ventaId };
 
-                q = "select * from lotes where id = @loteId";
-                var lote = conexion.QuerySingle<LoteModelo>(q, new { loteId = venta.LoteId });
+                var resultados = conexion.Query<VentaModelo, LoteModelo, ProductoModelo, ClienteModelo, VentaModelo>(q, map, parametros);
 
-                q = "select * from productos where id = @productoId";
-                var producto = conexion.QuerySingle<ProductoModelo>(q, new { productoId = lote.ProductoId });
+                var venta = resultados.FirstOrDefault();
+                if (venta == null) return null;
 
-                q = "select * from clientes where id = @clienteId";
-                var cliente = conexion.QuerySingleOrDefault<ClienteModelo>(q, new { clienteId = venta.ClienteId });
+                // Convertir moneda interna a representacion original.
+                venta.PrecioVentaUnidad /= factorConversion;
+                venta.Lote.Inversion /= factorConversion;
+                venta.Lote.PrecioVentaUnidad /= factorConversion;
 
-                // Convertir precio interno a representacion original.
-                venta.PrecioVentaUnidad /= FactorConversion;
-
-                lote.Producto = producto;
-                venta.Lote = lote;
-                venta.Cliente = cliente;
-
-                return venta;                
+                return venta;
             }
         }
 
@@ -1277,5 +1094,5 @@ namespace SivBiblioteca.AccesoDatos
                 }
             }
         }
-    }         
+    }
 }

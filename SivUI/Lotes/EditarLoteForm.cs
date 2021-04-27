@@ -71,21 +71,21 @@ namespace SivUI
             if (lote == null) return;
             if (Ayudantes.EsEnteroNoNegativo(unidades_disponibles_tb.Text) == false)
             {
-                MessageBox.Show("Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            var nuevoUnidadesDisponibles = int.Parse(unidades_disponibles_tb.Text);
+            var nuevoUnidadesDisponibles = uint.Parse(unidades_disponibles_tb.Text);
 
             if (nuevoUnidadesDisponibles > lote.UnidadesDisponibles)
             {
-                MessageBox.Show("No se permite agregar unidades al lote. Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se permite agregar unidades al lote. Unidades disponibles inválidas.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             if (Ayudantes.EsDecimalNoNegativo(precio_venta_unidad_tb.Text) == false)
             {
-                MessageBox.Show("Precio de venta por unidad inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Precio de venta por unidad inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 

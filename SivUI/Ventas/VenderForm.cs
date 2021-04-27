@@ -134,7 +134,7 @@ namespace SivUI
             }
 
             // Verificar que existan suficientes unidades en el lote.
-            var unidadesAVender = int.Parse(unidades_tb.Text);
+            var unidadesAVender = uint.Parse(unidades_tb.Text);
 
             if (unidadesAVender > lote.UnidadesDisponibles)
             {
@@ -222,7 +222,7 @@ namespace SivUI
                 }
 
                 var venta = ((VentaModelo)ventas_dtgv.Rows[e.RowIndex].DataBoundItem);
-                var intUnidadesAVender = int.Parse(stringUnidadesAVender);
+                var intUnidadesAVender = uint.Parse(stringUnidadesAVender);
 
                 if (intUnidadesAVender > venta.Lote.UnidadesDisponibles)
                 {

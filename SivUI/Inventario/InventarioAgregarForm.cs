@@ -113,7 +113,7 @@ namespace SivUI
 
             LoteModelo lote = new LoteModelo();
 
-            lote.UnidadesCompradas = int.Parse(unidades_tb.Text);
+            lote.UnidadesCompradas = uint.Parse(unidades_tb.Text);
             lote.Inversion = decimal.Parse(inversion_total_tb.Text);
             lote.PrecioVentaUnidad = decimal.Parse(precio_venta_defecto_tb.Text);
             lote.Producto = producto;

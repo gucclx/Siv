@@ -23,9 +23,11 @@ namespace SivUI
         public void ProductoListo(ProductoModelo producto)
         {
             if (producto == null) return;
+
             this.producto = producto;
             nombre_producto_tb.Text = producto.Nombre;
             nuevo_nombre_tb.Text = producto.Nombre;
+            descripcion_tb.Text = producto.Descripcion;
             nueva_descripcion_tb.Text = producto.Descripcion;
 
             try
@@ -60,6 +62,7 @@ namespace SivUI
         private void remover_categorias_button_Click(object sender, EventArgs e)
         {
             if (producto == null) return;
+
             var categoriasSeleccionadas = categorias_listbox.SelectedItems.Cast<CategoriaModelo>().ToList();
 
             foreach (var categoria in categoriasSeleccionadas)
@@ -130,6 +133,7 @@ namespace SivUI
             nombre_producto_tb.Focus();
             nuevo_nombre_tb.Clear();
             nueva_descripcion_tb.Clear();
+            descripcion_tb.Clear();
             ActualizarCategorias();
         }
     }

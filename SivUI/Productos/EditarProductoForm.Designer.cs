@@ -42,6 +42,8 @@
             this.editar_button = new System.Windows.Forms.Button();
             this.crear_categoria_linklabel = new System.Windows.Forms.LinkLabel();
             this.nueva_descripcion_tb = new System.Windows.Forms.TextBox();
+            this.nueva_descripcion_label = new System.Windows.Forms.Label();
+            this.descripcion_tb = new System.Windows.Forms.TextBox();
             this.descripcion_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -173,20 +175,39 @@
             // nueva_descripcion_tb
             // 
             this.nueva_descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nueva_descripcion_tb.Location = new System.Drawing.Point(12, 214);
+            this.nueva_descripcion_tb.Location = new System.Drawing.Point(232, 214);
             this.nueva_descripcion_tb.Multiline = true;
             this.nueva_descripcion_tb.Name = "nueva_descripcion_tb";
-            this.nueva_descripcion_tb.Size = new System.Drawing.Size(449, 72);
+            this.nueva_descripcion_tb.Size = new System.Drawing.Size(229, 72);
             this.nueva_descripcion_tb.TabIndex = 34;
+            // 
+            // nueva_descripcion_label
+            // 
+            this.nueva_descripcion_label.AutoSize = true;
+            this.nueva_descripcion_label.Location = new System.Drawing.Point(227, 186);
+            this.nueva_descripcion_label.Name = "nueva_descripcion_label";
+            this.nueva_descripcion_label.Size = new System.Drawing.Size(168, 25);
+            this.nueva_descripcion_label.TabIndex = 33;
+            this.nueva_descripcion_label.Text = "Nueva descripción";
+            // 
+            // descripcion_tb
+            // 
+            this.descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descripcion_tb.Location = new System.Drawing.Point(12, 214);
+            this.descripcion_tb.Multiline = true;
+            this.descripcion_tb.Name = "descripcion_tb";
+            this.descripcion_tb.ReadOnly = true;
+            this.descripcion_tb.Size = new System.Drawing.Size(213, 72);
+            this.descripcion_tb.TabIndex = 36;
             // 
             // descripcion_label
             // 
             this.descripcion_label.AutoSize = true;
             this.descripcion_label.Location = new System.Drawing.Point(7, 186);
             this.descripcion_label.Name = "descripcion_label";
-            this.descripcion_label.Size = new System.Drawing.Size(168, 25);
-            this.descripcion_label.TabIndex = 33;
-            this.descripcion_label.Text = "Nueva descripción";
+            this.descripcion_label.Size = new System.Drawing.Size(111, 25);
+            this.descripcion_label.TabIndex = 35;
+            this.descripcion_label.Text = "Descripción";
             // 
             // EditarProductoForm
             // 
@@ -194,8 +215,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(473, 501);
-            this.Controls.Add(this.nueva_descripcion_tb);
+            this.Controls.Add(this.descripcion_tb);
             this.Controls.Add(this.descripcion_label);
+            this.Controls.Add(this.nueva_descripcion_tb);
+            this.Controls.Add(this.nueva_descripcion_label);
             this.Controls.Add(this.crear_categoria_linklabel);
             this.Controls.Add(this.editar_button);
             this.Controls.Add(this.remover_categorias_button);
@@ -237,6 +260,8 @@
         private System.Windows.Forms.Button editar_button;
         private System.Windows.Forms.LinkLabel crear_categoria_linklabel;
         private System.Windows.Forms.TextBox nueva_descripcion_tb;
+        private System.Windows.Forms.Label nueva_descripcion_label;
+        private System.Windows.Forms.TextBox descripcion_tb;
         private System.Windows.Forms.Label descripcion_label;
     }
 }
