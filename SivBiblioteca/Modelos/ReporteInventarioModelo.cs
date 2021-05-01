@@ -14,7 +14,7 @@ namespace SivBiblioteca.Modelos
     ///     los reportes a un archivo .csv utilizando la biblioteca CvsHelper.
     ///     El atributo ignore le pide a CsvHelper ignorar la propiedad.
     /// </summary>
-    public class ReporteInventarioModelo
+    public class ReporteInventarioModelo : IReporte
     {
         [Ignore]
         public int ProductoId { get; set; }
@@ -34,5 +34,8 @@ namespace SivBiblioteca.Modelos
         [Name("Inversión Unidades")]
         [Index(3)]
         public decimal InversionUnidadesProducto { get; set; }
+
+        [Ignore]
+        public int ReporteId => ProductoId;
     }
 }

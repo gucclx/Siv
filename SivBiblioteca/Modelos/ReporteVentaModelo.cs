@@ -13,7 +13,7 @@ namespace SivBiblioteca.Modelos
     ///     a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
     ///     El atributo Ignore le pide a CsvHelper ignorar la propiedad.
     /// </summary>
-    public class ReporteVentaModelo
+    public class ReporteVentaModelo : IReporte
     {
         [Ignore]
         public decimal InversionLote { get; set; }
@@ -22,47 +22,50 @@ namespace SivBiblioteca.Modelos
         public int UnidadesCompradasLote { get; set; }
 
         [Name("ID venta")]
-        [Index(-1)]
+        [Index(0)]
         public int VentaId { get; set; }
 
         [Name("ID lote")]
-        [Index(0)]
+        [Index(1)]
         public int LoteId { get; set; }
 
         [Name("Producto")]
-        [Index(1)]
+        [Index(2)]
         public string NombreProducto { get; set; }
 
         [Name("Unidades Vendidas")]
-        [Index(2)]
+        [Index(3)]
         public int UnidadesVendidas { get; set; }
 
         [Name("Inversión Unidad")]
-        [Index(3)]
+        [Index(4)]
         public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
 
         [Name("Precio Venta Unidad")]
-        [Index(4)]
+        [Index(5)]
         public decimal PrecioVentaUnidad { get; set; }
 
         [Name("Inversión Venta")]
-        [Index(5)]
+        [Index(6)]
         public decimal InversionVenta { get { return UnidadesVendidas * InversionUnidad; } }
 
         [Name("Ingreso Venta")]
-        [Index(6)]
+        [Index(7)]
         public decimal IngresoVenta { get { return UnidadesVendidas * PrecioVentaUnidad; } }
 
         [Name("Ganancia Venta")]
-        [Index(7)]
+        [Index(8)]
         public decimal GananciaVenta { get { return IngresoVenta - InversionVenta; } }
 
         [Name("Fecha Venta")]
-        [Index(8)]
+        [Index(9)]
         public string FechaVenta { get; set; }
 
         [Name("Cliente")]
-        [Index(9)]
+        [Index(10)]
         public string NombreCliente { get; set; }
+
+        [Ignore]
+        public int ReporteId => VentaId;
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="Clientes\BuscarClienteForm.Designer.cs">
       <DependentUpon>BuscarClienteForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exportar.cs" />
     <Compile Include="Filtros\HistorialLotesFiltroForm.cs">
       <SubType>Form</SubType>
     </Compile>

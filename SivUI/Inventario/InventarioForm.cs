@@ -22,6 +22,11 @@ namespace SivUI.Inventario
         {
             InitializeComponent();
 
+            reporteFiltro = new ReporteFiltroModelo();
+
+            // Por defecto, mostrar al usuario solo los productos con unidades disponibles.
+            reporteFiltro.IncluirProductosSinUnidades = false;
+
             resultados_dtgv.AutoGenerateColumns = false;
 
             // Inicializar columnas
@@ -69,7 +74,6 @@ namespace SivUI.Inventario
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
             cargar_reporte_button.Enabled = true;
             ConfigTareaLabel(visible: false);
@@ -151,28 +155,25 @@ namespace SivUI.Inventario
         {
             if (resultados == null || resultados.DataSource == null) return;
 
-            using (var dialogGuardar = new SaveFileDialog())
+            Exportando(true);
+            ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+
+            var reportes = resultados.List.Cast<ReporteInventarioModelo>();
+
+            try
             {
-                dialogGuardar.Filter = "CSV |*.csv";
-                dialogGuardar.OverwritePrompt = true;
+                var destino = Exportar.DialogoGuardar();
 
-                if (dialogGuardar.ShowDialog() != DialogResult.OK) return;
+                if (destino == null) return;
 
-                FileInfo archivo = new FileInfo(dialogGuardar.FileName);
-
-                Exportando(true);
-                ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
-
-                try
-                {
-                    await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteInventarioModelo>().ToList(), archivo: archivo);
-                    MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (IOException ex)
-                {
-                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                await Exportar.ExportarReportes<ReporteInventarioModelo>(reportes, destino);
+                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             Exportando(false);
             ConfigTareaLabel(visible: false);
         }

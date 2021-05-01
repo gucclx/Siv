@@ -15,7 +15,7 @@ namespace SivBiblioteca.Modelos
     /// Los atributos especifican los titulos y el orden de las columnas
     /// a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
     /// </remarks>
-    public class ReporteLoteModelo
+    public class ReporteLoteModelo : IReporte
     {
 
         [Name("ID lote")]
@@ -53,5 +53,8 @@ namespace SivBiblioteca.Modelos
         [Name("Fecha agregado")]
         [Index(8)]
         public string FechaAgregado { get; set; }
+
+        [Ignore]
+        public int ReporteId => LoteId;
     }
 }

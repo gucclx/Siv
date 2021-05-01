@@ -173,27 +173,27 @@ namespace SivUI
         private async void exportar_button_Click(object sender, EventArgs e)
         {
             if (resultados == null || resultados.DataSource == null) return;
-            
-            using (var dialogGuardar = new SaveFileDialog())
+
+            Exportando(true);
+            ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+
+            var reportes = resultados.List.Cast<ReporteLoteModelo>();
+
+            try
             {
-                dialogGuardar.Filter = "CSV |*.csv";
-                dialogGuardar.OverwritePrompt = true;
-                if (dialogGuardar.ShowDialog() == DialogResult.OK)
-                {
-                    FileInfo archivo = new FileInfo(dialogGuardar.FileName);
-                    try
-                    {
-                        Exportando(true);
-                        ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
-                        await Ayudantes.GuardarCsvReporteAsync(reportes: resultados.List.Cast<ReporteLoteModelo>().ToList(), archivo: archivo);
-                        MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (IOException ex)
-                    {
-                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                var destino = Exportar.DialogoGuardar();
+
+                if (destino == null) return;
+
+                await Exportar.ExportarReportes<ReporteLoteModelo>(reportes, destino);
+
+                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             Exportando(false);
             ConfigTareaLabel(visible: false);
         }

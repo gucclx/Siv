@@ -20,7 +20,11 @@ namespace SivUI
     {
         ReporteFiltroModelo reporteFiltro;
 
-        const int LimiteFilas = 100_000;
+        // Firma de la funcion que cargara los reportes.
+        delegate List<T> ReportesFuncion<T>(ReporteFiltroModelo filtro, int? limiteFilas, int? comienzo);
+
+        // todo - cambiar
+        const int LimiteFilas = 1;
         public ExportarForm()
         {
             InitializeComponent();
@@ -31,44 +35,47 @@ namespace SivUI
             reporteFiltro = filtro;
         }
 
+        // todo - mover logica a biblioteca
+        private async Task ExportarReportes<T>(FileInfo destino, ReportesFuncion<T> f) where T : IReporte
+        {
+            List<T> reportes;
+            int? comienzo = null;
+
+            // Exportar los resultados mediante paginacion.
+            do
+            {
+                reportes = await Task.Run(() => f(filtro: reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo));
+                await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
+                comienzo = reportes.LastOrDefault()?.ReporteId;
+            } while (reportes.Count > 0);
+        }
+
         private async void exportar_lotes_button_Click(object sender, EventArgs e)
         {
-            var frm = new HistorialLotesFiltroForm(this);
+            var frm = new HistorialLotesFiltroForm(solicitante: this);
             this.Hide();
             frm.ShowDialog();
             this.Show();
 
-            var destino = DialogoGuardar();
+            var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);
             CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
-            List<ReporteLoteModelo> reportes;
-            int? comienzo = 0;
+            ReportesFuncion<ReporteLoteModelo> f = 
+                (filtro, limiteFilas, comienzo) => ConfigGlobal.conexion.CargarReporteLotes(filtro: filtro, limiteFilas: limiteFilas, comienzo: comienzo);
 
             try
             {
-                // Exportar los resultados mediante paginacion
-                do
-                {
-                    reportes = await Task.Run(() =>
-                        ConfigGlobal.conexion.CargarReporteLotes(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
-                    );
-                    await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
-                    comienzo = reportes.LastOrDefault()?.LoteId;
-                } while (reportes.Count > 0);
+                await ExportarReportes(destino, f);
+                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Exportando(false);
-                reporteFiltro = null;
-                CambiarTareaLabel(visible: false);
-                return;
             }
 
-            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
             CambiarTareaLabel(visible: false);
             reporteFiltro = null;
@@ -87,27 +94,6 @@ namespace SivUI
             tarea_label.Dock = DockStyle.Fill;
         }
 
-        /// <summary>
-        ///     Abre un dialogo donde el usuario escoge el destino a guardar la exportacion.
-        /// </summary>
-        /// <returns> La informacion del destino. Si el usuario no escoge uno se retorna null. </returns>
-        private FileInfo DialogoGuardar()
-        {
-            using (var dialogGuardar = new SaveFileDialog())
-            {
-                dialogGuardar.Filter = "CSV |*.csv";
-                dialogGuardar.OverwritePrompt = true;
-
-                var resultadoDialogo = dialogGuardar.ShowDialog();
-
-                if (resultadoDialogo == DialogResult.OK)
-                {
-                    return new FileInfo(dialogGuardar.FileName);
-                }
-                return null;              
-            }           
-        }
-
         private async void exportar_ventas_button_Click(object sender, EventArgs e)
         {
             var frm = new HistorialVentasFiltroForm(this);
@@ -115,37 +101,25 @@ namespace SivUI
             frm.ShowDialog();
             this.Show();
 
-            var destino = DialogoGuardar();
+            var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);
             CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
-            List<ReporteVentaModelo> reportes;
-            int? comienzo = null;
+            ReportesFuncion<ReporteVentaModelo> f =
+                (filtro, limiteFilas, comienzo) => ConfigGlobal.conexion.CargarReporteVentas(filtro: filtro, limiteFilas: limiteFilas, comienzo: comienzo);
 
             try
             {
-                // Guardar los reportes utilizando paginacion.
-                do
-                {
-                    reportes = await Task.Run(() =>
-                        ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
-                    );
-                    await Ayudantes.GuardarCsvReporteAsync(reportes, destino);
-                    comienzo = reportes.LastOrDefault()?.VentaId;
-                } while (reportes.Count > 0);
+                await ExportarReportes(destino, f);
+                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Exportando(false);
-                reporteFiltro = null;
-                CambiarTareaLabel(visible: false);
-                return;
             }
 
-            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
             CambiarTareaLabel(visible: false);
             reporteFiltro = null;
@@ -163,44 +137,57 @@ namespace SivUI
             exportar_ventas_button.Enabled = !trabajando;
             exportar_inventario_button.Enabled = !trabajando;
         }
+        
+        /// <summary>
+        /// Abre el dialogo en el que el usuario escoge el destino del archivo.
+        /// </summary>
+        /// <returns> 
+        /// La informacion de destino. Si el usuario no escoge uno, se retorna null.
+        /// Si ocurre un error, se retornar null.
+        /// </returns>
+        private FileInfo AbrirDialogoGuardar()
+        {
+            FileInfo destino = null;
+            try
+            {
+                destino = Exportar.DialogoGuardar();
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return destino;
+        }
 
         private async void exportar_inventario_button_Click(object sender, EventArgs e)
         {
-            var frm = new InventarioFiltroForm(this);
+            reporteFiltro = new ReporteFiltroModelo();
+            reporteFiltro.IncluirProductosSinUnidades = false;
+
+            var frm = new InventarioFiltroForm(this, reporteFiltro);
             this.Hide();
             frm.ShowDialog();
             this.Show();
 
-            var destino = DialogoGuardar();
+            var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
             Exportando(true);
             CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
-            List<ReporteInventarioModelo> inventario;
-            int? comienzo = 0;
-
             try
             {
-                do
-                {
-                    inventario = await Task.Run(() =>
-                        ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro, limiteFilas: LimiteFilas, comienzo: comienzo)
-                    );
-                    await Ayudantes.GuardarCsvReporteAsync(inventario, destino);
-                    comienzo = inventario.LastOrDefault()?.ProductoId;
-                } while (inventario.Count > 0);
+                ReportesFuncion<ReporteInventarioModelo> f = 
+                    (filtro, limiteFilas, comienzo) => ConfigGlobal.conexion.CargarReporteInventario(filtro: filtro, limiteFilas: limiteFilas, comienzo: comienzo);
+
+                await ExportarReportes(destino, f);
+                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Exportando(false);
-                reporteFiltro = null;
-                CambiarTareaLabel(visible: false);
-                return;
             }
 
-            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Exportando(false);
             CambiarTareaLabel(visible: false);
             reporteFiltro = null;

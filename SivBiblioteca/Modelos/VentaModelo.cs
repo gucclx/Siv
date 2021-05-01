@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SivBiblioteca.Modelos
 {
-    // todo - quiza crear clase para display datagridview
     public class VentaModelo
     {
         LoteModelo lote;
@@ -15,13 +14,14 @@ namespace SivBiblioteca.Modelos
 
         public int Id { get; set; }
         public string Fecha { get; set; }
+
         /// <summary>
         /// Se situa la propiedad loteId por simplicidad a la hora de presentar
         /// la propiedad en un datagridview.
         /// ej. solo se necesita realizar venta.lote = miLote;
         /// en vez de venta.lote = miLote; venta.loteId = miLote.Id;
         /// ya que el DataPropertyName de la columna en el datagridview
-        /// sera VentaModelo.LoteId y esta propiedad no soporta propiedades hijas.
+        /// sera VentaModelo.LoteId y datagridview no soporta propiedades hijas.
         /// </summary>
         public LoteModelo Lote 
         { 
@@ -46,7 +46,7 @@ namespace SivBiblioteca.Modelos
             {
                 if (value < 1)
                 {
-                    throw new ArgumentException("Las cantidad de unidades de la venta no puede ser menor a 1");
+                    throw new ArgumentException("Las cantidad de unidades de la venta no puede ser menor a 1.");
                 }
                 unidades = value;
             }

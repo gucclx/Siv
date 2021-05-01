@@ -12,7 +12,7 @@ namespace SivBiblioteca.AccesoDatos
     /// Nota - Los precios se guardan en la base de datos como enteros.
     ///          Esto se realiza para guardar los precios con una precision fija.
     ///     
-    /// Nota - Se utiliza 'case' en algunas condiciones de algunos query
+    /// Nota - Se utiliza 'case' en algunas condiciones de algunos queries
     /// usualmente para obtener un 'mejor' query plan.
     /// 
     /// ej. Cuando se genera un reporte de venta, si se filtra por fecha de venta 
@@ -43,9 +43,11 @@ namespace SivBiblioteca.AccesoDatos
     ///  Ni idea si el plan del query sin case se debe a una estructura del query pobre, 
     ///  o un diseno pobre de las tablas lol
     ///  ¯\_(ツ)_/¯
+
+
     public class SqliteConexion : IConexionDatos
     {
-        string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
+        readonly string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
 
         // Describe cuantos digitos se consideran despues del punto decimal
         // en todos los precios que se guardan en la base de datos.
@@ -70,6 +72,7 @@ namespace SivBiblioteca.AccesoDatos
         decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         public decimal MonedaMaximo { get { return monedaMaximo; } }
+
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -448,13 +451,47 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
+        //public List<IReporte> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null) where T: IReporte
+        //{
+
+        //    var parametros = new DynamicParameters();
+
+        //    var q = ConstruirQueryReporte
+        //    (
+        //        reporteTipo: typeof(T),
+        //        filtro: filtro,
+        //        parametros: parametros,
+        //        comienzo: comienzo,
+        //        limiteFilas: limiteFilas
+        //    );
+
+        //    List<T> reportes;
+
+        //    using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+        //    {
+        //        reportes = conexion.Query<T>(q, parametros).ToList();
+        //    }
+
+        //    if (typeof(T) == typeof(ReporteLoteModelo))
+        //    {
+        //        // Convertir representacion interna de la moneda a la representacion original.
+        //        foreach (ReporteLoteModelo reporte in reportes)
+        //        {
+        //            reporte.InversionLote /= factorConversion;
+        //            reporte.PrecioVentaUnidad /= factorConversion;
+        //        }
+        //    }
+        //    return reportes;
+        //}
+
         /// <summary>
         ///     Genera y retorna una lista de reportes de lotes.
         ///     Cada reporte contiene informacion como el id del lote adquerido, cuando se adquirio,
         ///     el producto del lote, inversion total, etc.
         /// </summary>
         /// <param name="filtro"> 
-        ///     Objeto que contiene condiciones para generar los reportes. 
+        ///     Objeto que contiene condiciones para generar los reportes.
+        /// 	Como tipo de Producto, rango de fechas en las que los lotes fueron comprados, etc.
         /// </param>
         /// <param name="limiteFilas"> 
         ///     Limite de filas a retonar.
@@ -467,6 +504,7 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         /// <example>
         /// <code>
+        /// // Ejemplo de paginacion de resultados.
         /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: null); // Carga los primeros dos lotes.
         /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: reportes1.LastOrDefault()?.Id); // Carga los siguientes dos lotes.
         /// ...
@@ -751,9 +789,9 @@ namespace SivBiblioteca.AccesoDatos
         /// </returns>
         public string ConstruirCondicionesReporte(Type reporteTipo, ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo)
         {
-            var condiciones = new List<string>();
-
             if (filtro == null) return string.Empty;
+
+            var condiciones = new List<string>();
 
             // Si se filtra por categorias del producto.
             if (filtro.Categorias != null && filtro.Categorias.Count > 0)
@@ -761,12 +799,14 @@ namespace SivBiblioteca.AccesoDatos
                 condiciones.Add(CondicionFiltroCategorias(parametros, filtro.Categorias));
             }
 
+
+            // Si se filtra por fecha de creacion.
+
             var filtrarPorFechas = filtro.FechaInicial != null &&
                                     filtro.FechaFinal != null &&
                                     filtro.FiltroPorFechas &&
                                     reporteTipo != typeof(ReporteInventarioModelo);
 
-            // Si se filtra por fecha de creacion.
             if (filtrarPorFechas)
             {
                 if (reporteTipo == typeof(ReporteLoteModelo))
@@ -795,13 +835,28 @@ namespace SivBiblioteca.AccesoDatos
                 parametros.Add("@ProductoId", filtro.Producto.Id);
             }
 
-            // Si solo se incluyen lotes con unidades disponibles.
-            if (filtro.IncluirLotesSinUnidades == false && reporteTipo == typeof(ReporteLoteModelo))
+            // Si solo se incluyen lotes con unidades disponibles en un reporte de lotes.
+
+            var incluirLotesSinUnidades = filtro.IncluirLotesSinUnidades == false &&
+                                            reporteTipo == typeof(ReporteLoteModelo);
+
+            if (incluirLotesSinUnidades)
+            {
+                condiciones.Add("Lotes.UnidadesDisponibles > 0");
+            }
+
+            // Si solo se incluyen productos con unidades disponibles en un reporte de inventario.
+
+            var incluirProductosSinUnidades = filtro.IncluirProductosSinUnidades == false &&
+                                                reporteTipo == typeof(ReporteInventarioModelo);
+
+            if (incluirProductosSinUnidades)
             {
                 condiciones.Add("Lotes.UnidadesDisponibles > 0");
             }
 
             // Si se filtra por las compras de cierto cliente.
+
             var filtrarPorCliente = filtro.FiltroPorCliente &&
                                     filtro.Cliente != null &&
                                     reporteTipo == typeof(ReporteVentaModelo);
@@ -870,7 +925,7 @@ namespace SivBiblioteca.AccesoDatos
             string select = "";
             string ordenacion = "";
             string agrupacion = "";
-            string limite = "-1";
+            string limite = "limit -1";
             string condiciones = "";
 
             if (reporteTipo == typeof(ReporteLoteModelo))
@@ -974,8 +1029,8 @@ namespace SivBiblioteca.AccesoDatos
 
             for (int i = 1; i < categorias.Count; i++)
             {
-                var parametro = $"@FPCCATID{i}";
-                partes.Add($"union select {parametro}");
+                var parametro = $"@FPCCATID{ i }";
+                partes.Add($"union select { parametro }");
                 parametros.Add(parametro, categorias[i].Id);
             }
 
@@ -992,7 +1047,7 @@ namespace SivBiblioteca.AccesoDatos
                             (
                             SELECT  NULL
                             FROM (
-                                    {string.Join(" ", partes)}
+                                    { string.Join(" ", partes) }
                                     ) filtro
                             WHERE   NOT EXISTS
                                     (
@@ -1054,11 +1109,6 @@ namespace SivBiblioteca.AccesoDatos
         /// <param name="id"> Id de la venta a eliminar. </param>
         public void EliminarVenta(int ventaId)
         {
-            if (ventaId < 1)
-            {
-                throw new ArgumentException($"Id de la venta invalido: { ventaId }, el id no puede ser menor a 1.");
-            }
-
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
                 conexion.Open();

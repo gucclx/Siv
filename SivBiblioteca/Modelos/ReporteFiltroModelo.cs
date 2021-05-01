@@ -63,6 +63,12 @@ namespace SivBiblioteca.Modelos
         /// Si se deben incluir lotes sin unidades disponibles o no
         /// a la hora de generar un reporte de lotes.
         /// </summary>
-        public bool IncluirLotesSinUnidades = true;
+        public bool IncluirLotesSinUnidades { get; set; } = true;
+
+        /// <summary>
+        /// Si se deben incluir productos sin unidades disponibles o no
+        /// a la hora de generar un reporte de inventario.
+        /// </summary>
+        public bool IncluirProductosSinUnidades { get; set; } = false;
     }
 }

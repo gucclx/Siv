@@ -24,26 +24,28 @@ namespace SivUI.Filtros
         {
             InitializeComponent();
 
-            // Cargar filtro anterior
-            if (filtro != null)
-            {
-
-                if (filtro.FiltroPorProducto && filtro.Producto != null)
-                {
-                    producto = filtro.Producto;
-                    nombre_producto_tb.Text = filtro.Producto.Nombre;
-
-                    filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
-                    filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
-                }
-
-                if (filtro.Categorias != null)
-                {
-                    categoriasSeleccionadas = filtro.Categorias;
-                    ActualizarCategorias();
-                }
-            }
             this.solicitante = solicitante;
+
+            if (filtro == null) return;
+
+            // Cargar filtro
+
+            if (filtro.FiltroPorProducto && filtro.Producto != null)
+            {
+                producto = filtro.Producto;
+                nombre_producto_tb.Text = filtro.Producto.Nombre;
+
+                filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
+                filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+            }
+
+            if (filtro.Categorias != null)
+            {
+                categoriasSeleccionadas = filtro.Categorias;
+                ActualizarCategorias();
+            }
+
+            incluir_productos_sin_unidades.Checked = !filtro.IncluirProductosSinUnidades;
         }
 
         private void filtrar_por_producto_checkbox_CheckedChanged(object sender, EventArgs e)
@@ -73,6 +75,8 @@ namespace SivUI.Filtros
             filtro.FiltroPorProducto = filtrar_por_producto_checkbox.Checked;
 
             filtro.Categorias = categoriasSeleccionadas;
+
+            filtro.IncluirProductosSinUnidades = !incluir_productos_sin_unidades.Checked;
 
             solicitante.FiltroCreado(filtro);
             MessageBox.Show("Filtro configurado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
