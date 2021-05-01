@@ -181,11 +181,11 @@ namespace SivUI
 
             try
             {
-                var destino = Exportar.DialogoGuardar();
+                var destino = ExportarDialogo.Mostrar();
 
                 if (destino == null) return;
 
-                await Exportar.ExportarReportes<ReporteLoteModelo>(reportes, destino);
+                await Exportar.GuardarCsvReporteAsync(reportes, destino);
 
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

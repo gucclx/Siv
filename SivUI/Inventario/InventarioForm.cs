@@ -162,11 +162,11 @@ namespace SivUI.Inventario
 
             try
             {
-                var destino = Exportar.DialogoGuardar();
+                var destino = ExportarDialogo.Mostrar();
 
                 if (destino == null) return;
 
-                await Exportar.ExportarReportes<ReporteInventarioModelo>(reportes, destino);
+                await Exportar.GuardarCsvReporteAsync(reportes, destino);
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)

@@ -14,13 +14,6 @@ namespace SivBiblioteca
     /// </summary>
     public static class ValidacionModelosExtensiones
     {
-        /// <summary>
-        /// Realiza validaciones a un producto.
-        /// </summary>
-        /// <param name="producto"> El producto a validar. </param>
-        /// <param name="verificarQueNoExista"> 
-        /// Verificar que el nombre del producto no exista en la base de datos.
-        /// </param>
         public static void ValidarProducto(this ProductoModelo producto, bool verificarQueNoExista = false)
         {
             if (producto == null)
@@ -41,13 +34,6 @@ namespace SivBiblioteca
             }
         }
 
-        /// <summary>
-        /// Realiza validaciones a una o mas categorias.
-        /// </summary>
-        /// <param name="categorias"> Lista de categorias a validar. </param>
-        /// <param name="verificarQueNoExistan">
-        /// Verificar que el nombre cada categoria no exista en la base de datos.
-        /// </param>
         public static void ValidarCategorias(this List<CategoriaModelo> categorias, bool verificarQueNoExistan = false)
         {
             if (categorias == null)
@@ -75,10 +61,6 @@ namespace SivBiblioteca
             }
         }
 
-        /// <summary>
-        /// Realiza validaciones a una o mas ventas.
-        /// </summary>
-        /// <param name="ventas"> Lista de ventas a validar. </param>
         public static void ValidarVentas(this List<VentaModelo> ventas)
         {
             if (ventas == null)
@@ -110,10 +92,6 @@ namespace SivBiblioteca
             }
         }
 
-        /// <summary>
-        /// Realiza validaciones a un cliente.
-        /// </summary>
-        /// <param name="cliente"> Cliente a validar. </param>
         public static void ValidarCliente(this ClienteModelo cliente)
         {
             if (cliente == null)
@@ -127,10 +105,6 @@ namespace SivBiblioteca
             }
         }
 
-        /// <summary>
-        /// Realiza validaciones a un lote.
-        /// </summary>
-        /// <param name="lote"> Lote a validar. </param>
         public static void ValidarLote(this LoteModelo lote)
         {
             if (lote == null)

@@ -451,39 +451,6 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
-        //public List<IReporte> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null) where T: IReporte
-        //{
-
-        //    var parametros = new DynamicParameters();
-
-        //    var q = ConstruirQueryReporte
-        //    (
-        //        reporteTipo: typeof(T),
-        //        filtro: filtro,
-        //        parametros: parametros,
-        //        comienzo: comienzo,
-        //        limiteFilas: limiteFilas
-        //    );
-
-        //    List<T> reportes;
-
-        //    using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-        //    {
-        //        reportes = conexion.Query<T>(q, parametros).ToList();
-        //    }
-
-        //    if (typeof(T) == typeof(ReporteLoteModelo))
-        //    {
-        //        // Convertir representacion interna de la moneda a la representacion original.
-        //        foreach (ReporteLoteModelo reporte in reportes)
-        //        {
-        //            reporte.InversionLote /= factorConversion;
-        //            reporte.PrecioVentaUnidad /= factorConversion;
-        //        }
-        //    }
-        //    return reportes;
-        //}
-
         /// <summary>
         ///     Genera y retorna una lista de reportes de lotes.
         ///     Cada reporte contiene informacion como el id del lote adquerido, cuando se adquirio,
