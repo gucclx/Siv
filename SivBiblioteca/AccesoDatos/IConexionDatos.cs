@@ -9,8 +9,6 @@ namespace SivBiblioteca.AccesoDatos
 {
     public interface IConexionDatos
     {
-        decimal MonedaMaximo { get; }
-
         void GuardarCategorias(List<CategoriaModelo> categoria);
         List<CategoriaModelo> CargarCategorias_PorProductoId(int id);
         bool CategoriaExiste(string nombreCategoria);
@@ -22,8 +20,6 @@ namespace SivBiblioteca.AccesoDatos
         int? UnidadesDisponiblesLote(int productoId);
         void GuardarCliente(ClienteModelo cliente);
         List<ClienteModelo> BuscarCliente_PorNombre(string nombre, int limiteFilas = 10);
-        List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
-        List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);
         List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre, int limiteFilas = 10);
@@ -31,8 +27,8 @@ namespace SivBiblioteca.AccesoDatos
         void EditarProducto(ProductoModelo producto);
         void EditarLote(LoteModelo lote);
         void EditarCliente(ClienteModelo cliente);
-        List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null);
         VentaModelo CargarVenta_PorId(int id);
         void EliminarVenta(int id);
+        List<T> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
     }
 }

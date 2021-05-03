@@ -28,11 +28,7 @@ namespace SivBiblioteca.Modelos
             get { return lote; } 
             set 
             {
-                if (value == null)
-                {
-                    throw new ArgumentException("El lote de la venta no puede ser null.");
-                }
-                lote = value; 
+                lote = value ?? throw new ArgumentException("El lote de la venta no puede ser null."); 
                 LoteId = value.Id; 
             } 
         }
@@ -66,6 +62,5 @@ namespace SivBiblioteca.Modelos
         }
         public decimal Total { get { return PrecioVentaUnidad * Unidades;  } }
         public ClienteModelo Cliente { get; set; }
-        public string Comentario { get; set; }
     }
 }

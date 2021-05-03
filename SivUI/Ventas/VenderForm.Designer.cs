@@ -42,8 +42,6 @@
             this.cliente_tb = new System.Windows.Forms.TextBox();
             this.cliente_label = new System.Windows.Forms.Label();
             this.buscar_linklabel = new System.Windows.Forms.LinkLabel();
-            this.comentario_tb = new System.Windows.Forms.TextBox();
-            this.comentario_label = new System.Windows.Forms.Label();
             this.crear_nuevo_cliente_label = new System.Windows.Forms.LinkLabel();
             this.limpiar_cliente_button = new System.Windows.Forms.Button();
             this.panel_contenedor = new System.Windows.Forms.Panel();
@@ -94,7 +92,7 @@
             // 
             // total_tb
             // 
-            this.total_tb.Location = new System.Drawing.Point(588, 400);
+            this.total_tb.Location = new System.Drawing.Point(588, 378);
             this.total_tb.Name = "total_tb";
             this.total_tb.ReadOnly = true;
             this.total_tb.Size = new System.Drawing.Size(184, 33);
@@ -104,7 +102,7 @@
             // total_label
             // 
             this.total_label.AutoSize = true;
-            this.total_label.Location = new System.Drawing.Point(583, 375);
+            this.total_label.Location = new System.Drawing.Point(530, 381);
             this.total_label.Name = "total_label";
             this.total_label.Size = new System.Drawing.Size(52, 25);
             this.total_label.TabIndex = 13;
@@ -113,7 +111,7 @@
             // vender_button
             // 
             this.vender_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.vender_button.Location = new System.Drawing.Point(647, 512);
+            this.vender_button.Location = new System.Drawing.Point(647, 481);
             this.vender_button.Name = "vender_button";
             this.vender_button.Size = new System.Drawing.Size(125, 37);
             this.vender_button.TabIndex = 5;
@@ -141,7 +139,7 @@
             // remover_venta_button
             // 
             this.remover_venta_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.remover_venta_button.Location = new System.Drawing.Point(588, 34);
+            this.remover_venta_button.Location = new System.Drawing.Point(12, 378);
             this.remover_venta_button.Name = "remover_venta_button";
             this.remover_venta_button.Size = new System.Drawing.Size(184, 37);
             this.remover_venta_button.TabIndex = 16;
@@ -151,7 +149,7 @@
             // 
             // cliente_tb
             // 
-            this.cliente_tb.Location = new System.Drawing.Point(12, 405);
+            this.cliente_tb.Location = new System.Drawing.Point(12, 485);
             this.cliente_tb.Name = "cliente_tb";
             this.cliente_tb.ReadOnly = true;
             this.cliente_tb.Size = new System.Drawing.Size(276, 33);
@@ -161,7 +159,7 @@
             // cliente_label
             // 
             this.cliente_label.AutoSize = true;
-            this.cliente_label.Location = new System.Drawing.Point(7, 375);
+            this.cliente_label.Location = new System.Drawing.Point(7, 455);
             this.cliente_label.Name = "cliente_label";
             this.cliente_label.Size = new System.Drawing.Size(71, 25);
             this.cliente_label.TabIndex = 17;
@@ -171,7 +169,7 @@
             // 
             this.buscar_linklabel.AutoSize = true;
             this.buscar_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buscar_linklabel.Location = new System.Drawing.Point(82, 378);
+            this.buscar_linklabel.Location = new System.Drawing.Point(82, 458);
             this.buscar_linklabel.Name = "buscar_linklabel";
             this.buscar_linklabel.Size = new System.Drawing.Size(56, 21);
             this.buscar_linklabel.TabIndex = 19;
@@ -179,28 +177,11 @@
             this.buscar_linklabel.Text = "Buscar";
             this.buscar_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_linklabel_LinkClicked);
             // 
-            // comentario_tb
-            // 
-            this.comentario_tb.Location = new System.Drawing.Point(12, 474);
-            this.comentario_tb.Multiline = true;
-            this.comentario_tb.Name = "comentario_tb";
-            this.comentario_tb.Size = new System.Drawing.Size(385, 75);
-            this.comentario_tb.TabIndex = 21;
-            // 
-            // comentario_label
-            // 
-            this.comentario_label.AutoSize = true;
-            this.comentario_label.Location = new System.Drawing.Point(7, 446);
-            this.comentario_label.Name = "comentario_label";
-            this.comentario_label.Size = new System.Drawing.Size(111, 25);
-            this.comentario_label.TabIndex = 20;
-            this.comentario_label.Text = "Comentario";
-            // 
             // crear_nuevo_cliente_label
             // 
             this.crear_nuevo_cliente_label.AutoSize = true;
             this.crear_nuevo_cliente_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(191, 378);
+            this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(191, 458);
             this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
             this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(95, 21);
             this.crear_nuevo_cliente_label.TabIndex = 23;
@@ -211,7 +192,7 @@
             // limpiar_cliente_button
             // 
             this.limpiar_cliente_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.limpiar_cliente_button.Location = new System.Drawing.Point(294, 402);
+            this.limpiar_cliente_button.Location = new System.Drawing.Point(294, 482);
             this.limpiar_cliente_button.Name = "limpiar_cliente_button";
             this.limpiar_cliente_button.Size = new System.Drawing.Size(101, 37);
             this.limpiar_cliente_button.TabIndex = 24;
@@ -233,12 +214,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(784, 530);
             this.Controls.Add(this.panel_contenedor);
             this.Controls.Add(this.limpiar_cliente_button);
             this.Controls.Add(this.crear_nuevo_cliente_label);
-            this.Controls.Add(this.comentario_tb);
-            this.Controls.Add(this.comentario_label);
             this.Controls.Add(this.buscar_linklabel);
             this.Controls.Add(this.cliente_tb);
             this.Controls.Add(this.cliente_label);
@@ -282,8 +261,6 @@
         private System.Windows.Forms.TextBox cliente_tb;
         private System.Windows.Forms.Label cliente_label;
         private System.Windows.Forms.LinkLabel buscar_linklabel;
-        private System.Windows.Forms.TextBox comentario_tb;
-        private System.Windows.Forms.Label comentario_label;
         private System.Windows.Forms.LinkLabel crear_nuevo_cliente_label;
         private System.Windows.Forms.Button limpiar_cliente_button;
         private System.Windows.Forms.Panel panel_contenedor;

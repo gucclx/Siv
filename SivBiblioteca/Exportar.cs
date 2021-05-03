@@ -16,29 +16,30 @@ namespace SivBiblioteca
     /// </summary>
     public static class Exportar
     {
-        // todo - cambiar
         /// <summary>
         /// Los reportes a exportar se cargan por paginacion.
         /// Esta variable indica cuantas filas posee cada paginacion.
         /// Util si la cantidad de filas es grande, ya que si no se utiliza se carga
         /// una cantidad innecesaria de objetos a la memoria.
         /// </summary>
-        static int? filasPaginacion = 1;
+        static int? filasPaginacion = 100_000;
 
         /// <summary>
         /// Se utiliza para exportar el inventario, historial de compras de lotes o historial de ventas.
         /// Los reportes se exportan a un archivo .csv utilizando la biblioteca CsvHelper.
         /// Si el archivo seleccionado existe, los reportes seran adjuntados al archivo.
-        /// Esto es util se se exportan los reportes por paginacion.
+        /// Esto es util si se exportan los reportes por paginacion.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T"> El tipo de reporte. </typeparam>
         /// <param name="reportes"> Reportes a guardar. </param>
-        /// <param name="archivo"> Archivo donde se escribiran los reportes. </param>
+        /// <param name="destino"> Informacion de ruta donde se guardaran los reportes. </param>
         /// <returns></returns>
-        public static async Task GuardarCsvReporteAsync<T>(IEnumerable<T> reportes, FileInfo destino)
+        public static async Task GuardarCsvReporteAsync<T>(FileInfo destino, IEnumerable<T> reportes)
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
+                // Si el archivo existe se adjuntara la informacion.
+                // por lo que si este existe, no se deben incluir los headers de nuevo.
                 HasHeaderRecord = !File.Exists(destino.FullName)
             };
 
@@ -49,73 +50,32 @@ namespace SivBiblioteca
             }
         }
 
-        public async static Task ExportarReporte<T>(FileInfo destino, ReporteFiltroModelo reporteFiltro)
+        public async static Task ExportarReporte<T>(FileInfo destino, IEnumerable<T> reportes = null, ReporteFiltroModelo reporteFiltro = null) where T: IReporte
         {
-            if (typeof(T) == typeof(ReporteLoteModelo))
+            if (reportes != null)
             {
-                await ExportarReporteLotes(destino, reporteFiltro);
+                await GuardarCsvReporteAsync<T>(destino, reportes);
+                return;
             }
-            if (typeof(T) == typeof(ReporteVentaModelo))
-            {
-                await ExportarReporteVentas(destino, reporteFiltro);
-            }
-            if (typeof(T) == typeof(ReporteInventarioModelo))
-            {
-                await ExportarReporteInventario(destino, reporteFiltro);
-            }
+
+            await ExportarReportePaginacion<T>(destino, reporteFiltro);
         }
 
-        public static async Task ExportarReporteLotes(FileInfo destino, ReporteFiltroModelo reporteFiltro)
+        public static async Task ExportarReportePaginacion<T>(FileInfo destino, ReporteFiltroModelo reporteFiltro) where T: IReporte
         {
-            List<ReporteLoteModelo> reportes;
+            List<T> reportes;
             int? comienzo = null;
 
             do
             {
-                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporteLotes
+                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporte<T>
                                             (
                                                 filtro: reporteFiltro,
                                                 limiteFilas: filasPaginacion,
                                                 comienzo: comienzo
                                             ));
-                await GuardarCsvReporteAsync(reportes, destino);
-                comienzo = reportes.LastOrDefault()?.LoteId;
-            } while (reportes.Count > 0);
-        }
-
-        public static async Task ExportarReporteVentas(FileInfo destino, ReporteFiltroModelo reporteFiltro)
-        {
-            List<ReporteVentaModelo> reportes;
-            int? comienzo = null;
-
-            do
-            {
-                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporteVentas
-                            (
-                                filtro: reporteFiltro,
-                                limiteFilas: filasPaginacion,
-                                comienzo: comienzo
-                            ));
-                await GuardarCsvReporteAsync(reportes, destino);
-                comienzo = reportes.LastOrDefault()?.VentaId;
-            } while (reportes.Count > 0);
-        }
-
-        public static async Task ExportarReporteInventario(FileInfo destino, ReporteFiltroModelo reporteFiltro)
-        {
-            List<ReporteInventarioModelo> reportes;
-            int? comienzo = null;
-
-            do
-            {
-                reportes = await Task.Run(() => ConfigGlobal.conexion.CargarReporteInventario
-                            (
-                                filtro: reporteFiltro,
-                                limiteFilas: filasPaginacion,
-                                comienzo: comienzo
-                            ));
-                await GuardarCsvReporteAsync(reportes, destino);
-                comienzo = reportes.LastOrDefault()?.ProductoId;
+                await GuardarCsvReporteAsync(destino, reportes);
+                comienzo = reportes.LastOrDefault()?.ReporteId;
             } while (reportes.Count > 0);
         }
     }

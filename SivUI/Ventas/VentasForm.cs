@@ -93,8 +93,12 @@ namespace SivUI
 
             try
             {
-                var reportes = await Task.Run(() =>
-                    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas)
+                //var reportes = await Task.Run(() =>
+                //    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas)
+                //);
+
+                var reportes = await Task.Run(
+                    () => ConfigGlobal.conexion.CargarReporte<ReporteVentaModelo>(filtro: reporteFiltro, limiteFilas: LimiteFilas)
                 );
 
                 resultados = new BindingSource();
@@ -102,7 +106,7 @@ namespace SivUI
                 resultados_dtgv.DataSource = resultados;                
                 CalcularResumenReporte();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 cargar_reporte_button.Enabled = true;
@@ -193,7 +197,7 @@ namespace SivUI
             if (resultados == null || resultados.DataSource == null) return;
 
             Exportando(true);
-            ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+            ConfigTareaLabel($"Exportando {resultados.List.Count:#,##0} filas...");
 
             var reportes = resultados.List.Cast<ReporteVentaModelo>();
 
@@ -204,7 +208,7 @@ namespace SivUI
 
                 if (destino == null) return;
 
-                await Exportar.GuardarCsvReporteAsync(reportes, destino);
+                await Exportar.ExportarReporte<ReporteVentaModelo>(destino, reportes);
 
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

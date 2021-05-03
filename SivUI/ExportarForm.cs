@@ -40,12 +40,18 @@ namespace SivUI
             var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
+            await ExportarReporte<ReporteLoteModelo>(destino, reporteFiltro);
+            reporteFiltro = null;
+        }
+
+        private async Task ExportarReporte<T>(FileInfo destino, ReporteFiltroModelo filtro) where T: IReporte
+        {
             Exportando(true);
             CambiarTareaLabel(mensaje: "Exportando...", visible: true);
 
             try
             {
-                await Exportar.ExportarReporte<ReporteLoteModelo>(destino, reporteFiltro);
+                await Exportar.ExportarReporte<T>(destino, reporteFiltro: filtro);
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
@@ -55,7 +61,6 @@ namespace SivUI
 
             Exportando(false);
             CambiarTareaLabel(visible: false);
-            reporteFiltro = null;
         }
 
         /// <summary>
@@ -81,21 +86,7 @@ namespace SivUI
             var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
-            Exportando(true);
-            CambiarTareaLabel(mensaje: "Exportando...", visible: true);
-
-            try
-            {
-                await Exportar.ExportarReporte<ReporteVentaModelo>(destino, reporteFiltro);
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            Exportando(false);
-            CambiarTareaLabel(visible: false);
+            await ExportarReporte<ReporteVentaModelo>(destino, reporteFiltro);
             reporteFiltro = null;
         }
 
@@ -146,21 +137,7 @@ namespace SivUI
             var destino = AbrirDialogoGuardar();
             if (destino == null) return;
 
-            Exportando(true);
-            CambiarTareaLabel(mensaje: "Exportando...", visible: true);
-
-            try
-            {
-                await Exportar.ExportarReporte<ReporteInventarioModelo>(destino, reporteFiltro);
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            Exportando(false);
-            CambiarTareaLabel(visible: false);
+            await ExportarReporte<ReporteInventarioModelo>(destino, reporteFiltro);
             reporteFiltro = null;
         }
     }

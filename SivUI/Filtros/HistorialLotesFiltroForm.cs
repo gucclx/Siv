@@ -22,7 +22,7 @@ namespace SivUI.Filtros
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="solicitante"> Form solicitante que solicita el filtro. </param>
+        /// <param name="solicitante"> Form que solicita el filtro. </param>
         /// <param name="filtro"> Filtro anterior o preconfigurado a cargar. </param>
         public HistorialLotesFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {

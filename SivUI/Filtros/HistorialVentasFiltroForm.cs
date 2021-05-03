@@ -21,6 +21,11 @@ namespace SivUI
         List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
         ISolicitudFiltro solicitante;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="solicitante"> Form que solicita el filtro. </param>
+        /// <param name="filtro"> Filtro anterior o preconfigurado a cargar. </param>
         public HistorialVentasFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();

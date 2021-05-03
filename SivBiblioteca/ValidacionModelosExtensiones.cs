@@ -1,4 +1,5 @@
-﻿using SivBiblioteca.Modelos;
+﻿using SivBiblioteca.AccesoDatos;
+using SivBiblioteca.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -85,7 +86,7 @@ namespace SivBiblioteca
                     throw new ArgumentException($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
                 }
 
-                if (venta.PrecioVentaUnidad > ConfigGlobal.conexion.MonedaMaximo)
+                if (venta.PrecioVentaUnidad > SqliteMoneda.MonedaMaximo)
                 {
                     throw new OverflowException("El precio de venta por unidad es demasiado grande.");
                 }
@@ -117,12 +118,12 @@ namespace SivBiblioteca
                 throw new ArgumentException("El producto del lote fue null.");
             }
 
-            if (lote.Inversion > ConfigGlobal.conexion.MonedaMaximo)
+            if (lote.Inversion > SqliteMoneda.MonedaMaximo)
             {
                 throw new OverflowException("El valor de la inversión del lote es demasiado grande.");
             }
 
-            if (lote.PrecioVentaUnidad > ConfigGlobal.conexion.MonedaMaximo)
+            if (lote.PrecioVentaUnidad > SqliteMoneda.MonedaMaximo)
             {
                 throw new OverflowException("Precio de venta de la unidad demasiado grande.");
             }

@@ -63,7 +63,7 @@ namespace SivUI.Inventario
             try
             {
                 var reportes = await Task.Run(() =>
-                    ConfigGlobal.conexion.CargarReporteInventario(reporteFiltro)
+                    ConfigGlobal.conexion.CargarReporte<ReporteInventarioModelo>(reporteFiltro)
                 );
 
                 resultados = new BindingSource();
@@ -156,7 +156,7 @@ namespace SivUI.Inventario
             if (resultados == null || resultados.DataSource == null) return;
 
             Exportando(true);
-            ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+            ConfigTareaLabel($"Exportando {resultados.List.Count:#,##0} filas...");
 
             var reportes = resultados.List.Cast<ReporteInventarioModelo>();
 
@@ -166,7 +166,7 @@ namespace SivUI.Inventario
 
                 if (destino == null) return;
 
-                await Exportar.GuardarCsvReporteAsync(reportes, destino);
+                await Exportar.ExportarReporte<ReporteInventarioModelo>(destino, reportes);
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)

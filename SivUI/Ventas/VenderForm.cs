@@ -167,9 +167,8 @@ namespace SivUI
 
             if (listaVentas.Count == 0) return;
 
-            foreach (VentaModelo venta in ventas)
+            foreach (var venta in listaVentas)
             {
-                venta.Comentario = comentario_tb.Text.Trim();
                 venta.Cliente = cliente;
             }
 
@@ -262,7 +261,6 @@ namespace SivUI
         private void LimpiarForm()
         {
             LimpiarCamposLote();
-            comentario_tb.Clear();
             total_tb.Text = "0";
             ventas.DataSource = null;
             ventas.DataSource = typeof(VentaModelo);

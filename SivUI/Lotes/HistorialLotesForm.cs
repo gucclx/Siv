@@ -83,7 +83,7 @@ namespace SivUI
             try
             {
                 var reportes = await Task.Run(() =>
-                    ConfigGlobal.conexion.CargarReporteLotes(reporteFiltro, limiteFilas: LimiteFilasReporte)
+                    ConfigGlobal.conexion.CargarReporte<ReporteLoteModelo>(reporteFiltro, limiteFilas: LimiteFilasReporte)
                 );
 
                 resultados = new BindingSource();
@@ -175,7 +175,7 @@ namespace SivUI
             if (resultados == null || resultados.DataSource == null) return;
 
             Exportando(true);
-            ConfigTareaLabel($"Exportando { resultados.List.Count.ToString("#,##0") } filas...");
+            ConfigTareaLabel($"Exportando {resultados.List.Count:#,##0} filas...");
 
             var reportes = resultados.List.Cast<ReporteLoteModelo>();
 
@@ -185,7 +185,7 @@ namespace SivUI
 
                 if (destino == null) return;
 
-                await Exportar.GuardarCsvReporteAsync(reportes, destino);
+                await Exportar.ExportarReporte<ReporteLoteModelo>(destino, reportes);
 
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

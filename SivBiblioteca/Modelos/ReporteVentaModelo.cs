@@ -13,7 +13,7 @@ namespace SivBiblioteca.Modelos
     ///     a la hora de exportar los reportes a un archivo .csv usando la biblioteca CsvHelper.
     ///     El atributo Ignore le pide a CsvHelper ignorar la propiedad.
     /// </summary>
-    public class ReporteVentaModelo
+    public class ReporteVentaModelo : IReporte
     {
         [Ignore]
         public decimal InversionLote { get; set; }
@@ -64,5 +64,8 @@ namespace SivBiblioteca.Modelos
         [Name("Cliente")]
         [Index(10)]
         public string NombreCliente { get; set; }
+
+        [Ignore]
+        public int ReporteId => VentaId;
     }
 }

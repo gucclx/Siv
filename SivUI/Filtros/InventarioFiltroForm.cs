@@ -20,6 +20,11 @@ namespace SivUI.Filtros
 
         ISolicitudFiltro solicitante;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="solicitante"> Form que solicita el filtro. </param>
+        /// <param name="filtro"> Filtro anterior o preconfigurado a cargar. </param>
         public InventarioFiltroForm(ISolicitudFiltro solicitante, ReporteFiltroModelo filtro = null)
         {
             InitializeComponent();
@@ -45,7 +50,7 @@ namespace SivUI.Filtros
                 ActualizarCategorias();
             }
 
-            incluir_productos_sin_unidades.Checked = !filtro.IncluirProductosSinUnidades;
+            incluir_productos_sin_unidades.Checked = filtro.IncluirProductosSinUnidades;
         }
 
         private void filtrar_por_producto_checkbox_CheckedChanged(object sender, EventArgs e)
@@ -76,7 +81,7 @@ namespace SivUI.Filtros
 
             filtro.Categorias = categoriasSeleccionadas;
 
-            filtro.IncluirProductosSinUnidades = !incluir_productos_sin_unidades.Checked;
+            filtro.IncluirProductosSinUnidades = incluir_productos_sin_unidades.Checked;
 
             solicitante.FiltroCreado(filtro);
             MessageBox.Show("Filtro configurado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);

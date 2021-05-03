@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using SivBiblioteca.Modelos;
+using SivBiblioteca.Procesadores;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +9,8 @@ using System.Linq;
 
 namespace SivBiblioteca.AccesoDatos
 {
+    // todo - incluir procesadores para lotes, ventas?
+
     /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     /// Nota - Los precios se guardan en la base de datos como enteros.
     ///          Esto se realiza para guardar los precios con una precision fija.
@@ -49,30 +52,33 @@ namespace SivBiblioteca.AccesoDatos
     {
         readonly string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
 
-        // Describe cuantos digitos se consideran despues del punto decimal
-        // en todos los precios que se guardan en la base de datos.
-        // Si la precision es 2, todos los precios se deberan guardar en
-        // centavos.
-        // Ej. 5.55 cordobas se convierte a 555 centavos.
-        // En este caso se conservan 4 digitos despues del decimal, por lo que
-        // se trabaja con 'diezmilesimas' es decir 5.55 -> 55500, 6.7899 -> 67899.
-        // Los digitos restantes seran truncados.
+        public List<T> BuscarModelo_PorNombre<T>(string nombre, int? limite = 10)
+        {
+            string q;
 
-        // En general si se trabaja con una precision p y
-        // un precio x se representara en la base de datos como
-        // x * (10^p)
-        // una vez extraido de la base de datos se divide por (10^p) para obtener la representacion
-        // original x
-        const double MonedaPrecision = 4;
+            var modeloTipo = typeof(T);
 
-        // Factor de conversion para convertir los precios.
-        int factorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+            if (modeloTipo == typeof(ProductoModelo))
+            {
+                q = "select * from Productos where Nombre like @Nombre limit @limiteFilas";
+            }
+            else if (modeloTipo == typeof(CategoriaModelo))
+            {
+                q = "select * from Categorias where Nombre like @Nombre limit @limiteFilas";
+            }
+            else if (modeloTipo == typeof(ClienteModelo))
+            {
+                q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre limit @limiteFilas";
+            }
+            else return null;
 
-        // Valor maximo de la moneda que se puede representar.
-        decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+            var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limite };
 
-        public decimal MonedaMaximo { get { return monedaMaximo; } }
-
+            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            {
+                return conexion.Query<T>(q, parametros).ToList();
+            }
+        }
 
         /// <summary>
         /// Revisa si la categoria existe en la base de datos.
@@ -165,19 +171,6 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     x se multiplica por el factor de conversion para obtener 
-        ///     la representacion de la moneda que se utilizara en la base de datos.
-        ///     los decimales restantes se truncan. 
-        ///     Si x * FactorConversion > decimal.MaxValue o x * FactorConversion > Int64.MaxValue se producira una excepcion.
-        /// </summary>
-        /// <param name="x"> El valor de la moneda en su representacion actual. </param>
-        /// <returns> El valor de la moneda en la representacion utilizada en la base de datos. </returns>
-        private long ConvertirMonedaARepresentacionInterna(decimal x)
-        {
-            return Convert.ToInt64(decimal.Truncate(x * factorConversion));
-        }
-
-        /// <summary>
         ///     Carga y retorna un lote de la base de datos a partir de su id.
         /// </summary>
         /// <param name="id"> Id del lote. </param>
@@ -197,13 +190,13 @@ namespace SivBiblioteca.AccesoDatos
                             join productos p on p.id = lotes.ProductoId
                             where lotes.id = @loteId";
 
-                Func<LoteModelo, ProductoModelo, LoteModelo> f = (l, p) => { l.Producto = p; return l; };
+                LoteModelo f(LoteModelo l, ProductoModelo p) { l.Producto = p; return l; }
                 var lote = conexion.Query<LoteModelo, ProductoModelo, LoteModelo>(q, f, new { loteId = id }).FirstOrDefault();
 
                 if (lote == null) return null;
 
-                lote.Inversion = lote.Inversion / factorConversion;
-                lote.PrecioVentaUnidad = lote.PrecioVentaUnidad / factorConversion;
+                lote.Inversion = SqliteMoneda.ConvertirAOriginal(lote.Inversion);
+                lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(lote.PrecioVentaUnidad);
 
                 return lote;
             }
@@ -224,8 +217,8 @@ namespace SivBiblioteca.AccesoDatos
                 {
                     try
                     {
-                        var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, Comentario, ClienteId, Fecha)
-                            values (@LoteId, @Unidades, @PrecioVentaUnidad, @Comentario, @ClienteId, strftime('%s', 'now'))";
+                        var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, ClienteId, Fecha)
+                            values (@LoteId, @Unidades, @PrecioVentaUnidad, @ClienteId, strftime('%s', 'now'))";
 
                         foreach (var venta in ventas)
                         {
@@ -234,8 +227,7 @@ namespace SivBiblioteca.AccesoDatos
                             {
                                 LoteId = venta.Lote.Id,
                                 Unidades = venta.Unidades,
-                                PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(venta.PrecioVentaUnidad),
-                                Comentario = venta.Comentario?.Trim(),
+                                PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(venta.PrecioVentaUnidad),
                                 ClienteId = venta.Cliente?.Id
                             };
 
@@ -310,58 +302,6 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Genera y retorna una lista de cada venta realizada con informacion pertinente.
-        /// </summary>
-        /// <param name="filtro"> 
-        ///     Objeto que contiene condiciones que las ventas deben cumplir.
-        ///     ej. Tipo de producto, fecha de venta, etc.
-        /// </param>
-        /// <param name="limiteFilas"> 
-        ///     Limite de filas a retornar. Util si la informacion se presentara al usuario
-        ///     o para paginar los resultados.
-        /// </param>
-        /// <param name="comienzo">
-        ///     Impone la condicion (ventas.id < comienzo.)
-        ///     Util para paginar los resultados.
-        /// </param>
-        /// <returns> Lista de reportes. </returns>
-        /// <example>
-        /// <code>
-        /// // Ejemplo para paginacion de resultados.
-        /// var reportes1 = CargarReporteVentas(limiteFilas: 1, comienzo: null); // Carga la ultima venta.
-        /// var reportes2 = CargarReporteVentas(limiteFilas: 1, comienzo: reportes1.LastOrDefault()?.Id); // Carga la penultima venta.
-        /// var reportes3 = CargarReporteVentas(limiteFilas: 1, comienzo: reportes2.LastOrDefault()?.Id); // Carga la antepenultima venta.
-        /// ...
-        /// </code>
-        /// </example>
-        public List<ReporteVentaModelo> CargarReporteVentas(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
-        {
-            var parametros = new DynamicParameters();
-
-            var q = ConstruirQueryReporte
-            (
-                reporteTipo: typeof(ReporteVentaModelo),
-                filtro: filtro,
-                parametros: parametros,
-                comienzo: comienzo,
-                limiteFilas: limiteFilas
-            );
-
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var reportes = conexion.Query<ReporteVentaModelo>(q, parametros).ToList();
-
-                // Convertir representacion interna de la moneda a la representacion original.
-                foreach (var reporte in reportes)
-                {
-                    reporte.InversionLote /= factorConversion;
-                    reporte.PrecioVentaUnidad /= factorConversion;
-                }
-                return reportes;
-            }
-        }
-
-        /// <summary>
         /// Carga y retorna el id del ultimo lote agregado a la base de datos.
         /// </summary>
         /// <returns> El id del ultimo lote agregado a la base de datos. </returns>
@@ -393,8 +333,8 @@ namespace SivBiblioteca.AccesoDatos
                     ProductoId = lote.Producto.Id,
                     UnidadesCompradas = lote.UnidadesCompradas,
                     UnidadesDisponibles = lote.UnidadesDisponibles,
-                    Inversion = ConvertirMonedaARepresentacionInterna(lote.Inversion),
-                    PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad)
+                    Inversion = SqliteMoneda.ConvertirAInterna(lote.Inversion),
+                    PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad)
                 };
 
                 conexion.Execute(q, parametros);
@@ -448,61 +388,6 @@ namespace SivBiblioteca.AccesoDatos
                 var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
 
                 return conexion.Query<CategoriaModelo>(q, parametros).ToList();
-            }
-        }
-
-        /// <summary>
-        ///     Genera y retorna una lista de reportes de lotes.
-        ///     Cada reporte contiene informacion como el id del lote adquerido, cuando se adquirio,
-        ///     el producto del lote, inversion total, etc.
-        /// </summary>
-        /// <param name="filtro"> 
-        ///     Objeto que contiene condiciones para generar los reportes.
-        /// 	Como tipo de Producto, rango de fechas en las que los lotes fueron comprados, etc.
-        /// </param>
-        /// <param name="limiteFilas"> 
-        ///     Limite de filas a retonar.
-        ///     Util si los resultados se presentan al usuario.
-        ///     Util si los para paginar los resultados.
-        /// </param>
-        /// <param name="comienzo">
-        ///  Impone la condicion (Lotes.Id > comienzo) en el query.
-        ///  Util para paginar los resultados.
-        /// </param>
-        /// <example>
-        /// <code>
-        /// // Ejemplo de paginacion de resultados.
-        /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: null); // Carga los primeros dos lotes.
-        /// var reportes1 = CargarReporteLotes(limiteFilas: 2, comienzo: reportes1.LastOrDefault()?.Id); // Carga los siguientes dos lotes.
-        /// ...
-        /// </code>
-        /// </example>
-        /// <returns> Una lista de reportes de lotes. </returns>
-        public List<ReporteLoteModelo> CargarReporteLotes(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
-        {
-            var parametros = new DynamicParameters();
-
-            var q = ConstruirQueryReporte
-            (
-                reporteTipo: typeof(ReporteLoteModelo),
-                filtro: filtro,
-                parametros: parametros,
-                comienzo: comienzo,
-                limiteFilas: limiteFilas
-            );
-
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var reportes = conexion.Query<ReporteLoteModelo>(q, parametros).ToList();
-
-                // Convertir representacion interna de la moneda a la representacion original.
-                foreach (var reporte in reportes)
-                {
-                    reporte.InversionLote /= factorConversion;
-                    reporte.PrecioVentaUnidad /= factorConversion;
-                }
-
-                return reportes;
             }
         }
 
@@ -621,7 +506,7 @@ namespace SivBiblioteca.AccesoDatos
                 var parametros = new
                 {
                     UnidadesDisponibles = lote.UnidadesDisponibles,
-                    PrecioVentaUnidad = ConvertirMonedaARepresentacionInterna(lote.PrecioVentaUnidad),
+                    PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad),
                     Id = lote.Id
                 };
 
@@ -663,6 +548,7 @@ namespace SivBiblioteca.AccesoDatos
             }
         }
 
+        // todo - eliminar
         public void populate()
         {
             SQLiteConnection con = new SQLiteConnection(stringConexion);
@@ -691,52 +577,50 @@ namespace SivBiblioteca.AccesoDatos
             con.Close();
         }
 
-        /// <summary>
-        ///     Retorna un resumen de productos con informacion como Nombre, unidades disponibles, 
-        ///     y el valor de estas unidades disponibles.
-        /// </summary>
-        /// <param name="filtro"> 
-        ///     Objeto que contiene condiciones para generar los resumenes.
-        ///     Condiciones como tipo de producto y/o categoria(s) de/los producto(s).
-        /// </param>
-        /// <param name="limiteFilas"> 
-        ///     Limite de filas a retornar. Util para cuando se presenta la info al usuario o para paginar los resultados
-        /// </param>
-        /// <param name="comienzo"> 
-        ///     Impone la condicion en la columna Productos.Id > comienzo.
-        ///     Util para paginar los resultados.
-        /// </param>
-        /// <returns> La lista de los reportes generados. </returns>
-        public List<ReporteInventarioModelo> CargarReporteInventario(ReporteFiltroModelo filtro, int? limiteFilas = null, int? comienzo = null)
-        { 
+        public List<T> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
+        {
             var parametros = new DynamicParameters();
 
-            var q = ConstruirQueryReporte
+            var q = ConstruirQueryReporte<T>
             (
-                reporteTipo: typeof(ReporteInventarioModelo),
                 filtro: filtro,
                 parametros: parametros,
                 comienzo: comienzo,
                 limiteFilas: limiteFilas
             );
 
+            List<T> reportes;
+
             using (IDbConnection conexion = new SQLiteConnection(stringConexion))
             {
-                var reportes = conexion.Query<ReporteInventarioModelo>(q, parametros).ToList();
-
-                // Convertir representacion interna de la moneda a la representacion original.
-                foreach (var reporte in reportes)
-                {
-                    reporte.InversionUnidadesProducto /= factorConversion;
-                }
-
-                return reportes;
+                reportes = conexion.Query<T>(q, parametros).ToList();
             }
+
+            IReporteProcesador procesador = null;
+
+            if (reportes is List<ReporteLoteModelo> reportesLote)
+            {
+                procesador = new ReporteLoteProcesador(reportesLote);
+            }
+
+            if (reportes is List<ReporteVentaModelo> reportesVenta)
+            {
+                procesador = new ReporteVentaProcesador(reportesVenta);
+            }
+
+            if (reportes is List<ReporteInventarioModelo> reportesInventario)
+            {
+                procesador = new ReporteInventarioProcesador(reportesInventario);
+            }
+
+            procesador.Procesar();
+
+            return reportes;
         }
 
         /// <summary>
         /// Construye las condiciones necesarias de un query
-        /// para generar el reporte de tipo <paramref name="reporteTipo"/>.
+        /// para generar el reporte de tipo <typeparamref name="T"/>
         /// </summary>
         /// <param name="reporteTipo"> Tipo de reporte. (ReporteVentaModelo, ReporteLoteModelo, ...)</param>
         /// <param name="filtro">
@@ -751,12 +635,14 @@ namespace SivBiblioteca.AccesoDatos
         /// </param>
         /// <returns> 
         /// Una string con el formato "where [condicion1] and [condicion2] and..."
-        /// que representa las condiciones necesarias para generar un reporte de tipo <paramref name="reporteTipo"/>
+        /// que representa las condiciones necesarias para generar un reporte de tipo <typeparamref name="T"/>.
         /// Si el filtro es null o no tiene condiciones, se retorna String.Empty.
         /// </returns>
-        public string ConstruirCondicionesReporte(Type reporteTipo, ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo)
+        public string ConstruirCondicionesReporte<T>(ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo)
         {
             if (filtro == null) return string.Empty;
+
+            var reporteTipo = typeof(T);
 
             var condiciones = new List<string>();
 
@@ -887,13 +773,14 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns>
         /// El query final para generar el repote de tipo <paramref name="reporteTipo"/>
         /// </returns>
-        public string ConstruirQueryReporte(Type reporteTipo, ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo, int? limiteFilas)
+        public string ConstruirQueryReporte<T>(ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo, int? limiteFilas)
         {
             string select = "";
             string ordenacion = "";
             string agrupacion = "";
             string limite = "limit -1";
-            string condiciones = "";
+
+            var reporteTipo = typeof(T);
 
             if (reporteTipo == typeof(ReporteLoteModelo))
             {
@@ -942,9 +829,8 @@ namespace SivBiblioteca.AccesoDatos
                 ordenacion = "order by Productos.Id asc";
             }
 
-            condiciones = ConstruirCondicionesReporte
+            string condiciones = ConstruirCondicionesReporte<T>
             (
-                reporteTipo: reporteTipo,
                 filtro: filtro,
                 parametros: parametros,
                 comienzo: comienzo
@@ -990,8 +876,10 @@ namespace SivBiblioteca.AccesoDatos
             // Nota: El nombre de los parametros es extraño solo para evitar
             // coliciones con algun otro parametro ya existente.
 
-            var partes = new List<string>();
-            partes.Add("select @FPCCATID0 as CategoriaId");
+            var partes = new List<string>
+            {
+                "select @FPCCATID0 as CategoriaId"
+            };
             parametros.Add("@FPCCATID0", categorias[0].Id);
 
             for (int i = 1; i < categorias.Count; i++)
@@ -1039,7 +927,6 @@ namespace SivBiblioteca.AccesoDatos
                 var q = @"select v.Id,
                             v.Unidades,
                             v.PrecioVentaUnidad,
-                            v.Comentario,
                             v.LoteId,
                             datetime(v.Fecha, 'unixepoch', 'localtime') as 'Fecha',
                             l.*,
@@ -1051,8 +938,7 @@ namespace SivBiblioteca.AccesoDatos
                             left join clientes c on c.id = v.ClienteId
                             where v.id = @ventaId";
 
-                Func<VentaModelo, LoteModelo, ProductoModelo, ClienteModelo, VentaModelo> map =
-                    (v, l, p, c) => { l.Producto = p; v.Lote = l; v.Cliente = c;  return v; };
+                VentaModelo map(VentaModelo v, LoteModelo l, ProductoModelo p, ClienteModelo c) { l.Producto = p; v.Lote = l; v.Cliente = c; return v; }
 
                 var parametros = new { ventaId = ventaId };
 
@@ -1062,9 +948,9 @@ namespace SivBiblioteca.AccesoDatos
                 if (venta == null) return null;
 
                 // Convertir moneda interna a representacion original.
-                venta.PrecioVentaUnidad /= factorConversion;
-                venta.Lote.Inversion /= factorConversion;
-                venta.Lote.PrecioVentaUnidad /= factorConversion;
+                venta.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.PrecioVentaUnidad);
+                venta.Lote.Inversion = SqliteMoneda.ConvertirAOriginal(venta.Lote.Inversion);
+                venta.Lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.Lote.PrecioVentaUnidad);
 
                 return venta;
             }
