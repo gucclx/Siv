@@ -31,10 +31,10 @@ namespace SivBiblioteca.AccesoDatos
         const double MonedaPrecision = 4;
 
         // Factor de conversion para convertir los precios.
-        static int factorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+        static readonly int factorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         // Valor maximo de la moneda que se puede representar.
-        static decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+        static readonly decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         static public decimal MonedaMaximo { get { return monedaMaximo; } }
         static public decimal FactorConversion { get { return factorConversion; } }

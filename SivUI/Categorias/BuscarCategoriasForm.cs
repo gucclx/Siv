@@ -55,7 +55,7 @@ namespace SivUI
 
             try
             {
-                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombreCategoria));
+                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarModelo_PorNombre<CategoriaModelo>(nombreCategoria));
                 ActualizarResultados();
             }
             catch (Exception ex)

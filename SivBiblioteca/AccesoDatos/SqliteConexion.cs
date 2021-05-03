@@ -52,8 +52,22 @@ namespace SivBiblioteca.AccesoDatos
     {
         readonly string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
 
+        /// <summary>
+        /// Busca un producto o categoria o cliente por nombre.
+        /// </summary>
+        /// <typeparam name="T">El tipo de modelo a buscar.</typeparam>
+        /// <param name="nombre">El nombre del modelo.</param>
+        /// <param name="limite">Limite de filas a retonar.</param>
+        /// <returns>Una lista de modelos cuyo nombre contiene <paramref name="nombre"/>.</returns>
         public List<T> BuscarModelo_PorNombre<T>(string nombre, int? limite = 10)
         {
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new ArgumentException("El nombre a buscar esta vacio o fue null.");
+            }
+
+            nombre = nombre.Trim();
+
             string q;
 
             var modeloTipo = typeof(T);
@@ -74,17 +88,15 @@ namespace SivBiblioteca.AccesoDatos
 
             var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limite };
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                return conexion.Query<T>(q, parametros).ToList();
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            return conexion.Query<T>(q, parametros).ToList();
         }
 
         /// <summary>
-        /// Revisa si la categoria existe en la base de datos.
+        /// Revisa una categoria existe en la base de datos.
         /// </summary>
-        /// <param name="nombreCategoria"> Nombre de la categoria a buscar. </param>
-        /// <returns> true si existe, false si no. </returns>
+        /// <param name="nombreCategoria">Nombre de la categoria a buscar.</param>
+        /// <returns><see langword="true"/> si existe, <see langword="false"/> si no.</returns>
         public bool CategoriaExiste(string nombreCategoria)
         {
             if (string.IsNullOrWhiteSpace(nombreCategoria))
@@ -94,11 +106,11 @@ namespace SivBiblioteca.AccesoDatos
 
             nombreCategoria = nombreCategoria.Trim();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select exists (select 1 from Categorias where Nombre = @Nombre)";
-                return conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = "select exists (select 1 from Categorias where Nombre = @Nombre)";
+
+            return conexion.ExecuteScalar<bool>(q, new { Nombre = nombreCategoria });
         }
 
         /// <summary>
@@ -111,75 +123,72 @@ namespace SivBiblioteca.AccesoDatos
         {
             categorias.ValidarCategorias(verificarQueNoExistan: true);
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "insert into Categorias (Nombre) values (@Nombre)";
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
 
-                foreach (var categoria in categorias)
-                {
-                    conexion.Execute(q, categoria);
-                    categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
-                }
+            var q = "insert into Categorias (Nombre) values (@Nombre)";
+
+            foreach (var categoria in categorias)
+            {
+                conexion.Execute(q, categoria);
+                categoria.Id = conexion.ExecuteScalar<int>("select max(id) from Categorias");
             }
         }
 
         /// <summary>
-        ///     Elimina de la base de datos una lista de categorias.
+        /// Elimina de la base de datos una lista de categorias.
         /// </summary>
-        /// <param name="categorias"> Lista de categorias a eliminar. </param>
+        /// <param name="categorias">Lista de categorias a eliminar.</param>
         public void EliminarCategorias(List<CategoriaModelo> categorias)
         {
             categorias.ValidarCategorias();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "delete from Categorias where Id = @Id";
-                conexion.Execute(q, categorias);
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = "delete from Categorias where Id = @Id";
+            conexion.Execute(q, categorias);
         }
 
         /// <summary>
-        ///     Guarda un producto en la base de datos.
+        /// Guarda un producto en la base de datos.
         /// </summary>
-        /// <param name="producto"> Producto a guardar. </param>
+        /// <param name="producto">Producto a guardar.</param>
         public void GuardarProducto(ProductoModelo producto)
         {
             producto.ValidarProducto(verificarQueNoExista: true);
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"insert into productos (Nombre, FechaCreacion, Descripcion)
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = @"insert into productos (Nombre, FechaCreacion, Descripcion)
                             values (@Nombre, strftime('%s', 'now'), @Descripcion)";
 
-                var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion };
+            var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion };
 
-                conexion.Execute(q, parametros);
+            conexion.Execute(q, parametros);
 
-                producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
+            producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
 
-                if (producto.Categorias == null) return;
+            if (producto.Categorias == null) return;
 
-                producto.Categorias.ValidarCategorias();
+            producto.Categorias.ValidarCategorias();
 
-                q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
+            q = "insert into ProductoCategoria (ProductoId, CategoriaId) values (@ProductoId, @CategoriaId)";
 
-                foreach (var categoria in producto.Categorias)
-                {
-                    conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
-                }
+            foreach (var categoria in producto.Categorias)
+            {
+                conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
             }
         }
 
         /// <summary>
-        ///     Carga y retorna un lote de la base de datos a partir de su id.
+        /// Carga y retorna un lote de la base de datos a partir de su id.
         /// </summary>
-        /// <param name="id"> Id del lote. </param>
-        /// <returns> El lote. Si no se encontro se retorna null. </returns>
+        /// <param name="id">Id del lote.</param>
+        /// <returns>El lote encontrado. Si no se encontro se retorna <see langword="null"/>.</returns>
         public LoteModelo CargarLote_PorId(int id)
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = $@"select lotes.Id,
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = $@"select lotes.Id,
                             lotes.UnidadesCompradas,
                             lotes.UnidadesDisponibles,
                             lotes.Inversion,
@@ -190,165 +199,135 @@ namespace SivBiblioteca.AccesoDatos
                             join productos p on p.id = lotes.ProductoId
                             where lotes.id = @loteId";
 
-                LoteModelo f(LoteModelo l, ProductoModelo p) { l.Producto = p; return l; }
-                var lote = conexion.Query<LoteModelo, ProductoModelo, LoteModelo>(q, f, new { loteId = id }).FirstOrDefault();
+            LoteModelo f(LoteModelo l, ProductoModelo p) { l.Producto = p; return l; }
 
-                if (lote == null) return null;
+            var lote = conexion.Query<LoteModelo, ProductoModelo, LoteModelo>(q, f, new { loteId = id }).FirstOrDefault();
 
-                lote.Inversion = SqliteMoneda.ConvertirAOriginal(lote.Inversion);
-                lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(lote.PrecioVentaUnidad);
+            if (lote == null) return null;
 
-                return lote;
-            }
+            lote.Inversion = SqliteMoneda.ConvertirAOriginal(lote.Inversion);
+            lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(lote.PrecioVentaUnidad);
+
+            return lote;
         }
 
         /// <summary>
         /// Guarda una lista de ventas a la base de datos.
         /// </summary>
-        /// <param name="ventas"> Lista de ventas a guardar. </param>
+        /// <param name="ventas">Lista de ventas a guardar.</param>
         public void GuardarVentas(List<VentaModelo> ventas)
         {
             ventas.ValidarVentas();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            conexion.Open();
+
+            using var transaccion = conexion.BeginTransaction();
+
+            try
             {
-                conexion.Open();
-                using (var transaccion = conexion.BeginTransaction())
-                {
-                    try
-                    {
-                        var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, ClienteId, Fecha)
+                var q = @"insert into ventas (LoteId, Unidades, PrecioVentaUnidad, ClienteId, Fecha)
                             values (@LoteId, @Unidades, @PrecioVentaUnidad, @ClienteId, strftime('%s', 'now'))";
 
-                        foreach (var venta in ventas)
-                        {
-
-                            var parametros = new
-                            {
-                                LoteId = venta.Lote.Id,
-                                Unidades = venta.Unidades,
-                                PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(venta.PrecioVentaUnidad),
-                                ClienteId = venta.Cliente?.Id
-                            };
-
-                            conexion.Execute(q, parametros);
-
-                            conexion.Execute("update Lotes set UnidadesDisponibles = UnidadesDisponibles - @UnidadesVendidas where Id = @Id",
-                                new { UnidadesVendidas = venta.Unidades, Id = venta.Lote.Id }
-                            );
-                        }
-                        transaccion.Commit();
-                    }
-                    catch
+                foreach (var venta in ventas)
+                {
+                    var parametros = new
                     {
-                        transaccion.Rollback();
-                        throw;
-                    }
+                        LoteId = venta.Lote.Id,
+                        Unidades = venta.Unidades,
+                        PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(venta.PrecioVentaUnidad),
+                        ClienteId = venta.Cliente?.Id
+                    };
+
+                    conexion.Execute(q, parametros);
+
+                    conexion.Execute("update Lotes set UnidadesDisponibles = UnidadesDisponibles - @UnidadesVendidas where Id = @Id",
+                        new { UnidadesVendidas = venta.Unidades, Id = venta.Lote.Id }
+                    );
                 }
+                transaccion.Commit();
+            }
+            catch
+            {
+                transaccion.Rollback();
+                throw;
             }
         }
 
         /// <summary>
-        ///     Retorna las unidades disponibles de un lote.
+        /// Retorna las unidades disponibles de un lote.
         /// </summary>
-        /// <param name="loteId"> Id del lote. </param>
-        /// <returns> Unidades restantes del lote. Si el lote no existe se retorna null. </returns>
+        /// <param name="loteId">Id del lote.</param>
+        /// <returns>Unidades restantes del lote. Si el lote no existe se retorna <see langword="null"/>.</returns>
         public int? UnidadesDisponiblesLote(int loteId)
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select UnidadesDisponibles from Lotes where Id = @Id";
-                return conexion.ExecuteScalar<int?>(q, new { Id = loteId });
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            var q = "select UnidadesDisponibles from Lotes where Id = @Id";
+
+            return conexion.ExecuteScalar<int?>(q, new { Id = loteId });
         }
 
         /// <summary>
-        ///     Guarda un cliente en la base de datos.
+        /// Guarda un cliente en la base de datos.
         /// </summary>
-        /// <param name="cliente"> El cliente a guardar. </param>
+        /// <param name="cliente">El cliente a guardar.</param>
         public void GuardarCliente(ClienteModelo cliente)
         {
             cliente.ValidarCliente();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
-                conexion.Execute(q, cliente);
-                cliente.Id = conexion.ExecuteScalar<int>("select max(Id) from clientes;");
-            }
-        }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
 
-        /// <summary>
-        ///     Carga y retorna una lista de clientes cuyo nombre completo contiene el parametro 'nombre'.
-        /// </summary>
-        /// <param name="nombre"> El nombre del cliente a buscar. </param>
-        /// <param name="limiteFilas"> Limite de filas a retonar. </param>
-        /// <returns> Lista de clientes encontrados. </returns>
-        public List<ClienteModelo> BuscarCliente_PorNombre(string nombre, int limiteFilas = 10)
-        {
-            if (string.IsNullOrWhiteSpace(nombre))
-            {
-                throw new ArgumentException("El nombre a buscar no puede estar vacio.");
-            }
+            var q = "insert into Clientes (Nombre, Apellido, NumeroContacto) values (@Nombre, @Apellido, @NumeroContacto)";
+            conexion.Execute(q, cliente);
 
-            nombre = nombre.Trim();
-
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select * from Clientes where (Nombre || ' ' || coalesce(Apellido, '')) like @Nombre limit @limiteFilas";
-                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
-                return conexion.Query<ClienteModelo>(q, parametros).ToList();
-            }
+            cliente.Id = conexion.ExecuteScalar<int>("select max(Id) from clientes;");
         }
 
         /// <summary>
         /// Carga y retorna el id del ultimo lote agregado a la base de datos.
         /// </summary>
-        /// <returns> El id del ultimo lote agregado a la base de datos. </returns>
+        /// <returns>El id del ultimo lote agregado a la base de datos.</returns>
         public int CargarUltimoLoteId()
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                return conexion.ExecuteScalar<int>("select max(Id) from Lotes");
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            return conexion.ExecuteScalar<int>("select max(Id) from Lotes");
         }
 
         /// <summary>
-        ///     Guarda un lote en la base de datos.
+        /// Guarda un lote en la base de datos.
         /// </summary>
-        /// <param name="lote"> Lote a guardar. </param>
+        /// <param name="lote">El lote a guardar.</param>
         public void GuardarLote(LoteModelo lote)
         {
             lote.ValidarLote();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, Inversion, PrecioVentaUnidad, FechaCreacion)
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = @"insert into Lotes (ProductoId, UnidadesCompradas, UnidadesDisponibles, Inversion, PrecioVentaUnidad, FechaCreacion)
                             values (@ProductoId, @UnidadesCompradas, @UnidadesDisponibles, @Inversion, @PrecioVentaUnidad, strftime('%s', 'now'))";
 
-                lote.UnidadesDisponibles = lote.UnidadesCompradas;
+            lote.UnidadesDisponibles = lote.UnidadesCompradas;
 
-                var parametros = new
-                {
-                    ProductoId = lote.Producto.Id,
-                    UnidadesCompradas = lote.UnidadesCompradas,
-                    UnidadesDisponibles = lote.UnidadesDisponibles,
-                    Inversion = SqliteMoneda.ConvertirAInterna(lote.Inversion),
-                    PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad)
-                };
+            var parametros = new
+            {
+                ProductoId = lote.Producto.Id,
+                UnidadesCompradas = lote.UnidadesCompradas,
+                UnidadesDisponibles = lote.UnidadesDisponibles,
+                Inversion = SqliteMoneda.ConvertirAInterna(lote.Inversion),
+                PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad)
+            };
 
-                conexion.Execute(q, parametros);
+            conexion.Execute(q, parametros);
 
-                q = "select max(Id) from Lotes";
-                lote.Id = conexion.ExecuteScalar<int>(q);
-            }
+            q = "select max(Id) from Lotes";
+            lote.Id = conexion.ExecuteScalar<int>(q);
         }
 
         /// <summary>
-        ///     Revisa si un producto existe en la base de datos a partir del nombre proporcionado.
+        /// Revisa si un producto existe en la base de datos a partir del nombre proporcionado.
         /// </summary>
-        /// <param name="nombre"> El nombre del producto a buscar. </param>
-        /// <returns> true si el producto existe, false si no. </returns>
+        /// <param name="nombre">El nombre del producto a buscar.</param>
+        /// <returns><see langword="true"/> si el producto existe, <see langword="false"/> si no.</returns>
         public bool ProductoExiste(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
@@ -358,64 +337,14 @@ namespace SivBiblioteca.AccesoDatos
 
             nombre = nombre.Trim();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select exists (select 1 from Productos where Nombre = @Nombre collate nocase)";
-                return conexion.ExecuteScalar<bool>(q, new { Nombre = nombre });
-            }
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            var q = "select exists (select 1 from Productos where Nombre = @Nombre collate nocase)";
+
+            return conexion.ExecuteScalar<bool>(q, new { Nombre = nombre });
         }
 
         /// <summary>
-        ///     Carga y retorna una lista de categorias de la base de datos
-        ///     cuyos nombres contienen el parametro 'nombre'.
-        /// </summary>
-        /// <param name="nombre"> Nombre a buscar. </param>
-        /// <param name="limiteFilas"> Limite de filas a retornar. </param>
-        /// <returns> Lista de categorias encontradas. </returns>
-        public List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre, int limiteFilas = 10)
-        {
-            if (string.IsNullOrWhiteSpace(nombre))
-            {
-                throw new ArgumentException("El nombre de la categoria a buscar esta vacio o fue null.");
-            }
-
-            nombre = nombre.Trim();
-
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select * from Categorias where Nombre like @Nombre limit @limiteFilas";
-
-                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
-
-                return conexion.Query<CategoriaModelo>(q, parametros).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Carga y retorna una lista de productos cuyo nombre contiene el parametro 'nombre'.
-        /// </summary>
-        /// <param name="nombre"> Nombre del producto a buscar. </param>
-        /// <param name="limiteFilas"> Limite de filas a retornar. </param>
-        /// <returns> Los productos encontrados. </returns>
-        public List<ProductoModelo> BuscarProducto_PorNombre(string nombre, int limiteFilas = 10)
-        {
-            if (string.IsNullOrWhiteSpace(nombre))
-            {
-                throw new ArgumentException("El nombre del producto a buscar no puede estar vacio.");
-            }
-
-            nombre = nombre.Trim();
-
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = "select * from Productos where Nombre like @Nombre limit @limiteFilas";
-                var parametros = new { Nombre = '%' + nombre + '%', limiteFilas = limiteFilas };
-                return conexion.Query<ProductoModelo>(q, parametros).ToList();
-            }
-        }
-
-        /// <summary>
-        ///     Edita un producto en la base de datos.
+        /// Edita un producto en la base de datos.
         /// </summary>
         /// <param name="producto">
         ///     El producto a editar. Las propiedades de este producto se usaran
@@ -426,92 +355,93 @@ namespace SivBiblioteca.AccesoDatos
         {
             producto.ValidarProducto();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            var q = @"update Productos set Nombre = @Nombre, Descripcion = @Descripcion where Id = @Id";
+
+            var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion, Id = producto.Id };
+
+            conexion.Execute(q, parametros);
+
+            if (producto.Categorias == null) return;
+
+            producto.Categorias.ValidarCategorias();
+
+            conexion.Open();
+            using var transaccion = conexion.BeginTransaction();
+
+            try
             {
-                var q = @"update Productos set Nombre = @Nombre, Descripcion = @Descripcion where Id = @Id";
-                var parametros = new { Nombre = producto.Nombre, Descripcion = producto.Descripcion, Id = producto.Id };
+                q = "delete from ProductoCategoria where ProductoId = @ProductoId";
+                conexion.Execute(q, new { ProductoId = producto.Id });
 
-                conexion.Execute(q, parametros);
-
-                if (producto.Categorias == null) return;
-
-                producto.Categorias.ValidarCategorias();
-
-                conexion.Open();
-                using (var transaccion = conexion.BeginTransaction())
-                {
-                    try
-                    {
-                        q = "delete from ProductoCategoria where ProductoId = @ProductoId";
-                        conexion.Execute(q, new { ProductoId = producto.Id });
-
-                        q = @"insert into ProductoCategoria (productoId, CategoriaId)
+                q = @"insert into ProductoCategoria (productoId, CategoriaId)
                                         values (@ProductoId, @CategoriaId)";
 
-                        foreach (var categoria in producto.Categorias)
-                        {
-                            conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
-                        }
-
-                        transaccion.Commit();
-                    }
-                    catch
-                    {
-                        transaccion.Rollback();
-                        throw;
-                    }
+                foreach (var categoria in producto.Categorias)
+                {
+                    conexion.Execute(q, new { ProductoId = producto.Id, CategoriaId = categoria.Id });
                 }
+
+                transaccion.Commit();
+            }
+            catch
+            {
+                transaccion.Rollback();
+                throw;
             }
         }
 
         /// <summary>
-        ///     Carga y retorna las categorias de un producto especificando el id del producto.
-        ///     Util cuando se carga un producto desde el metodo BuscarProducto_PorNombre
-        ///     ya que es ineficiente cargar todas las categorias de todos los posibles
-        ///     productos retornados por dicho metodo.
+        /// Carga y retorna las categorias de un producto cuyo id es <paramref name="id"/>.
         /// </summary>
-        /// <param name="id"> Id del producto. </param>
-        /// <returns> Las categorias del producto cuyo id fue proporcionado. </returns>
+        /// <param name="id">Id del producto.</param>
+        /// <returns>Las categorias del producto.</returns>
+        /// <remarks>
+        /// Util cuando se carga un producto desde el metodo BuscarModelo_PorNombre
+        /// ya que es ineficiente cargar todas las categorias de todos los posibles
+        /// productos retornados por dicho metodo.
+        /// </remarks>
         public List<CategoriaModelo> CargarCategorias_PorProductoId(int id)
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"select categorias.nombre, categorias.id from Categorias 
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+            var q = @"select categorias.nombre, categorias.id from Categorias 
                         join ProductoCategoria on ProductoCategoria.CategoriaId = categorias.Id
                         where ProductoCategoria.ProductoId = @Id";
-                return conexion.Query<CategoriaModelo>(q, new { Id = id }).ToList();
-            }
+
+            return conexion.Query<CategoriaModelo>(q, new { Id = id }).ToList();
         }
 
         /// <summary>
         /// Edita un lote de la base de datos.
         /// </summary>
         /// <param name="lote"> 
-        ///     El lote a editar. Los valores lote.UnidadesDisponibles y lote.PrecioVentaUnidad
-        ///     se usan para sobreescribir las respectivas columnas en la tabla lotes 
-        ///     de la base de datos, en la respectiva fila identificada por lote.Id.
-        ///     No se permite agregar mas unidades al lote, 
-        ///     por lo que lote.UnidadesDisponibles debe ser menor o igual
-        ///     al valor actual almacenado en la base de datos.
+        /// El lote a editar.
         /// </param>
+        /// <remarks>
+        /// Los valores lote.UnidadesDisponibles y lote.PrecioVentaUnidad
+        /// se usan para sobreescribir las respectivas columnas en la tabla lotes 
+        /// de la base de datos, en la respectiva fila identificada por lote.Id.
+        /// No se permite agregar mas unidades al lote, 
+        /// por lo que lote.UnidadesDisponibles debe ser menor o igual
+        /// al valor actual almacenado en la base de datos.
+        /// </remarks>
         public void EditarLote(LoteModelo lote)
         {
             lote.ValidarLote();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"update lotes set UnidadesDisponibles = @UnidadesDisponibles, 
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = @"update lotes set UnidadesDisponibles = @UnidadesDisponibles, 
                         PrecioVentaUnidad = @PrecioVentaUnidad where Id = @Id";
 
-                var parametros = new
-                {
-                    UnidadesDisponibles = lote.UnidadesDisponibles,
-                    PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad),
-                    Id = lote.Id
-                };
+            var parametros = new
+            {
+                UnidadesDisponibles = lote.UnidadesDisponibles,
+                PrecioVentaUnidad = SqliteMoneda.ConvertirAInterna(lote.PrecioVentaUnidad),
+                Id = lote.Id
+            };
 
-                conexion.Execute(q, parametros);
-            }
+            conexion.Execute(q, parametros);
         }
 
         /// <summary>
@@ -519,33 +449,34 @@ namespace SivBiblioteca.AccesoDatos
         /// </summary>
         /// <param name="cliente"> 
         ///     El cliente a editar.
-        ///     Las propiedades en el objeto cliente proporcionado
-        ///     se utilizan para sobreescribir las columnas respectivas
-        ///     en la tabla clientes de la base de datos en la fila respectiva
-        ///     identificada por el valor cliente.Id.
         /// </param>
+        /// <remarks>
+        /// Las propiedades en el objeto cliente proporcionado
+        /// se utilizan para sobreescribir las columnas respectivas
+        /// en la tabla clientes de la base de datos en la fila respectiva
+        /// identificada por el valor cliente.Id.
+        /// </remarks>
         public void EditarCliente(ClienteModelo cliente)
         {
             cliente.ValidarCliente();
 
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"update clientes 
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = @"update clientes 
                           set Nombre = @Nombre, 
                               Apellido = @Apellido, 
                               NumeroContacto = @NumeroContacto
                           where Id = @Id";
 
-                var parametros = new
-                {
-                    Nombre = cliente.Nombre,
-                    Apellido = cliente.Apellido,
-                    NumeroContacto = cliente.NumeroContacto,
-                    Id = cliente.Id
-                };
+            var parametros = new
+            {
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                NumeroContacto = cliente.NumeroContacto,
+                Id = cliente.Id
+            };
 
-                conexion.Execute(q, parametros);
-            }
+            conexion.Execute(q, parametros);
         }
 
         // todo - eliminar
@@ -622,7 +553,7 @@ namespace SivBiblioteca.AccesoDatos
         /// Construye las condiciones necesarias de un query
         /// para generar el reporte de tipo <typeparamref name="T"/>
         /// </summary>
-        /// <param name="reporteTipo"> Tipo de reporte. (ReporteVentaModelo, ReporteLoteModelo, ...)</param>
+        /// <typeparam name="T">Tipo de reporte.</typeparam>
         /// <param name="filtro">
         /// Objeto principal de donde se generan las condiciones.
         /// Contiene condiciones para generar el query.
@@ -655,9 +586,7 @@ namespace SivBiblioteca.AccesoDatos
 
             // Si se filtra por fecha de creacion.
 
-            var filtrarPorFechas = filtro.FechaInicial != null &&
-                                    filtro.FechaFinal != null &&
-                                    filtro.FiltroPorFechas &&
+            var filtrarPorFechas = filtro.FiltroPorFechas &&
                                     reporteTipo != typeof(ReporteInventarioModelo);
 
             if (filtrarPorFechas)
@@ -752,9 +681,7 @@ namespace SivBiblioteca.AccesoDatos
         /// Construye el query final para generar un reporte de ventas,
         /// lotes o inventario.
         /// </summary>
-        /// <param name="reporteTipo"> 
-        /// Tipo de reporte. (ReporteVentaModelo, ReporteLoteModelo, ...) 
-        /// </param>
+        /// <typeparam name="T">Tipo de reporte.</typeparam>
         /// <param name="filtro"> 
         /// Objeto principal de donde se generan las condiciones.
         /// Contiene condiciones para generar el query.
@@ -851,21 +778,23 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        ///     Genera la condicion necesaria para encontrar los productos asociados
-        ///     con todas las categorias proveidas.
-        ///     Util cuando se generan reportes de ventas, lotes o inventario
-        ///     ya que todos estos reportes poseen un producto.
-        ///     Se tiene la intencion que la condicion generada se utilice como parte de otro query.
+        /// Genera la condicion necesaria para encontrar los productos asociados
+        /// con todas las categorias proveidas.
         /// </summary>
+        /// <remarks>
+        /// Util cuando se generan reportes de ventas, lotes o inventario
+        /// ya que todos estos reportes poseen un producto.
+        /// Se tiene la intencion que la condicion generada se utilice como parte de otro query.
+        /// </remarks>
         /// <param name="parametros"> 
-        ///     Ya que se asume que la condcion generada es parte de otro query
-        ///     este objeto representa los parametros de tal query, el query principal por asi decir.
-        ///     Por lo tanto el objeto se pasa por referencia para agregar los parametros generados aqui.
+        /// Ya que se asume que la condcion generada es parte de otro query
+        /// este objeto representa los parametros de tal query, el query principal por asi decir.
+        /// Por lo tanto el objeto se pasa por referencia para agregar los parametros generados aqui.
         /// </param>
-        /// <param name="categorias"> Lista de categorias por las cuales se desea filtrar. </param>
+        /// <param name="categorias">Lista de categorias por las cuales se desea filtrar.</param>
         /// <returns> 
-        ///     Una string sql que representa la condicion necesaria 
-        ///     para encontrar los productos asociados con todas las categorias proveidas.
+        /// Una string sql que representa la condicion necesaria 
+        /// para encontrar los productos asociados con todas las categorias proveidas.
         /// </returns>
         string CondicionFiltroCategorias(DynamicParameters parametros, List<CategoriaModelo> categorias)
         {
@@ -880,6 +809,7 @@ namespace SivBiblioteca.AccesoDatos
             {
                 "select @FPCCATID0 as CategoriaId"
             };
+
             parametros.Add("@FPCCATID0", categorias[0].Id);
 
             for (int i = 1; i < categorias.Count; i++)
@@ -918,13 +848,13 @@ namespace SivBiblioteca.AccesoDatos
         /// <summary>
         /// Carga y retorna una venta a partir del id especificado.
         /// </summary>
-        /// <param name="id"> El id de la venta. </param>
-        /// <returns> La venta si existe, null si no. </returns>
+        /// <param name="id">El id de la venta.</param>
+        /// <returns>La venta si existe, <see langword="null"/> si no. </returns>
         public VentaModelo CargarVenta_PorId(int ventaId)
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
-            {
-                var q = @"select v.Id,
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            var q = @"select v.Id,
                             v.Unidades,
                             v.PrecioVentaUnidad,
                             v.LoteId,
@@ -938,63 +868,63 @@ namespace SivBiblioteca.AccesoDatos
                             left join clientes c on c.id = v.ClienteId
                             where v.id = @ventaId";
 
-                VentaModelo map(VentaModelo v, LoteModelo l, ProductoModelo p, ClienteModelo c) { l.Producto = p; v.Lote = l; v.Cliente = c; return v; }
+            VentaModelo map(VentaModelo v, LoteModelo l, ProductoModelo p, ClienteModelo c) { l.Producto = p; v.Lote = l; v.Cliente = c; return v; }
 
-                var parametros = new { ventaId = ventaId };
+            var parametros = new { ventaId = ventaId };
 
-                var resultados = conexion.Query<VentaModelo, LoteModelo, ProductoModelo, ClienteModelo, VentaModelo>(q, map, parametros);
+            var resultados = conexion.Query<VentaModelo, LoteModelo, ProductoModelo, ClienteModelo, VentaModelo>(q, map, parametros);
 
-                var venta = resultados.FirstOrDefault();
-                if (venta == null) return null;
+            var venta = resultados.FirstOrDefault();
 
-                // Convertir moneda interna a representacion original.
-                venta.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.PrecioVentaUnidad);
-                venta.Lote.Inversion = SqliteMoneda.ConvertirAOriginal(venta.Lote.Inversion);
-                venta.Lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.Lote.PrecioVentaUnidad);
+            if (venta == null) return null;
 
-                return venta;
-            }
+            venta.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.PrecioVentaUnidad);
+            venta.Lote.Inversion = SqliteMoneda.ConvertirAOriginal(venta.Lote.Inversion);
+            venta.Lote.PrecioVentaUnidad = SqliteMoneda.ConvertirAOriginal(venta.Lote.PrecioVentaUnidad);
+
+            return venta;
         }
 
         /// <summary>
-        /// Elimina una venta a partir del id proporcionado.
+        /// Elimina una venta cuyo id es <paramref name="id"/>.
         /// </summary>
-        /// <param name="id"> Id de la venta a eliminar. </param>
-        public void EliminarVenta(int ventaId)
+        /// <param name="id">Id de la venta a eliminar.</param>
+        public void EliminarVenta(int id)
         {
-            using (IDbConnection conexion = new SQLiteConnection(stringConexion))
+            using IDbConnection conexion = new SQLiteConnection(stringConexion);
+
+            conexion.Open();
+            using var transaccion = conexion.BeginTransaction();
+
+            try
             {
-                conexion.Open();
-                using (var transaccion = conexion.BeginTransaction())
-                {
-                    try
-                    {
-                        var q = "select Unidades, LoteId from ventas where id = @id";
-                        var resultados = conexion.Query(q, new { id = ventaId }).ToList();
+                var q = "select Unidades, LoteId from ventas where id = @id";
 
-                        if (resultados.Count < 1) return;
+                var resultados = conexion.Query(q, new { id = id }).ToList();
 
-                        var info = (IDictionary<string, object>)resultados[0];
+                if (resultados.Count < 1) return;
 
-                        var unidadesVendidas = info["Unidades"];
-                        var loteId = info["LoteId"];
+                var info = (IDictionary<string, object>)resultados[0];
 
-                        q = @"update lotes 
+                var unidadesVendidas = info["Unidades"];
+                var loteId = info["LoteId"];
+
+                q = @"update lotes 
                             set UnidadesDisponibles = UnidadesDisponibles + @UnidadesVendidas
                             where id = @Id";
 
-                        conexion.Execute(q, new { UnidadesVendidas = unidadesVendidas, Id = loteId });
+                conexion.Execute(q, new { UnidadesVendidas = unidadesVendidas, Id = loteId });
 
-                        q = "delete from ventas where id = @Id";
-                        conexion.Execute(q, new { Id = ventaId });
-                        transaccion.Commit();
-                    }
-                    catch
-                    {
-                        transaccion.Rollback();
-                        throw;
-                    }
-                }
+                q = "delete from ventas where id = @Id";
+
+                conexion.Execute(q, new { Id = id });
+
+                transaccion.Commit();
+            }
+            catch
+            {
+                transaccion.Rollback();
+                throw;
             }
         }
     }

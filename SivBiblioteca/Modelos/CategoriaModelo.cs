@@ -15,7 +15,7 @@ namespace SivBiblioteca.Modelos
             get { return nombre; }
             set
             {
-                if (string.IsNullOrWhiteSpace(value.Trim()))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException("El nombre de la categoria no debe estar en blanco o ser null.");
                 }

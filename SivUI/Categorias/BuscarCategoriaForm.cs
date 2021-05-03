@@ -31,7 +31,7 @@ namespace SivUI.Categorias
 
             try
             {
-                resultados = ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombre);
+                //resultados = ConfigGlobal.conexion.BuscarCategoria_PorNombre(nombre);
                 ActualizarResultados();
             }
             catch (Exception ex)

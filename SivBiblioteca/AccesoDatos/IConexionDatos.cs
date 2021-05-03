@@ -19,16 +19,14 @@ namespace SivBiblioteca.AccesoDatos
         void GuardarVentas(List<VentaModelo> ventas);
         int? UnidadesDisponiblesLote(int productoId);
         void GuardarCliente(ClienteModelo cliente);
-        List<ClienteModelo> BuscarCliente_PorNombre(string nombre, int limiteFilas = 10);
         void GuardarLote(LoteModelo lote);
         bool ProductoExiste(string nombre);
-        List<CategoriaModelo> BuscarCategoria_PorNombre(string nombre, int limiteFilas = 10);
-        List<ProductoModelo> BuscarProducto_PorNombre(string nombre, int limiteFilas = 10);
         void EditarProducto(ProductoModelo producto);
         void EditarLote(LoteModelo lote);
         void EditarCliente(ClienteModelo cliente);
         VentaModelo CargarVenta_PorId(int id);
         void EliminarVenta(int id);
         List<T> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null);
+        List<T> BuscarModelo_PorNombre<T>(string nombre, int? limiteFilas = 10);
     }
 }

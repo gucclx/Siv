@@ -132,7 +132,7 @@
             this.agregar_al_inventario_button.Location = new System.Drawing.Point(511, 391);
             this.agregar_al_inventario_button.Name = "agregar_al_inventario_button";
             this.agregar_al_inventario_button.Size = new System.Drawing.Size(207, 37);
-            this.agregar_al_inventario_button.TabIndex = 17;
+            this.agregar_al_inventario_button.TabIndex = 13;
             this.agregar_al_inventario_button.Text = "Agregar al inventario";
             this.agregar_al_inventario_button.UseVisualStyleBackColor = true;
             this.agregar_al_inventario_button.Click += new System.EventHandler(this.agregar_al_inventario_button_Click);
@@ -140,11 +140,11 @@
             // nuevo_producto_linklabel
             // 
             this.nuevo_producto_linklabel.AutoSize = true;
-            this.nuevo_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nuevo_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.nuevo_producto_linklabel.Location = new System.Drawing.Point(623, 165);
             this.nuevo_producto_linklabel.Name = "nuevo_producto_linklabel";
             this.nuevo_producto_linklabel.Size = new System.Drawing.Size(95, 21);
-            this.nuevo_producto_linklabel.TabIndex = 9;
+            this.nuevo_producto_linklabel.TabIndex = 10;
             this.nuevo_producto_linklabel.TabStop = true;
             this.nuevo_producto_linklabel.Text = "Crear nuevo";
             this.nuevo_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.nuevo_producto_linklabel_LinkClicked);
@@ -171,7 +171,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(260, 12);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(215, 30);
@@ -181,11 +181,11 @@
             // buscar_producto_linklabel
             // 
             this.buscar_producto_linklabel.AutoSize = true;
-            this.buscar_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_producto_linklabel.Location = new System.Drawing.Point(224, 165);
             this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
             this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
-            this.buscar_producto_linklabel.TabIndex = 19;
+            this.buscar_producto_linklabel.TabIndex = 9;
             this.buscar_producto_linklabel.TabStop = true;
             this.buscar_producto_linklabel.Text = "Buscar";
             this.buscar_producto_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_producto_linklabel_LinkClicked);
@@ -196,18 +196,18 @@
             this.nombre_producto_tb.Name = "nombre_producto_tb";
             this.nombre_producto_tb.ReadOnly = true;
             this.nombre_producto_tb.Size = new System.Drawing.Size(696, 33);
-            this.nombre_producto_tb.TabIndex = 20;
+            this.nombre_producto_tb.TabIndex = 11;
             this.nombre_producto_tb.TabStop = false;
             // 
             // descripcion_producto_tb
             // 
-            this.descripcion_producto_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descripcion_producto_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.descripcion_producto_tb.Location = new System.Drawing.Point(22, 275);
             this.descripcion_producto_tb.Multiline = true;
             this.descripcion_producto_tb.Name = "descripcion_producto_tb";
             this.descripcion_producto_tb.ReadOnly = true;
             this.descripcion_producto_tb.Size = new System.Drawing.Size(696, 75);
-            this.descripcion_producto_tb.TabIndex = 22;
+            this.descripcion_producto_tb.TabIndex = 12;
             this.descripcion_producto_tb.TabStop = false;
             // 
             // descripcion_producto_label
@@ -243,7 +243,7 @@
             this.Controls.Add(this.inversion_total_label);
             this.Controls.Add(this.unidades_tb);
             this.Controls.Add(this.unidades_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

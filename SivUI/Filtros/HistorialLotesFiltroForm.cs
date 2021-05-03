@@ -15,7 +15,7 @@ namespace SivUI.Filtros
 {
     public partial class HistorialLotesFiltroForm : Form, ISolicitudProducto, ISolicitudCategorias
     {
-        List<CategoriaModelo> categoriasSeleccionadas = new List<CategoriaModelo>();
+        List<CategoriaModelo> categoriasSeleccionadas = new();
         ProductoModelo producto;
         ISolicitudFiltro solicitante;
 
@@ -35,9 +35,6 @@ namespace SivUI.Filtros
             {
                 if (filtro.FiltroPorFechas)
                 {
-                    if (filtro.FechaInicial != null) { fecha_inicial_dtp.Value = filtro.FechaInicial; }
-                    if (filtro.FechaFinal != null) { fecha_final_dtp.Value = filtro.FechaFinal; }
-
                     filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
                     habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
                 }

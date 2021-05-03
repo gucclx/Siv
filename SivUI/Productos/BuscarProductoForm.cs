@@ -52,7 +52,7 @@ namespace SivUI
 
             try
             {
-                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarProducto_PorNombre(nombre));
+                resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarModelo_PorNombre<ProductoModelo>(nombre));
                 ActualizarResultados();
             }
             catch (Exception ex)

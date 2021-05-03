@@ -126,8 +126,10 @@ namespace SivUI
 
         private async void exportar_inventario_button_Click(object sender, EventArgs e)
         {
-            reporteFiltro = new ReporteFiltroModelo();
-            reporteFiltro.IncluirProductosSinUnidades = false;
+            reporteFiltro = new ReporteFiltroModelo
+            {
+                IncluirProductosSinUnidades = false
+            };
 
             var frm = new InventarioFiltroForm(this, reporteFiltro);
             this.Hide();
