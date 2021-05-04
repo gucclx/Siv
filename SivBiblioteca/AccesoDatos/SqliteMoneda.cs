@@ -8,7 +8,7 @@ namespace SivBiblioteca.AccesoDatos
 {
     /// <summary>
     /// Define la precision de la moneda con la que se trabajara en la base de datos
-    /// y provee propiedades utiles para la conversion de la moneda / validacion de la moneda.
+    /// y provee propiedades utiles para la conversion de la moneda / validacion de la moneda
     /// y metodos para la conversion de precios.
     /// </summary>
     public static class SqliteMoneda
@@ -34,7 +34,7 @@ namespace SivBiblioteca.AccesoDatos
         static readonly int factorConversion = Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
         // Valor maximo de la moneda que se puede representar.
-        static readonly decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
+        static readonly decimal monedaMaximo = Int64.MaxValue / factorConversion;
 
         static public decimal MonedaMaximo => monedaMaximo;
         static public decimal FactorConversion => factorConversion;

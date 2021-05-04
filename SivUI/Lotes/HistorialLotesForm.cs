@@ -187,7 +187,7 @@ namespace SivUI.Lotes
 
                 if (destino == null) return;
 
-                await Exportar.ExportarReporte<ReporteLoteModelo>(destino, reportes);
+                await Exportar.ExportarReportes<ReporteLoteModelo>(destino, reportes);
 
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

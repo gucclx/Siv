@@ -210,7 +210,7 @@ namespace SivUI.Ventas
 
                 if (destino == null) return;
 
-                await Exportar.ExportarReporte<ReporteVentaModelo>(destino, reportes);
+                await Exportar.ExportarReportes<ReporteVentaModelo>(destino, reportes);
 
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

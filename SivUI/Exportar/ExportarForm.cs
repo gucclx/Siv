@@ -50,7 +50,7 @@ namespace SivUI.ExportarUI
 
             try
             {
-                await Exportar.ExportarReporte<T>(destino, reporteFiltro: filtro);
+                await Exportar.ExportarReportes<T>(destino, reporteFiltro: filtro);
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)

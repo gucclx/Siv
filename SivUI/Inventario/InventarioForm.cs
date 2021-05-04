@@ -168,7 +168,7 @@ namespace SivUI.Inventario
 
                 if (destino == null) return;
 
-                await Exportar.ExportarReporte<ReporteInventarioModelo>(destino, reportes);
+                await Exportar.ExportarReportes<ReporteInventarioModelo>(destino, reportes);
                 MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)

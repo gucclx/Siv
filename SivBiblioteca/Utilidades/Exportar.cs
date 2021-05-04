@@ -27,20 +27,22 @@ namespace SivBiblioteca.Utilidades
 
         /// <summary>
         /// Se utiliza para exportar el inventario, historial de compras de lotes o historial de ventas.
+        /// </summary>
+        /// <remarks>
         /// Los reportes se exportan a un archivo .csv utilizando la biblioteca CsvHelper.
         /// Si el archivo seleccionado existe, los reportes seran adjuntados al archivo.
         /// Esto es util si se exportan los reportes por paginacion.
-        /// </summary>
-        /// <typeparam name="T"> El tipo de reporte. </typeparam>
-        /// <param name="reportes"> Reportes a guardar. </param>
-        /// <param name="destino"> Informacion de ruta donde se guardaran los reportes. </param>
+        /// </remarks>
+        /// <typeparam name="T">El tipo de reporte.</typeparam>
+        /// <param name="reportes">Reportes a guardar.</param>
+        /// <param name="destino">Informacion de ruta donde se guardaran los reportes.</param>
         /// <returns></returns>
         public static async Task GuardarCsvReporteAsync<T>(FileInfo destino, IEnumerable<T> reportes)
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 // Si el archivo existe se adjuntara la informacion.
-                // por lo que si este existe, no se deben incluir los headers de nuevo.
+                // Por lo que si este existe, no se deben incluir los headers otra vez.
                 HasHeaderRecord = !File.Exists(destino.FullName)
             };
 
@@ -50,7 +52,7 @@ namespace SivBiblioteca.Utilidades
             await csv.WriteRecordsAsync(reportes);
         }
 
-        public async static Task ExportarReporte<T>(FileInfo destino, IEnumerable<T> reportes = null, ReporteFiltroModelo reporteFiltro = null) where T: IReporte
+        public async static Task ExportarReportes<T>(FileInfo destino, IEnumerable<T> reportes = null, ReporteFiltroModelo reporteFiltro = null) where T: IReporte
         {
             if (reportes != null)
             {
@@ -58,10 +60,10 @@ namespace SivBiblioteca.Utilidades
                 return;
             }
 
-            await ExportarReportePaginacion<T>(destino, reporteFiltro);
+            await ExportarReportesPaginacion<T>(destino, reporteFiltro);
         }
 
-        public static async Task ExportarReportePaginacion<T>(FileInfo destino, ReporteFiltroModelo reporteFiltro) where T: IReporte
+        public static async Task ExportarReportesPaginacion<T>(FileInfo destino, ReporteFiltroModelo reporteFiltro) where T: IReporte
         {
             List<T> reportes;
             int? comienzo = null;
