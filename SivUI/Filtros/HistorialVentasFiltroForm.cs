@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SivBiblioteca.Modelos;
-using SivBiblioteca;
 using SivUI.Categorias;
-using SivUI.Interfaces;
+using SivUI.Clientes;
+using SivUI.Productos;
 
 namespace SivUI
 {

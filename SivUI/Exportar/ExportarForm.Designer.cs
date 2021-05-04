@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.ExportarUI
 {
     partial class ExportarForm
     {

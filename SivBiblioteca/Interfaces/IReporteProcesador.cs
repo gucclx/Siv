@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SivBiblioteca
+namespace SivBiblioteca.Interfaces
 {
-    public interface IReporte
+    public interface IReporteProcesador
     {
-        int ReporteId { get; }
+        void Procesar();
     }
 }

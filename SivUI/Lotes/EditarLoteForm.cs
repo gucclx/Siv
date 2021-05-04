@@ -9,8 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SivBiblioteca.Utilidades;
 
-namespace SivUI
+namespace SivUI.Lotes
 {
     public partial class EditarLoteForm : Form
     {
@@ -97,11 +98,6 @@ namespace SivUI
             try
             {
                 ConfigGlobal.conexion.EditarLote(lote);
-            }
-            catch (OverflowException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
             }
             catch (ArgumentException ex)
             {

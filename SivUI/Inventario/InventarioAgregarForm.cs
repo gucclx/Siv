@@ -8,8 +8,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SivBiblioteca.Utilidades;
+using SivUI.Productos;
 
-namespace SivUI
+
+namespace SivUI.Inventario
 {
     public partial class InventarioAgregarForm : Form, ISolicitudProducto
     {
@@ -121,11 +124,6 @@ namespace SivUI
             try
             {
                 ConfigGlobal.conexion.GuardarLote(lote);
-            }
-            catch (OverflowException ex)
-            {
-                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
             }
             catch (ArgumentException ex)
             {

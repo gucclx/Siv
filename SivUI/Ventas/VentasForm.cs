@@ -11,8 +11,10 @@ using System.Windows.Forms;
 using SivBiblioteca.Modelos;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
+using SivBiblioteca.Utilidades;
+using SivUI.ExportarUI;
 
-namespace SivUI
+namespace SivUI.Ventas
 {
     public partial class VentasForm : Form, ISolicitudFiltro
     {

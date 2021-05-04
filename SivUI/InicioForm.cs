@@ -7,10 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SivBiblioteca.Modelos;
-using SivBiblioteca;
 using SivUI.Inventario;
 using SivUI.Ventas;
+using SivUI.ExportarUI;
+using SivUI.Categorias;
+using SivUI.Clientes;
+using SivUI.Productos;
+using SivUI.Lotes;
+
 
 namespace SivUI
 {

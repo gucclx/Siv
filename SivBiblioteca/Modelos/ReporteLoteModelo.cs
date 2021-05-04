@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SivBiblioteca.Interfaces;
 
 namespace SivBiblioteca.Modelos
 {
@@ -40,7 +41,7 @@ namespace SivBiblioteca.Modelos
 
         [Name("Inversión Unidad")]
         [Index(5)]
-        public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
+        public decimal InversionUnidad => InversionLote / UnidadesCompradasLote;
 
         [Name("Precio Venta Unidad")]
         [Index(6)]

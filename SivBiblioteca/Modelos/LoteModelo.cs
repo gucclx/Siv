@@ -17,7 +17,7 @@ namespace SivBiblioteca.Modelos
         public uint UnidadesDisponibles { set; get; }
         public uint UnidadesCompradas
         {
-            get { return unidadesCompradas; }
+            get => unidadesCompradas;
             set
             {
                 if (value < 1)
@@ -29,7 +29,7 @@ namespace SivBiblioteca.Modelos
         }
         public decimal Inversion
         {
-            get { return inversion; }
+            get => inversion;
             set
             {
                 if (value < 0)
@@ -39,10 +39,10 @@ namespace SivBiblioteca.Modelos
                 inversion = value;
             }
         }
-        public decimal InversionUnidad { get { return Inversion / UnidadesCompradas; } }
+        public decimal InversionUnidad => Inversion / UnidadesCompradas;
         public decimal PrecioVentaUnidad
         {
-            get { return precioVentaUnidad; }
+            get => precioVentaUnidad;
             set
             {
                 if (value < 0)

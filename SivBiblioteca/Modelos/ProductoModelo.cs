@@ -14,10 +14,10 @@ namespace SivBiblioteca.Modelos
         public string Descripcion { get; set; }
         public string Nombre
         {
-            get { return nombre; }
+            get => nombre;
             set
             {
-                if (string.IsNullOrWhiteSpace(value.Trim()))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException("El nombre del producto no debe estar en blanco o ser null.");
                 }

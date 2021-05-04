@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SivUI
+namespace SivUI.Categorias
 {
     public partial class CrearCategoriaForm : Form
     {

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using SivBiblioteca.Interfaces;
+using SivBiblioteca.Validacion;
 
 namespace SivBiblioteca.AccesoDatos
 {
@@ -508,6 +510,17 @@ namespace SivBiblioteca.AccesoDatos
             con.Close();
         }
 
+        /// <summary>
+        /// Carga una lista de reportes de ventas, lotes, o inventario.
+        /// </summary>
+        /// <typeparam name="T">Tipo de reporte a cargar. </typeparam>
+        /// <param name="filtro">Contiene condiciones para generar el reporte.</param>
+        /// <param name="limiteFilas">
+        /// Limite de filas a retornar. 
+        /// Util si la informacion se presenta al usuario o se paginan los resultados.
+        /// </param>
+        /// <param name="comienzo">Util para paginar los resultados.</param>
+        /// <returns>Una lista de reportes de tipo <typeparamref name="T"/>.</returns>
         public List<T> CargarReporte<T>(ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             var parametros = new DynamicParameters();
@@ -649,25 +662,19 @@ namespace SivBiblioteca.AccesoDatos
                 parametros.Add("@ClienteId", filtro.Cliente.Id);
             }
 
-            // Util para paginar los resultados.
             if (comienzo != null)
             {
                 if (reporteTipo == typeof(ReporteVentaModelo))
                 {
-                    // En el caso de reportes de ventas, se paginan los resultados
-                    // en forma ascendente (ordenado por ventas.id).
-                    // Util para presentar las ultimas ventas al usuario,
-                    // en caso de que el usuario se haya equivocado en la venta.
-                    // De esta manera el usuario obtiene facilmente el id de la ultima venta por ejemplo.
                     condiciones.Add("Ventas.Id < @Comienzo");
                 }
                 else if (reporteTipo == typeof(ReporteLoteModelo))
                 {
-                    condiciones.Add("Lotes.Id > @Comienzo");
+                    condiciones.Add("Lotes.Id < @Comienzo");
                 }
                 else if (reporteTipo == typeof(ReporteInventarioModelo))
                 {
-                    condiciones.Add("Productos.Id > @Comienzo");
+                    condiciones.Add("Productos.Id < @Comienzo");
                 }
                 parametros.Add("@Comienzo", comienzo);
             }
@@ -700,7 +707,7 @@ namespace SivBiblioteca.AccesoDatos
         /// <returns>
         /// El query final para generar el repote de tipo <paramref name="reporteTipo"/>
         /// </returns>
-        public string ConstruirQueryReporte<T>(ReporteFiltroModelo filtro, DynamicParameters parametros, int? comienzo, int? limiteFilas)
+        public string ConstruirQueryReporte<T>(DynamicParameters parametros, ReporteFiltroModelo filtro = null, int? limiteFilas = null, int? comienzo = null)
         {
             string select = "";
             string ordenacion = "";
@@ -722,7 +729,7 @@ namespace SivBiblioteca.AccesoDatos
                                 from Productos
                                 join lotes on lotes.ProductoId = productos.Id";
 
-                ordenacion = "order by Lotes.Id asc";
+                ordenacion = "order by Lotes.Id desc";
             }
             else if (reporteTipo == typeof(ReporteVentaModelo))
             {
@@ -753,7 +760,7 @@ namespace SivBiblioteca.AccesoDatos
                         left join lotes on lotes.ProductoId = productos.Id";
 
                 agrupacion = "group by Productos.Id";
-                ordenacion = "order by Productos.Id asc";
+                ordenacion = "order by Productos.Id desc";
             }
 
             string condiciones = ConstruirCondicionesReporte<T>
@@ -800,12 +807,12 @@ namespace SivBiblioteca.AccesoDatos
         {
             // Esta seccion construye un commando sql
             // del tipo 'select 1 as CategoriaId union select 2 union select 3...'
-            // para crear la lista de ids de las categorias por las que se deben filtrar los productos
+            // para crear la lista de ids de las categorias por las que se deben filtrar los productos,
             // pero se utilizan parametros en vez de insertar los ids directamente en la string.
             // Nota: El nombre de los parametros es extraño solo para evitar
             // coliciones con algun otro parametro ya existente.
 
-            var partes = new List<string>
+            var ids = new List<string>
             {
                 "select @FPCCATID0 as CategoriaId"
             };
@@ -815,14 +822,15 @@ namespace SivBiblioteca.AccesoDatos
             for (int i = 1; i < categorias.Count; i++)
             {
                 var parametro = $"@FPCCATID{ i }";
-                partes.Add($"union select { parametro }");
+                ids.Add($"union select { parametro }");
                 parametros.Add(parametro, categorias[i].Id);
             }
 
-            ///     Magia negra para seleccionar solo productos
-            ///     asociados con todas las categorias solicitadas.
-            ///     https://stackoverflow.com/a/1330271
-            return $@"(case when productos.id in 
+            // Magia negra para seleccionar solo productos
+            // asociados con todas las categorias solicitadas.
+            // https://stackoverflow.com/a/1330271
+
+            return $@"(case when Productos.Id in 
                         (SELECT  *
                         FROM (
                                 SELECT  DISTINCT ProductoCategoria.ProductoId
@@ -832,7 +840,7 @@ namespace SivBiblioteca.AccesoDatos
                             (
                             SELECT  NULL
                             FROM (
-                                    { string.Join(" ", partes) }
+                                    { string.Join(" ", ids) }
                                     ) filtro
                             WHERE   NOT EXISTS
                                     (
@@ -863,9 +871,9 @@ namespace SivBiblioteca.AccesoDatos
                             p.*,
                             c.*
                             from ventas v
-                            join lotes l on l.id = v.LoteId
-                            join productos p on p.id = l.ProductoId
-                            left join clientes c on c.id = v.ClienteId
+                            join lotes l on l.Id = v.LoteId
+                            join productos p on p.Id = l.ProductoId
+                            left join clientes c on c.Id = v.ClienteId
                             where v.id = @ventaId";
 
             VentaModelo map(VentaModelo v, LoteModelo l, ProductoModelo p, ClienteModelo c) { l.Producto = p; v.Lote = l; v.Cliente = c; return v; }

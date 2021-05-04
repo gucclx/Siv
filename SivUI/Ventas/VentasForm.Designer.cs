@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Ventas
 {
     partial class VentasForm
     {

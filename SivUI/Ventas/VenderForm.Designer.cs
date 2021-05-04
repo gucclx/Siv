@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Ventas
 {
     partial class VenderForm
     {
@@ -168,7 +168,7 @@
             // buscar_linklabel
             // 
             this.buscar_linklabel.AutoSize = true;
-            this.buscar_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_linklabel.Location = new System.Drawing.Point(82, 458);
             this.buscar_linklabel.Name = "buscar_linklabel";
             this.buscar_linklabel.Size = new System.Drawing.Size(56, 21);
@@ -180,7 +180,7 @@
             // crear_nuevo_cliente_label
             // 
             this.crear_nuevo_cliente_label.AutoSize = true;
-            this.crear_nuevo_cliente_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.crear_nuevo_cliente_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(191, 458);
             this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
             this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(95, 21);
@@ -203,7 +203,7 @@
             // panel_contenedor
             // 
             this.panel_contenedor.Controls.Add(this.ventas_dtgv);
-            this.panel_contenedor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel_contenedor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.panel_contenedor.Location = new System.Drawing.Point(12, 76);
             this.panel_contenedor.Name = "panel_contenedor";
             this.panel_contenedor.Size = new System.Drawing.Size(760, 296);
@@ -230,7 +230,7 @@
             this.Controls.Add(this.agregar_lote_button);
             this.Controls.Add(this.lote_id_tb);
             this.Controls.Add(this.lote_id_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

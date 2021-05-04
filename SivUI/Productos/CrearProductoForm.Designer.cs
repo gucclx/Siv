@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Productos
 {
     partial class CrearProductoForm
     {

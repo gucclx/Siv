@@ -9,8 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SivUI.Categorias;
 
-namespace SivUI
+namespace SivUI.Productos
 {
     public partial class EditarProductoForm : Form, ISolicitudProducto, ISolicitudCategorias
     {

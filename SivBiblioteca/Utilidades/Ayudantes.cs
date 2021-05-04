@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SivBiblioteca
+namespace SivBiblioteca.Utilidades
 {
     public static class Ayudantes
     {

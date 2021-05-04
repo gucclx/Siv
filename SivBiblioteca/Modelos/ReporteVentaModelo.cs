@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SivBiblioteca.Interfaces;
 
 namespace SivBiblioteca.Modelos
 {
@@ -39,7 +40,7 @@ namespace SivBiblioteca.Modelos
 
         [Name("Inversión Unidad")]
         [Index(4)]
-        public decimal InversionUnidad { get { return InversionLote / UnidadesCompradasLote; } }
+        public decimal InversionUnidad => InversionLote / UnidadesCompradasLote;
 
         [Name("Precio Venta Unidad")]
         [Index(5)]
@@ -47,15 +48,15 @@ namespace SivBiblioteca.Modelos
 
         [Name("Inversión Venta")]
         [Index(6)]
-        public decimal InversionVenta { get { return UnidadesVendidas * InversionUnidad; } }
+        public decimal InversionVenta => UnidadesVendidas * InversionUnidad;
 
         [Name("Ingreso Venta")]
         [Index(7)]
-        public decimal IngresoVenta { get { return UnidadesVendidas * PrecioVentaUnidad; } }
+        public decimal IngresoVenta => UnidadesVendidas * PrecioVentaUnidad;
 
         [Name("Ganancia Venta")]
         [Index(8)]
-        public decimal GananciaVenta { get { return IngresoVenta - InversionVenta; } }
+        public decimal GananciaVenta => IngresoVenta - InversionVenta;
 
         [Name("Fecha Venta")]
         [Index(9)]

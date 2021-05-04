@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SivBiblioteca
+namespace SivBiblioteca.Validacion
 {
     /// <summary>
     /// Provee extensiones para validar los diferentes modelos 
@@ -46,11 +46,11 @@ namespace SivBiblioteca
             {
                 if (categoria == null)
                 {
-                    throw new ArgumentException(@"Al menos una categoria fue null.");
+                    throw new ArgumentException("Al menos una categoria fue null.");
                 }
                 if (string.IsNullOrEmpty(categoria.Nombre))
                 {
-                    throw new ArgumentException(@"El nombre de la categoria esta vacio o fue null.");
+                    throw new ArgumentException("El nombre de la categoria esta vacio o fue null.");
                 }
 
                 if (verificarQueNoExistan == false) continue;
@@ -83,12 +83,12 @@ namespace SivBiblioteca
 
                 if (venta.Unidades > ConfigGlobal.conexion.UnidadesDisponiblesLote(venta.Lote.Id))
                 {
-                    throw new ArgumentException($"El numero de unidades solicitadas (unidades a vender) sobrepasa las disponibles en el lote.");
+                    throw new ArgumentException($"El numero de unidades a vender sobrepasa las disponibles en el lote.");
                 }
 
                 if (venta.PrecioVentaUnidad > SqliteMoneda.MonedaMaximo)
                 {
-                    throw new OverflowException("El precio de venta por unidad es demasiado grande.");
+                    throw new ArgumentException("El precio de venta por unidad es demasiado grande.");
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace SivBiblioteca
 
             if (string.IsNullOrWhiteSpace(cliente.Nombre))
             {
-                throw new ArgumentException("Nombre del cliente vacio.");
+                throw new ArgumentException("El nombre del cliente esta vacio o fue null.");
             }
         }
 
@@ -125,7 +125,7 @@ namespace SivBiblioteca
 
             if (lote.PrecioVentaUnidad > SqliteMoneda.MonedaMaximo)
             {
-                throw new OverflowException("Precio de venta de la unidad demasiado grande.");
+                throw new ArgumentException("Precio de venta de la unidad demasiado grande.");
             }
 
             // Cargar unidades disponibles del lote desde la base de datos.

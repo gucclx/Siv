@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Inventario
 {
     partial class InventarioAgregarForm
     {

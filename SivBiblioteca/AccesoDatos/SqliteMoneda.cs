@@ -36,8 +36,8 @@ namespace SivBiblioteca.AccesoDatos
         // Valor maximo de la moneda que se puede representar.
         static readonly decimal monedaMaximo = Int64.MaxValue / Convert.ToInt32(Math.Pow(10, MonedaPrecision));
 
-        static public decimal MonedaMaximo { get { return monedaMaximo; } }
-        static public decimal FactorConversion { get { return factorConversion; } }
+        static public decimal MonedaMaximo => monedaMaximo;
+        static public decimal FactorConversion => factorConversion;
 
         /// <summary>
         ///     x se multiplica por el factor de conversion para obtener 
@@ -52,9 +52,6 @@ namespace SivBiblioteca.AccesoDatos
             return Convert.ToInt64(decimal.Truncate(x * factorConversion));
         }
 
-        public static decimal ConvertirAOriginal(decimal x)
-        {
-            return x / factorConversion;
-        }
+        public static decimal ConvertirAOriginal(decimal x) => x / factorConversion;
     }
 }

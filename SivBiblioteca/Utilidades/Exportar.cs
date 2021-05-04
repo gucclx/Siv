@@ -8,8 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SivBiblioteca.Interfaces;
 
-namespace SivBiblioteca
+namespace SivBiblioteca.Utilidades
 {
     /// <summary>
     /// Provee metodos para exportar reportes de ventas, lotes o inventario.
@@ -43,11 +44,10 @@ namespace SivBiblioteca
                 HasHeaderRecord = !File.Exists(destino.FullName)
             };
 
-            using (var writer = new StreamWriter(destino.FullName, true, Encoding.UTF8))
-            using (var csv = new CsvWriter(writer, config))
-            {
-                await csv.WriteRecordsAsync(reportes);
-            }
+            using var writer = new StreamWriter(destino.FullName, true, Encoding.UTF8);
+            using var csv = new CsvWriter(writer, config);
+
+            await csv.WriteRecordsAsync(reportes);
         }
 
         public async static Task ExportarReporte<T>(FileInfo destino, IEnumerable<T> reportes = null, ReporteFiltroModelo reporteFiltro = null) where T: IReporte

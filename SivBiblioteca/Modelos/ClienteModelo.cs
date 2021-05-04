@@ -13,10 +13,10 @@ namespace SivBiblioteca.Modelos
         public int Id { get; set; }
         public string Nombre
         {
-            get { return nombre; }
+            get => nombre;
             set
             {
-                if (string.IsNullOrWhiteSpace(value.Trim()))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException("El nombre del cliente no debe estar en blanco o ser null.");
                 }
@@ -25,17 +25,11 @@ namespace SivBiblioteca.Modelos
         }
         public string Apellido
         {
-            get { return apellido; }
-            set
-            {
-                apellido = value?.Trim();
-            }
+            get => apellido;
+            set => apellido = value?.Trim();
         }
 
-        public string NombreCompleto
-        {
-            get { return $"{Nombre} {Apellido}"; }
-        }
+        public string NombreCompleto => $"{Nombre} {Apellido}";
         public string NumeroContacto { get; set; }    
     }
 }

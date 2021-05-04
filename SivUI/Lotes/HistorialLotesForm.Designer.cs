@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Lotes
 {
     partial class HistorialLotesForm
     {

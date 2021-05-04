@@ -12,7 +12,7 @@ namespace SivBiblioteca.Modelos
         public int Id { get; set; }
         public string Nombre
         {
-            get { return nombre; }
+            get => nombre;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))

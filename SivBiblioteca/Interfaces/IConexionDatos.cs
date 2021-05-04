@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SivBiblioteca.AccesoDatos
+namespace SivBiblioteca.Interfaces
 {
     public interface IConexionDatos
     {

@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Clientes
 {
     partial class CrearClienteForm
     {

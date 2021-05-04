@@ -1,4 +1,4 @@
-﻿namespace SivUI
+﻿namespace SivUI.Categorias
 {
     partial class CrearCategoriaForm
     {

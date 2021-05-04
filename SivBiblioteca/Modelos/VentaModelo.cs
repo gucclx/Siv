@@ -33,11 +33,11 @@ namespace SivBiblioteca.Modelos
             } 
         }
         public int LoteId { get; set; }
-        public string ProductoDescripcion { get { return Lote.Producto.Descripcion;  } }
-        public string ProductoNombre { get { return Lote.Producto.Nombre; } }
+        public string ProductoDescripcion => Lote.Producto.Descripcion;
+        public string ProductoNombre => Lote.Producto.Nombre;
         public uint Unidades
         {
-            get { return unidades; }
+            get => unidades;
             set
             {
                 if (value < 1)
@@ -50,7 +50,7 @@ namespace SivBiblioteca.Modelos
 
         public decimal PrecioVentaUnidad
         {
-            get { return precioVentaUnidad; }
+            get => precioVentaUnidad;
             set
             {
                 if (value < 0)
@@ -60,7 +60,7 @@ namespace SivBiblioteca.Modelos
                 precioVentaUnidad = value;
             }
         }
-        public decimal Total { get { return PrecioVentaUnidad * Unidades;  } }
+        public decimal Total => PrecioVentaUnidad * Unidades;
         public ClienteModelo Cliente { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using SivBiblioteca;
+﻿using SivBiblioteca.Interfaces;
 using SivBiblioteca.Modelos;
 using System;
 using System.Collections.Generic;
@@ -9,12 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
-using SivBiblioteca.AccesoDatos;
 using SivUI.Filtros;
+using SivBiblioteca.Utilidades;
 
-namespace SivUI
+namespace SivUI.ExportarUI
 {
     public partial class ExportarForm : Form, ISolicitudFiltro
     {
@@ -126,7 +125,7 @@ namespace SivUI
 
         private async void exportar_inventario_button_Click(object sender, EventArgs e)
         {
-            reporteFiltro = new ReporteFiltroModelo
+            var reporteFiltro = new ReporteFiltroModelo
             {
                 IncluirProductosSinUnidades = false
             };

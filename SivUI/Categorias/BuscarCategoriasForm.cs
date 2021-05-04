@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SivUI
+namespace SivUI.Categorias
 {
     public partial class BuscarCategoriasForm : Form
     {
