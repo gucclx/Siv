@@ -46,17 +46,17 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(271, 10);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(242, 30);
+            this.header_label.Size = new System.Drawing.Size(248, 30);
             this.header_label.TabIndex = 3;
-            this.header_label.Text = "Búsqueda de categorias";
+            this.header_label.Text = "Búsqueda de categorías ";
             // 
             // resultados_label
             // 
             this.resultados_label.AutoSize = true;
-            this.resultados_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultados_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.resultados_label.Location = new System.Drawing.Point(20, 119);
             this.resultados_label.Name = "resultados_label";
             this.resultados_label.Size = new System.Drawing.Size(102, 25);
@@ -78,7 +78,7 @@
             // 
             // resultados_listbox
             // 
-            this.resultados_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultados_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.resultados_listbox.FormattingEnabled = true;
             this.resultados_listbox.HorizontalScrollbar = true;
             this.resultados_listbox.ItemHeight = 21;
@@ -117,7 +117,7 @@
             // 
             // categorias_seleccionadas_listbox
             // 
-            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_seleccionadas_listbox.FormattingEnabled = true;
             this.categorias_seleccionadas_listbox.HorizontalScrollbar = true;
             this.categorias_seleccionadas_listbox.ItemHeight = 21;
@@ -130,17 +130,17 @@
             // categorias_seleccionadas_label
             // 
             this.categorias_seleccionadas_label.AutoSize = true;
-            this.categorias_seleccionadas_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_seleccionadas_label.Location = new System.Drawing.Point(395, 119);
             this.categorias_seleccionadas_label.Name = "categorias_seleccionadas_label";
             this.categorias_seleccionadas_label.Size = new System.Drawing.Size(224, 25);
             this.categorias_seleccionadas_label.TabIndex = 28;
-            this.categorias_seleccionadas_label.Text = "Categorias seleccionadas";
+            this.categorias_seleccionadas_label.Text = "Categorías seleccionadas";
             // 
             // buscar_button
             // 
             this.buscar_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buscar_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_button.Location = new System.Drawing.Point(312, 68);
             this.buscar_button.Name = "buscar_button";
             this.buscar_button.Size = new System.Drawing.Size(77, 37);
@@ -191,7 +191,7 @@
             this.Controls.Add(this.nombre_categoria_tb);
             this.Controls.Add(this.nombre_categoria_label);
             this.Controls.Add(this.header_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -199,7 +199,7 @@
             this.MaximizeBox = false;
             this.Name = "BuscarCategoriasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Buscar categorias";
+            this.Text = "Buscar categorías ";
             this.ResumeLayout(false);
             this.PerformLayout();
 

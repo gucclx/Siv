@@ -124,16 +124,15 @@ namespace SivUI.Inventario
             try
             {
                 ConfigGlobal.conexion.GuardarLote(lote);
+                MessageBox.Show($"ID del lote: {lote.Id}", "Lote agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
             
             LimpiarForm();
-            ActualizarUltimoLoteId();
-            MessageBox.Show($"ID del lote: {lote.Id}", "Lote agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ActualizarUltimoLoteId();           
         }
 
         private void nuevo_producto_linklabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

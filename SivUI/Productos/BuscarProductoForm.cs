@@ -55,7 +55,7 @@ namespace SivUI.Productos
                 resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarModelo_PorNombre<ProductoModelo>(nombre));
                 ActualizarResultados();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -85,7 +85,6 @@ namespace SivUI.Productos
             if (e.KeyCode == Keys.Enter)
             {
                 await BuscarProducto();
-                
             }
         }
     }

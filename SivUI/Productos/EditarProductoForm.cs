@@ -35,7 +35,7 @@ namespace SivUI.Productos
             {
                 this.producto.Categorias = ConfigGlobal.conexion.CargarCategorias_PorProductoId(producto.Id);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -44,13 +44,10 @@ namespace SivUI.Productos
         }
 
         private void ActualizarCategorias()
-        {
+        {        
             categorias_listbox.DataSource = null;
-
-            if (producto != null)
-            {
-                categorias_listbox.DataSource = producto.Categorias;
-            }
+            if (producto == null) return;
+            categorias_listbox.DataSource = producto.Categorias;
             categorias_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
         }
 
@@ -81,7 +78,8 @@ namespace SivUI.Productos
 
         public void CategoriasListas(List<CategoriaModelo> categorias)
         {
-            if (producto == null) return;
+            if (producto == null || categorias == null) return;
+
             foreach (var categoria in categorias)
             {
                 if (producto.Categorias.Find(c => c.Id == categoria.Id) != null) continue;
@@ -109,7 +107,7 @@ namespace SivUI.Productos
             }
 
             var resultado = MessageBox.Show("¿Desea realizar los cambios?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (resultado == DialogResult.No) return;
+            if (resultado != DialogResult.Yes) return;
 
             producto.Nombre = nuevoNombre;
             producto.Descripcion = nueva_descripcion_tb.Text.Trim();
@@ -118,7 +116,7 @@ namespace SivUI.Productos
             {
                 ConfigGlobal.conexion.EditarProducto(producto);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

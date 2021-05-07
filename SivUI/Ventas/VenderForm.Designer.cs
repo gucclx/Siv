@@ -54,7 +54,7 @@
             this.lote_id_tb.Location = new System.Drawing.Point(12, 37);
             this.lote_id_tb.Name = "lote_id_tb";
             this.lote_id_tb.Size = new System.Drawing.Size(136, 33);
-            this.lote_id_tb.TabIndex = 1;
+            this.lote_id_tb.TabIndex = 0;
             // 
             // lote_id_label
             // 
@@ -71,7 +71,7 @@
             this.agregar_lote_button.Location = new System.Drawing.Point(301, 34);
             this.agregar_lote_button.Name = "agregar_lote_button";
             this.agregar_lote_button.Size = new System.Drawing.Size(101, 37);
-            this.agregar_lote_button.TabIndex = 4;
+            this.agregar_lote_button.TabIndex = 2;
             this.agregar_lote_button.Text = "Agregar";
             this.agregar_lote_button.UseVisualStyleBackColor = true;
             this.agregar_lote_button.Click += new System.EventHandler(this.agregar_lote_button_Click);
@@ -114,7 +114,7 @@
             this.vender_button.Location = new System.Drawing.Point(647, 481);
             this.vender_button.Name = "vender_button";
             this.vender_button.Size = new System.Drawing.Size(125, 37);
-            this.vender_button.TabIndex = 5;
+            this.vender_button.TabIndex = 7;
             this.vender_button.Text = "Vender";
             this.vender_button.UseVisualStyleBackColor = true;
             this.vender_button.Click += new System.EventHandler(this.vender_button_Click);
@@ -133,7 +133,7 @@
             this.unidades_tb.Location = new System.Drawing.Point(154, 37);
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.Size = new System.Drawing.Size(141, 33);
-            this.unidades_tb.TabIndex = 3;
+            this.unidades_tb.TabIndex = 1;
             this.unidades_tb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.unidades_tb_KeyDown);
             // 
             // remover_venta_button
@@ -142,7 +142,7 @@
             this.remover_venta_button.Location = new System.Drawing.Point(12, 378);
             this.remover_venta_button.Name = "remover_venta_button";
             this.remover_venta_button.Size = new System.Drawing.Size(184, 37);
-            this.remover_venta_button.TabIndex = 16;
+            this.remover_venta_button.TabIndex = 3;
             this.remover_venta_button.Text = "Remover selección";
             this.remover_venta_button.UseVisualStyleBackColor = true;
             this.remover_venta_button.Click += new System.EventHandler(this.remover_venta_button_Click);
@@ -172,7 +172,7 @@
             this.buscar_linklabel.Location = new System.Drawing.Point(82, 458);
             this.buscar_linklabel.Name = "buscar_linklabel";
             this.buscar_linklabel.Size = new System.Drawing.Size(56, 21);
-            this.buscar_linklabel.TabIndex = 19;
+            this.buscar_linklabel.TabIndex = 4;
             this.buscar_linklabel.TabStop = true;
             this.buscar_linklabel.Text = "Buscar";
             this.buscar_linklabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.buscar_linklabel_LinkClicked);
@@ -184,7 +184,7 @@
             this.crear_nuevo_cliente_label.Location = new System.Drawing.Point(191, 458);
             this.crear_nuevo_cliente_label.Name = "crear_nuevo_cliente_label";
             this.crear_nuevo_cliente_label.Size = new System.Drawing.Size(95, 21);
-            this.crear_nuevo_cliente_label.TabIndex = 23;
+            this.crear_nuevo_cliente_label.TabIndex = 5;
             this.crear_nuevo_cliente_label.TabStop = true;
             this.crear_nuevo_cliente_label.Text = "Crear nuevo";
             this.crear_nuevo_cliente_label.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.crear_nuevo_cliente_label_LinkClicked);
@@ -195,7 +195,7 @@
             this.limpiar_cliente_button.Location = new System.Drawing.Point(294, 482);
             this.limpiar_cliente_button.Name = "limpiar_cliente_button";
             this.limpiar_cliente_button.Size = new System.Drawing.Size(101, 37);
-            this.limpiar_cliente_button.TabIndex = 24;
+            this.limpiar_cliente_button.TabIndex = 6;
             this.limpiar_cliente_button.Text = "Limpiar";
             this.limpiar_cliente_button.UseVisualStyleBackColor = true;
             this.limpiar_cliente_button.Click += new System.EventHandler(this.limpiar_cliente_button_Click);

@@ -24,6 +24,5 @@ namespace SivBiblioteca.Modelos
                 nombre = value.Trim();
             }
         }
-        public string FechaCreacion { get; set; }
     }
 }

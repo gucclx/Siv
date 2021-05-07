@@ -63,7 +63,7 @@ namespace SivUI.ExportarUI
         }
 
         /// <summary>
-        ///     Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
+        /// Cambia el texto del label 'tarea' el cual indica el trabajo llevandose a cabo actualmente.
         /// </summary>
         /// <param name="s"></param>
         private void CambiarTareaLabel(string mensaje = "", bool visible = false)
@@ -90,16 +90,16 @@ namespace SivUI.ExportarUI
         }
 
         /// <summary>
-        ///     Deshabilita o habilita los botones de la interfaz dependiendo si se esta exportando o no.
-        ///     Hace visible el header label si se esta trabajando. Invisible si no.
+        /// Deshabilita o habilita los botones de la interfaz dependiendo si se esta exportando o no.
+        /// Hace visible el header label si se esta trabajando. Invisible si no.
         /// </summary>
         /// <param name="trabajando"> Indica si se esta exportando o no. </param>
-        private void Exportando(bool trabajando)
+        private void Exportando(bool exportando)
         {
-            header_label.Visible = !trabajando;
-            exportar_lotes_button.Enabled = !trabajando;
-            exportar_ventas_button.Enabled = !trabajando;
-            exportar_inventario_button.Enabled = !trabajando;
+            header_label.Visible = !exportando;
+            exportar_lotes_button.Enabled = !exportando;
+            exportar_ventas_button.Enabled = !exportando;
+            exportar_inventario_button.Enabled = !exportando;
         }
         
         /// <summary>

@@ -9,7 +9,7 @@ namespace SivBiblioteca.AccesoDatos
     /// <summary>
     /// Define la precision de la moneda con la que se trabajara en la base de datos
     /// y provee propiedades utiles para la conversion de la moneda / validacion de la moneda
-    /// y metodos para la conversion de precios.
+    /// y metodos para la conversion de la moneda.
     /// </summary>
     public static class SqliteMoneda
     {
@@ -40,13 +40,13 @@ namespace SivBiblioteca.AccesoDatos
         static public decimal FactorConversion => factorConversion;
 
         /// <summary>
-        ///     x se multiplica por el factor de conversion para obtener 
-        ///     la representacion de la moneda que se utilizara en la base de datos.
-        ///     los decimales restantes se truncan. 
-        ///     Si x * FactorConversion > decimal.MaxValue o x * FactorConversion > Int64.MaxValue se producira una excepcion.
+        /// x se multiplica por el factor de conversion para obtener 
+        /// la representacion de la moneda que se utilizara en la base de datos.
+        /// los decimales restantes se truncan. 
+        /// Si x * factorConversion > decimal.MaxValue o x * factorConversion > Int64.MaxValue se producira una excepcion.
         /// </summary>
-        /// <param name="x"> El valor de la moneda en su representacion actual. </param>
-        /// <returns> El valor de la moneda en la representacion utilizada en la base de datos. </returns>
+        /// <param name="x">El valor de la moneda en su representacion actual.</param>
+        /// <returns>El valor de la moneda en la representacion utilizada en la base de datos.</returns>
         public static long ConvertirAInterna(decimal x)
         {
             return Convert.ToInt64(decimal.Truncate(x * factorConversion));

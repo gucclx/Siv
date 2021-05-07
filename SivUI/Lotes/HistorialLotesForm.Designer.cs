@@ -43,6 +43,8 @@
             this.total_unidades_label = new System.Windows.Forms.Label();
             this.valor_unidades_tb = new System.Windows.Forms.TextBox();
             this.valor_unidades_label = new System.Windows.Forms.Label();
+            this.lotes_tb = new System.Windows.Forms.TextBox();
+            this.lotes_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.contenedor_panel.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +52,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(405, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(174, 30);
@@ -102,11 +104,12 @@
             this.resultados_dtgv.ReadOnly = true;
             this.resultados_dtgv.Size = new System.Drawing.Size(960, 323);
             this.resultados_dtgv.TabIndex = 28;
+            this.resultados_dtgv.TabStop = false;
             // 
             // contenedor_panel
             // 
             this.contenedor_panel.Controls.Add(this.resultados_dtgv);
-            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.contenedor_panel.Location = new System.Drawing.Point(12, 62);
             this.contenedor_panel.Name = "contenedor_panel";
             this.contenedor_panel.Size = new System.Drawing.Size(960, 323);
@@ -147,7 +150,8 @@
             // total_inversion_label
             // 
             this.total_inversion_label.AutoSize = true;
-            this.total_inversion_label.Location = new System.Drawing.Point(840, 392);
+            this.total_inversion_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.total_inversion_label.Location = new System.Drawing.Point(845, 392);
             this.total_inversion_label.Name = "total_inversion_label";
             this.total_inversion_label.Size = new System.Drawing.Size(132, 25);
             this.total_inversion_label.TabIndex = 32;
@@ -155,10 +159,10 @@
             // 
             // total_unidades_tb
             // 
-            this.total_unidades_tb.Location = new System.Drawing.Point(493, 420);
+            this.total_unidades_tb.Location = new System.Drawing.Point(521, 419);
             this.total_unidades_tb.Name = "total_unidades_tb";
             this.total_unidades_tb.ReadOnly = true;
-            this.total_unidades_tb.Size = new System.Drawing.Size(130, 33);
+            this.total_unidades_tb.Size = new System.Drawing.Size(135, 33);
             this.total_unidades_tb.TabIndex = 35;
             this.total_unidades_tb.TabStop = false;
             this.total_unidades_tb.Text = "N/A";
@@ -166,7 +170,8 @@
             // total_unidades_label
             // 
             this.total_unidades_label.AutoSize = true;
-            this.total_unidades_label.Location = new System.Drawing.Point(488, 393);
+            this.total_unidades_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.total_unidades_label.Location = new System.Drawing.Point(521, 392);
             this.total_unidades_label.Name = "total_unidades_label";
             this.total_unidades_label.Size = new System.Drawing.Size(135, 25);
             this.total_unidades_label.TabIndex = 34;
@@ -174,10 +179,10 @@
             // 
             // valor_unidades_tb
             // 
-            this.valor_unidades_tb.Location = new System.Drawing.Point(629, 420);
+            this.valor_unidades_tb.Location = new System.Drawing.Point(662, 419);
             this.valor_unidades_tb.Name = "valor_unidades_tb";
             this.valor_unidades_tb.ReadOnly = true;
-            this.valor_unidades_tb.Size = new System.Drawing.Size(210, 33);
+            this.valor_unidades_tb.Size = new System.Drawing.Size(177, 33);
             this.valor_unidades_tb.TabIndex = 37;
             this.valor_unidades_tb.TabStop = false;
             this.valor_unidades_tb.Text = "N/A";
@@ -185,11 +190,32 @@
             // valor_unidades_label
             // 
             this.valor_unidades_label.AutoSize = true;
-            this.valor_unidades_label.Location = new System.Drawing.Point(624, 393);
+            this.valor_unidades_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.valor_unidades_label.Location = new System.Drawing.Point(662, 395);
             this.valor_unidades_label.Name = "valor_unidades_label";
-            this.valor_unidades_label.Size = new System.Drawing.Size(215, 25);
+            this.valor_unidades_label.Size = new System.Drawing.Size(177, 21);
             this.valor_unidades_label.TabIndex = 36;
             this.valor_unidades_label.Text = "Inversión unidades disp.";
+            // 
+            // lotes_tb
+            // 
+            this.lotes_tb.Location = new System.Drawing.Point(443, 419);
+            this.lotes_tb.Name = "lotes_tb";
+            this.lotes_tb.ReadOnly = true;
+            this.lotes_tb.Size = new System.Drawing.Size(72, 33);
+            this.lotes_tb.TabIndex = 38;
+            this.lotes_tb.TabStop = false;
+            this.lotes_tb.Text = "N/A";
+            // 
+            // lotes_label
+            // 
+            this.lotes_label.AutoSize = true;
+            this.lotes_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lotes_label.Location = new System.Drawing.Point(443, 391);
+            this.lotes_label.Name = "lotes_label";
+            this.lotes_label.Size = new System.Drawing.Size(56, 25);
+            this.lotes_label.TabIndex = 39;
+            this.lotes_label.Text = "Lotes";
             // 
             // HistorialLotesForm
             // 
@@ -198,6 +224,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 461);
             this.Controls.Add(this.tarea_label);
+            this.Controls.Add(this.lotes_label);
+            this.Controls.Add(this.lotes_tb);
             this.Controls.Add(this.valor_unidades_tb);
             this.Controls.Add(this.valor_unidades_label);
             this.Controls.Add(this.total_unidades_tb);
@@ -210,7 +238,7 @@
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.filtros_button);
             this.Controls.Add(this.header_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -242,5 +270,7 @@
         private System.Windows.Forms.Label total_unidades_label;
         private System.Windows.Forms.TextBox valor_unidades_tb;
         private System.Windows.Forms.Label valor_unidades_label;
+        private System.Windows.Forms.TextBox lotes_tb;
+        private System.Windows.Forms.Label lotes_label;
     }
 }

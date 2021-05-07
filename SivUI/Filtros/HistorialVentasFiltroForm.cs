@@ -22,7 +22,6 @@ namespace SivUI
         ISolicitudFiltro solicitante;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="solicitante"> Form que solicita el filtro. </param>
         /// <param name="filtro"> Filtro anterior o preconfigurado a cargar. </param>
@@ -31,41 +30,41 @@ namespace SivUI
             InitializeComponent();
             this.solicitante = solicitante;
 
+            if (filtro == null) return;
+
             // Cargar filtro anterior
-            if (filtro != null)
+
+            if (filtro.FiltroPorFechas)
             {
-                if (filtro.FiltroPorFechas)
-                {
-                    fecha_inicial_dtp.Value = filtro.FechaInicial;
-                    fecha_final_dtp.Value = filtro.FechaFinal;
+                fecha_inicial_dtp.Value = filtro.FechaInicial;
+                fecha_final_dtp.Value = filtro.FechaFinal;
 
-                    filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
-                    habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
-                }
+                filtrar_por_fechas_groupbox.Enabled = filtro.FiltroPorFechas;
+                habilitar_fechas_checkbox.Checked = filtro.FiltroPorFechas;
+            }
 
-                if (filtro.FiltroPorCliente && filtro.Cliente != null)
-                {
-                    cliente = filtro.Cliente;
-                    cliente_tb.Text = cliente.NombreCompleto;
+            if (filtro.FiltroPorCliente && filtro.Cliente != null)
+            {
+                cliente = filtro.Cliente;
+                cliente_tb.Text = cliente.NombreCompleto;
 
-                    filtrar_por_cliente_groupbox.Enabled = filtro.FiltroPorCliente;
-                    filtrar_por_cliente_checkbox.Checked = filtro.FiltroPorCliente;
-                }
+                filtrar_por_cliente_groupbox.Enabled = filtro.FiltroPorCliente;
+                filtrar_por_cliente_checkbox.Checked = filtro.FiltroPorCliente;
+            }
 
-                if (filtro.FiltroPorProducto && filtro.Producto != null)
-                {
-                    producto = filtro.Producto;
-                    nombre_producto_tb.Text = filtro.Producto.Nombre;
-                }
+            if (filtro.FiltroPorProducto && filtro.Producto != null)
+            {
+                producto = filtro.Producto;
+                nombre_producto_tb.Text = filtro.Producto.Nombre;
+            }
 
-                filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
-                filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
+            filtrar_por_producto_groupbox.Enabled = filtro.FiltroPorProducto;
+            filtrar_por_producto_checkbox.Checked = filtro.FiltroPorProducto;
 
-                if (filtro.Categorias != null)
-                {
-                    categoriasSeleccionadas = filtro.Categorias;
-                    ActualizarCategorias();
-                }
+            if (filtro.Categorias != null)
+            {
+                categoriasSeleccionadas = filtro.Categorias;
+                ActualizarCategorias();
             }
         }
 

@@ -23,7 +23,6 @@ namespace SivUI.Filtros
         ISolicitudFiltro solicitante;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="solicitante"> Form que solicita el filtro. </param>
         /// <param name="filtro"> Filtro anterior o preconfigurado a cargar. </param>
@@ -35,7 +34,7 @@ namespace SivUI.Filtros
 
             if (filtro == null) return;
 
-            // Cargar filtro
+            // Cargar filtro anterior o preconfigurado
 
             if (filtro.FiltroPorProducto && filtro.Producto != null)
             {

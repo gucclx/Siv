@@ -11,8 +11,6 @@ using SivBiblioteca.Validacion;
 
 namespace SivBiblioteca.AccesoDatos
 {
-    // todo - incluir procesadores para lotes, ventas?
-
     /// Nota - las fechas se guardan en tiempo unix UTC y se extraen como strings yyyy-mm-dd hh:mm:ss en tiempo local.
     /// Nota - Los precios se guardan en la base de datos como enteros.
     ///          Esto se realiza para guardar los precios con una precision fija.
@@ -55,7 +53,7 @@ namespace SivBiblioteca.AccesoDatos
         readonly string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
 
         /// <summary>
-        /// Busca un producto o categoria o cliente por nombre.
+        /// Busca un producto, categoria, o cliente por su nombre.
         /// </summary>
         /// <typeparam name="T">El tipo de modelo a buscar.</typeparam>
         /// <param name="nombre">El nombre del modelo.</param>
@@ -95,7 +93,7 @@ namespace SivBiblioteca.AccesoDatos
         }
 
         /// <summary>
-        /// Revisa una categoria existe en la base de datos.
+        /// Revisa si una categoria existe en la base de datos.
         /// </summary>
         /// <param name="nombreCategoria">Nombre de la categoria a buscar.</param>
         /// <returns><see langword="true"/> si existe, <see langword="false"/> si no.</returns>
@@ -169,7 +167,7 @@ namespace SivBiblioteca.AccesoDatos
 
             producto.Id = conexion.ExecuteScalar<int>("select max(Id) from Productos");
 
-            if (producto.Categorias == null) return;
+            if (producto.Categorias == null || producto.Categorias.Count < 1) return;
 
             producto.Categorias.ValidarCategorias();
 
@@ -364,7 +362,7 @@ namespace SivBiblioteca.AccesoDatos
 
             conexion.Execute(q, parametros);
 
-            if (producto.Categorias == null) return;
+            if (producto.Categorias == null || producto.Categorias.Count < 1) return;
 
             producto.Categorias.ValidarCategorias();
 
@@ -487,7 +485,7 @@ namespace SivBiblioteca.AccesoDatos
             SQLiteConnection con = new SQLiteConnection(stringConexion);
 
             SQLiteCommand cmd1 = new SQLiteCommand(@"insert into lotes(productoId, UnidadesDisponibles, UnidadesCompradas, FechaCreacion, inversion) 
-                                                    values(1, 1, 1, 1, 13339)", con);
+                                                    values(1, 1, 1, 1, 9223372036854775807)", con);
 
             con.Open();
             var trans = con.BeginTransaction();
@@ -502,7 +500,7 @@ namespace SivBiblioteca.AccesoDatos
                 //SQLiteCommand cmd3 = new SQLiteCommand($@"insert into categorias (nombre) values ('categoria{i}') ", con);
                 //cmd3.ExecuteNonQuery();
 
-                SQLiteCommand cmd4 = new SQLiteCommand($@"insert into ventas (loteId, unidades, precioVentaUnidad, fecha) values (1, 1, 1, 1)", con);
+                SQLiteCommand cmd4 = new SQLiteCommand($@"insert into ventas (loteId, unidades, precioVentaUnidad, fecha) values ({9 + i}, 1, 1, 1)", con);
                 cmd4.ExecuteNonQuery();
             }
 

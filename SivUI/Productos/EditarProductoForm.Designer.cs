@@ -50,7 +50,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(128, 11);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(217, 30);
@@ -69,7 +69,7 @@
             // buscar_producto_linklabel
             // 
             this.buscar_producto_linklabel.AutoSize = true;
-            this.buscar_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_producto_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_producto_linklabel.Location = new System.Drawing.Point(405, 61);
             this.buscar_producto_linklabel.Name = "buscar_producto_linklabel";
             this.buscar_producto_linklabel.Size = new System.Drawing.Size(56, 21);
@@ -105,7 +105,7 @@
             // 
             // categorias_listbox
             // 
-            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_listbox.FormattingEnabled = true;
             this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 21;
@@ -122,12 +122,12 @@
             this.categorias_producto_label.Name = "categorias_producto_label";
             this.categorias_producto_label.Size = new System.Drawing.Size(215, 25);
             this.categorias_producto_label.TabIndex = 28;
-            this.categorias_producto_label.Text = "Categorias del producto";
+            this.categorias_producto_label.Text = "Categorías del producto";
             // 
             // agregar_categorias_linklabel
             // 
             this.agregar_categorias_linklabel.AutoSize = true;
-            this.agregar_categorias_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.agregar_categorias_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.agregar_categorias_linklabel.Location = new System.Drawing.Point(228, 292);
             this.agregar_categorias_linklabel.Name = "agregar_categorias_linklabel";
             this.agregar_categorias_linklabel.Size = new System.Drawing.Size(66, 21);
@@ -163,7 +163,7 @@
             // crear_categoria_linklabel
             // 
             this.crear_categoria_linklabel.AutoSize = true;
-            this.crear_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.crear_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.crear_categoria_linklabel.Location = new System.Drawing.Point(413, 292);
             this.crear_categoria_linklabel.Name = "crear_categoria_linklabel";
             this.crear_categoria_linklabel.Size = new System.Drawing.Size(48, 21);
@@ -174,7 +174,7 @@
             // 
             // nueva_descripcion_tb
             // 
-            this.nueva_descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nueva_descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.nueva_descripcion_tb.Location = new System.Drawing.Point(232, 214);
             this.nueva_descripcion_tb.Multiline = true;
             this.nueva_descripcion_tb.Name = "nueva_descripcion_tb";
@@ -192,7 +192,7 @@
             // 
             // descripcion_tb
             // 
-            this.descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descripcion_tb.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.descripcion_tb.Location = new System.Drawing.Point(12, 214);
             this.descripcion_tb.Multiline = true;
             this.descripcion_tb.Name = "descripcion_tb";
@@ -231,7 +231,7 @@
             this.Controls.Add(this.buscar_producto_linklabel);
             this.Controls.Add(this.producto_label);
             this.Controls.Add(this.header_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

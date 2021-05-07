@@ -93,7 +93,7 @@ namespace SivUI.Lotes
                 resultados_dtgv.DataSource = resultados;
                 CalcularResumenReporte();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -117,6 +117,7 @@ namespace SivUI.Lotes
             total_unidades_tb.Text = "N/A";
             total_inversion_tb.Text = "N/A";
             valor_unidades_tb.Text = "N/A";
+            lotes_tb.Text = "N/A";
         }
 
         private void CalcularResumenReporte()
@@ -135,6 +136,7 @@ namespace SivUI.Lotes
             total_unidades_tb.Text = unidadesTotal.ToString();
             total_inversion_tb.Text = inversionTotal.ToString();
             valor_unidades_tb.Text = valorUnidades.ToString();
+            lotes_tb.Text = resultados.List.Count.ToString();
         }
 
         private void limpiar_button_Click(object sender, EventArgs e)
@@ -185,11 +187,11 @@ namespace SivUI.Lotes
             {
                 var destino = ExportarDialogo.Mostrar();
 
-                if (destino == null) return;
-
-                await Exportar.ExportarReportes<ReporteLoteModelo>(destino, reportes);
-
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (destino != null)
+                {
+                    await Exportar.ExportarReportes<ReporteLoteModelo>(destino, reportes);
+                    MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (IOException ex)
             {

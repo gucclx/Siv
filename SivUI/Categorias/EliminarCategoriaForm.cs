@@ -31,19 +31,16 @@ namespace SivUI.Categorias
         {
             if (categoriasAEliminar.Count < 1) return;
 
-            var mensaje = "Las categorias seleccionadas se eliminarán de la base de datos. Estas categorias ya no serán asociadas con ningún producto. ¿Desea continuar?";
+            var mensaje = "Las categorías seleccionadas se eliminarán de la base de datos. Estas categorías ya no serán asociadas con ningún producto. ¿Desea continuar?";
             var continuar = MessageBox.Show(mensaje, "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (continuar == DialogResult.No)
-            {
-                return;
-            }
+            if (continuar != DialogResult.Yes) return;
 
             try
             {
                 ConfigGlobal.conexion.EliminarCategorias(categoriasAEliminar);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -51,7 +48,7 @@ namespace SivUI.Categorias
 
             categoriasAEliminar = new List<CategoriaModelo>();
             
-            MessageBox.Show("Categorias eliminadas", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ActualizarListaCategorias();
         }
 

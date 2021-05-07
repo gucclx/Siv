@@ -53,7 +53,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(150, 24);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(231, 30);
@@ -79,7 +79,7 @@
             // 
             // categorias_listbox
             // 
-            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_listbox.FormattingEnabled = true;
             this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 21;
@@ -116,12 +116,12 @@
             // categorias_a_crear_label
             // 
             this.categorias_a_crear_label.AutoSize = true;
-            this.categorias_a_crear_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_a_crear_label.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_a_crear_label.Location = new System.Drawing.Point(10, 181);
             this.categorias_a_crear_label.Name = "categorias_a_crear_label";
             this.categorias_a_crear_label.Size = new System.Drawing.Size(165, 25);
             this.categorias_a_crear_label.TabIndex = 20;
-            this.categorias_a_crear_label.Text = "Categorias a crear";
+            this.categorias_a_crear_label.Text = "Categorías a crear";
             // 
             // CrearCategoriaForm
             // 
@@ -137,7 +137,7 @@
             this.Controls.Add(this.header_label);
             this.Controls.Add(this.nombre_categoria_tb);
             this.Controls.Add(this.nombre_categoria_label);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -34,10 +34,7 @@ namespace SivUI.Clientes
         {
             var nombre = nombre_completo_tb.Text.Trim();
 
-            if (string.IsNullOrEmpty(nombre))
-            {
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(nombre)) return;
 
             buscar_cliente_button.Enabled = false;
             ConfigTareaLabel(mensaje: "Buscando clientes...", visible: true);
@@ -47,7 +44,7 @@ namespace SivUI.Clientes
                 resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarModelo_PorNombre<ClienteModelo>(nombre));
                 ActualizarResultados();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

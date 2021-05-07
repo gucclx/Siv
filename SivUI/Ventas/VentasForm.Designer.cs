@@ -63,7 +63,7 @@
             // contenedor_panel
             // 
             this.contenedor_panel.Controls.Add(this.resultados_dtgv);
-            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.contenedor_panel.Location = new System.Drawing.Point(13, 63);
             this.contenedor_panel.Name = "contenedor_panel";
             this.contenedor_panel.Size = new System.Drawing.Size(959, 322);
@@ -82,6 +82,7 @@
             this.resultados_dtgv.ReadOnly = true;
             this.resultados_dtgv.Size = new System.Drawing.Size(959, 322);
             this.resultados_dtgv.TabIndex = 0;
+            this.resultados_dtgv.TabStop = false;
             // 
             // filtros_button
             // 
@@ -97,7 +98,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(397, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(190, 30);
@@ -231,7 +232,7 @@
             this.Controls.Add(this.filtros_button);
             this.Controls.Add(this.contenedor_panel);
             this.Controls.Add(this.cargar_reporte_button);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

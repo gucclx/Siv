@@ -25,9 +25,9 @@ namespace SivUI.Clientes
         private bool ValidarForm()
         {
             bool resultado = true;
-            if (string.IsNullOrEmpty(nombre_cliente_tb.Text.Trim()))
+            if (string.IsNullOrWhiteSpace(nombre_cliente_tb.Text.Trim()))
             {
-                MessageBox.Show("Nombre inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("El nombre no puede estar en blanco.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 resultado = false;
             }
             return resultado;
@@ -35,7 +35,7 @@ namespace SivUI.Clientes
 
         private void crear_cliente_button_Click(object sender, EventArgs e)
         {
-            if (ValidarForm() == false) { return; }
+            if (ValidarForm() == false) return;
             
             ClienteModelo cliente = new ClienteModelo();
             cliente.Nombre = nombre_cliente_tb.Text.Trim();

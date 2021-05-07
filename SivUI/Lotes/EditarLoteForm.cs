@@ -32,10 +32,10 @@ namespace SivUI.Lotes
 
             try
             {
-                var loteId = Convert.ToInt32(lote_id_tb.Text);
+                var loteId = int.Parse(lote_id_tb.Text);
                 lote = ConfigGlobal.conexion.CargarLote_PorId(loteId);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

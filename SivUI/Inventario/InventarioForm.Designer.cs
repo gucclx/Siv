@@ -41,6 +41,8 @@
             this.inversion_tb = new System.Windows.Forms.TextBox();
             this.inversion_label = new System.Windows.Forms.Label();
             this.exportar_button = new System.Windows.Forms.Button();
+            this.productos_tb = new System.Windows.Forms.TextBox();
+            this.productos_label = new System.Windows.Forms.Label();
             this.contenedor_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultados_dtgv)).BeginInit();
             this.SuspendLayout();
@@ -48,7 +50,7 @@
             // contenedor_panel
             // 
             this.contenedor_panel.Controls.Add(this.resultados_dtgv);
-            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contenedor_panel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.contenedor_panel.Location = new System.Drawing.Point(12, 55);
             this.contenedor_panel.Name = "contenedor_panel";
             this.contenedor_panel.Size = new System.Drawing.Size(844, 370);
@@ -67,11 +69,12 @@
             this.resultados_dtgv.ReadOnly = true;
             this.resultados_dtgv.Size = new System.Drawing.Size(844, 370);
             this.resultados_dtgv.TabIndex = 29;
+            this.resultados_dtgv.TabStop = false;
             // 
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(379, 9);
             this.header_label.Name = "header_label";
             this.header_label.Size = new System.Drawing.Size(110, 30);
@@ -84,7 +87,7 @@
             this.filtros_button.Location = new System.Drawing.Point(12, 12);
             this.filtros_button.Name = "filtros_button";
             this.filtros_button.Size = new System.Drawing.Size(98, 37);
-            this.filtros_button.TabIndex = 26;
+            this.filtros_button.TabIndex = 0;
             this.filtros_button.Text = "Filtros";
             this.filtros_button.UseVisualStyleBackColor = true;
             this.filtros_button.Click += new System.EventHandler(this.filtros_button_Click);
@@ -95,7 +98,7 @@
             this.limpiar_button.Location = new System.Drawing.Point(174, 453);
             this.limpiar_button.Name = "limpiar_button";
             this.limpiar_button.Size = new System.Drawing.Size(156, 37);
-            this.limpiar_button.TabIndex = 33;
+            this.limpiar_button.TabIndex = 3;
             this.limpiar_button.Text = "Limpiar";
             this.limpiar_button.UseVisualStyleBackColor = true;
             this.limpiar_button.Click += new System.EventHandler(this.limpiar_button_Click);
@@ -106,7 +109,7 @@
             this.cargar_reporte_button.Location = new System.Drawing.Point(12, 453);
             this.cargar_reporte_button.Name = "cargar_reporte_button";
             this.cargar_reporte_button.Size = new System.Drawing.Size(156, 37);
-            this.cargar_reporte_button.TabIndex = 32;
+            this.cargar_reporte_button.TabIndex = 2;
             this.cargar_reporte_button.Text = "Cargar";
             this.cargar_reporte_button.UseVisualStyleBackColor = true;
             this.cargar_reporte_button.Click += new System.EventHandler(this.cargar_reporte_button_Click);
@@ -127,7 +130,7 @@
             this.unidades_tb.Name = "unidades_tb";
             this.unidades_tb.ReadOnly = true;
             this.unidades_tb.Size = new System.Drawing.Size(129, 33);
-            this.unidades_tb.TabIndex = 38;
+            this.unidades_tb.TabIndex = 5;
             this.unidades_tb.Text = "N/A";
             // 
             // total_unidades_label
@@ -145,7 +148,7 @@
             this.inversion_tb.Name = "inversion_tb";
             this.inversion_tb.ReadOnly = true;
             this.inversion_tb.Size = new System.Drawing.Size(164, 33);
-            this.inversion_tb.TabIndex = 36;
+            this.inversion_tb.TabIndex = 6;
             this.inversion_tb.Text = "N/A";
             // 
             // inversion_label
@@ -163,10 +166,28 @@
             this.exportar_button.Location = new System.Drawing.Point(758, 12);
             this.exportar_button.Name = "exportar_button";
             this.exportar_button.Size = new System.Drawing.Size(98, 37);
-            this.exportar_button.TabIndex = 39;
+            this.exportar_button.TabIndex = 1;
             this.exportar_button.Text = "Exportar";
             this.exportar_button.UseVisualStyleBackColor = true;
             this.exportar_button.Click += new System.EventHandler(this.exportar_button_Click);
+            // 
+            // productos_tb
+            // 
+            this.productos_tb.Location = new System.Drawing.Point(459, 456);
+            this.productos_tb.Name = "productos_tb";
+            this.productos_tb.ReadOnly = true;
+            this.productos_tb.Size = new System.Drawing.Size(92, 33);
+            this.productos_tb.TabIndex = 4;
+            this.productos_tb.Text = "N/A";
+            // 
+            // productos_label
+            // 
+            this.productos_label.AutoSize = true;
+            this.productos_label.Location = new System.Drawing.Point(454, 428);
+            this.productos_label.Name = "productos_label";
+            this.productos_label.Size = new System.Drawing.Size(97, 25);
+            this.productos_label.TabIndex = 39;
+            this.productos_label.Text = "Productos";
             // 
             // InventarioForm
             // 
@@ -174,18 +195,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(868, 502);
+            this.Controls.Add(this.tarea_label);
+            this.Controls.Add(this.productos_tb);
+            this.Controls.Add(this.productos_label);
             this.Controls.Add(this.exportar_button);
             this.Controls.Add(this.unidades_tb);
             this.Controls.Add(this.total_unidades_label);
             this.Controls.Add(this.inversion_tb);
             this.Controls.Add(this.inversion_label);
-            this.Controls.Add(this.tarea_label);
             this.Controls.Add(this.limpiar_button);
             this.Controls.Add(this.cargar_reporte_button);
             this.Controls.Add(this.filtros_button);
             this.Controls.Add(this.header_label);
             this.Controls.Add(this.contenedor_panel);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -215,5 +238,7 @@
         private System.Windows.Forms.TextBox inversion_tb;
         private System.Windows.Forms.Label inversion_label;
         private System.Windows.Forms.Button exportar_button;
+        private System.Windows.Forms.TextBox productos_tb;
+        private System.Windows.Forms.Label productos_label;
     }
 }

@@ -45,7 +45,7 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.header_label.Location = new System.Drawing.Point(153, 9);
             this.header_label.Name = "header_label";
@@ -76,7 +76,7 @@
             // nueva_categoria_linklabel
             // 
             this.nueva_categoria_linklabel.AutoSize = true;
-            this.nueva_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nueva_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.nueva_categoria_linklabel.LinkColor = System.Drawing.Color.Blue;
             this.nueva_categoria_linklabel.Location = new System.Drawing.Point(425, 152);
             this.nueva_categoria_linklabel.Name = "nueva_categoria_linklabel";
@@ -90,7 +90,7 @@
             // 
             this.categorias_seleccionadas_listbox.BackColor = System.Drawing.Color.White;
             this.categorias_seleccionadas_listbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_seleccionadas_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_seleccionadas_listbox.ForeColor = System.Drawing.Color.Black;
             this.categorias_seleccionadas_listbox.FormattingEnabled = true;
             this.categorias_seleccionadas_listbox.HorizontalScrollbar = true;
@@ -156,12 +156,12 @@
             this.categorias_seleccionadas_label.Name = "categorias_seleccionadas_label";
             this.categorias_seleccionadas_label.Size = new System.Drawing.Size(224, 25);
             this.categorias_seleccionadas_label.TabIndex = 23;
-            this.categorias_seleccionadas_label.Text = "Categorias seleccionadas";
+            this.categorias_seleccionadas_label.Text = "Categorías seleccionadas";
             // 
             // buscar_categoria_linklabel
             // 
             this.buscar_categoria_linklabel.AutoSize = true;
-            this.buscar_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_categoria_linklabel.LinkColor = System.Drawing.Color.Blue;
             this.buscar_categoria_linklabel.Location = new System.Drawing.Point(247, 152);
             this.buscar_categoria_linklabel.Name = "buscar_categoria_linklabel";
@@ -188,7 +188,7 @@
             this.Controls.Add(this.producto_nombre_label);
             this.Controls.Add(this.header_label);
             this.Controls.Add(this.nombre_producto_tb);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

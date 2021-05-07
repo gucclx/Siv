@@ -72,7 +72,7 @@ namespace SivUI.Ventas
             {
                 ConfigGlobal.conexion.EliminarVenta(venta.Id);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

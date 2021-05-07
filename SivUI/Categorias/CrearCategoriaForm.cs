@@ -51,29 +51,37 @@ namespace SivUI.Categorias
             nombre_categoria_tb.Focus();
         }
 
-        /// <summary>
-        /// valida que el nombre de la categoria no este en blanco, 
-        /// no este en la lista y no exista en la base de datos.
-        /// </summary>
-        /// <returns> true si es valida, false si no. </returns>
         private bool CategoriaEsValida()
         {
             // esta el nombre en blanco?
             var categoriaNombre = nombre_categoria_tb.Text.Trim();
-            if (String.IsNullOrEmpty(categoriaNombre))
+            if (String.IsNullOrWhiteSpace(categoriaNombre))
             {               
                 return false;
             }
 
             // existe la categoria en la lista?
-            var resultado = categoriasSeleccionadas.Find(categoria => categoria.Nombre.ToLower() == categoriaNombre.ToLower());
+            var resultado = categoriasSeleccionadas.Find(categoria => categoria.Nombre.ToLower().Trim() == categoriaNombre.ToLower());
+
             if (resultado != null)
             {               
                 return false;
             }
 
+            var categoriaExiste = true;
+
+            try
+            {
+                categoriaExiste = ConfigGlobal.conexion.CategoriaExiste(categoriaNombre);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             // existe la categoria en la base de datos?
-            if (ConfigGlobal.conexion.CategoriaExiste(categoriaNombre))
+            if (categoriaExiste)
             {
                 MessageBox.Show("La categoria ya existe en la base de datos", "Categoria existente", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
@@ -89,7 +97,7 @@ namespace SivUI.Categorias
             {
                 ConfigGlobal.conexion.GuardarCategorias(categoriasSeleccionadas);              
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -107,7 +115,6 @@ namespace SivUI.Categorias
         private void remover_categoria_button_Click(object sender, EventArgs e)
         {
             var categorias = categorias_listbox.SelectedItems;
-            if (categorias.Count == 0) return;
 
             foreach (var categoria in categorias)
             {

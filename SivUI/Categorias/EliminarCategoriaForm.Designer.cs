@@ -42,15 +42,15 @@
             this.eliminar_categoria_button.ForeColor = System.Drawing.Color.Crimson;
             this.eliminar_categoria_button.Location = new System.Drawing.Point(12, 327);
             this.eliminar_categoria_button.Name = "eliminar_categoria_button";
-            this.eliminar_categoria_button.Size = new System.Drawing.Size(192, 37);
+            this.eliminar_categoria_button.Size = new System.Drawing.Size(123, 37);
             this.eliminar_categoria_button.TabIndex = 18;
-            this.eliminar_categoria_button.Text = "Eliminar categorias";
+            this.eliminar_categoria_button.Text = "Eliminar";
             this.eliminar_categoria_button.UseVisualStyleBackColor = true;
             this.eliminar_categoria_button.Click += new System.EventHandler(this.eliminar_categoria_button_Click);
             // 
             // categorias_listbox
             // 
-            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categorias_listbox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.categorias_listbox.FormattingEnabled = true;
             this.categorias_listbox.HorizontalScrollbar = true;
             this.categorias_listbox.ItemHeight = 21;
@@ -74,7 +74,7 @@
             // buscar_categoria_linklabel
             // 
             this.buscar_categoria_linklabel.AutoSize = true;
-            this.buscar_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buscar_categoria_linklabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buscar_categoria_linklabel.Location = new System.Drawing.Point(8, 59);
             this.buscar_categoria_linklabel.Name = "buscar_categoria_linklabel";
             this.buscar_categoria_linklabel.Size = new System.Drawing.Size(56, 21);
@@ -86,12 +86,12 @@
             // header_label
             // 
             this.header_label.AutoSize = true;
-            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header_label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.header_label.Location = new System.Drawing.Point(165, 9);
             this.header_label.Name = "header_label";
-            this.header_label.Size = new System.Drawing.Size(194, 30);
+            this.header_label.Size = new System.Drawing.Size(200, 30);
             this.header_label.TabIndex = 31;
-            this.header_label.Text = "Eliminar categorias";
+            this.header_label.Text = "Eliminar categorías ";
             // 
             // EliminarCategoriaForm
             // 
@@ -104,7 +104,7 @@
             this.Controls.Add(this.remover_button);
             this.Controls.Add(this.eliminar_categoria_button);
             this.Controls.Add(this.categorias_listbox);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -112,7 +112,7 @@
             this.MaximizeBox = false;
             this.Name = "EliminarCategoriaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EliminarCategoriaForm";
+            this.Text = "Eliminar categorías";
             this.ResumeLayout(false);
             this.PerformLayout();
 

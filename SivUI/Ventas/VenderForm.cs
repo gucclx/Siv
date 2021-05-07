@@ -52,7 +52,7 @@ namespace SivUI.Ventas
             unidadesColumna.DataPropertyName = nameof(VentaModelo.Unidades);
 
             var totalVentaColumna = new DataGridViewTextBoxColumn();
-            totalVentaColumna.HeaderText = "Total";
+            totalVentaColumna.HeaderText = "Sub total";
             totalVentaColumna.DataPropertyName = nameof(VentaModelo.Total);
             totalVentaColumna.ReadOnly = true;
 
@@ -105,10 +105,10 @@ namespace SivUI.Ventas
         /// </summary>
         private void AgregarLote()
         {
-            LoteModelo lote = null;
-
             if (ValidarCampos() == false) return;
             var loteId = int.Parse(lote_id_tb.Text);
+
+            LoteModelo lote = null;
 
             try
             {
@@ -150,7 +150,6 @@ namespace SivUI.Ventas
                 return;
             }
 
-            // Crear venta.
             var venta = new VentaModelo();
             venta.Unidades = unidadesAVender;
             venta.Lote = lote;

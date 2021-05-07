@@ -73,7 +73,7 @@ namespace SivUI.Inventario
                 resultados_dtgv.DataSource = resultados;
                 CalcularResumen();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -95,6 +95,7 @@ namespace SivUI.Inventario
 
             unidades_tb.Text = "N/A";
             inversion_tb.Text = "N/A";
+            productos_tb.Text = "N/A";
         }
 
         /// <summary>
@@ -114,11 +115,12 @@ namespace SivUI.Inventario
 
             unidades_tb.Text = unidadesTotales.ToString();
             inversion_tb.Text = inversionTotal.ToString();
+            productos_tb.Text = resultados.List.Count.ToString();
         }
 
         /// <summary>
-        ///     Cambia el texto de tarea_label y hace visible o invisible este label.
-        ///     Util para indicar al usuario la tarea que se esta realizando.
+        /// Cambia el texto de tarea_label y hace visible o invisible este label.
+        /// Util para indicar al usuario la tarea que se esta realizando.
         /// </summary>
         /// <param name="mensaje"> Mensaje a mostrar. </param>
         /// <param name="visible"> Si el label es visible o no. </param>
@@ -146,7 +148,6 @@ namespace SivUI.Inventario
 
         private void Exportando(bool trabajando)
         {
-            tarea_label.Visible = trabajando;
             exportar_button.Enabled = !trabajando;
             cargar_reporte_button.Enabled = !trabajando;
             limpiar_button.Enabled = !trabajando;
@@ -158,7 +159,7 @@ namespace SivUI.Inventario
             if (resultados == null || resultados.DataSource == null) return;
 
             Exportando(true);
-            ConfigTareaLabel($"Exportando {resultados.List.Count:#,##0} filas...");
+            ConfigTareaLabel($"Exportando {resultados.List.Count:#,##0} filas...", visible: true);
 
             var reportes = resultados.List.Cast<ReporteInventarioModelo>();
 
@@ -166,10 +167,11 @@ namespace SivUI.Inventario
             {
                 var destino = ExportarDialogo.Mostrar();
 
-                if (destino == null) return;
-
-                await Exportar.ExportarReportes<ReporteInventarioModelo>(destino, reportes);
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (destino != null)
+                {
+                    await Exportar.ExportarReportes<ReporteInventarioModelo>(destino, reportes);
+                    MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (IOException ex)
             {

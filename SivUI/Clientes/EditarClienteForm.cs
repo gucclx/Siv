@@ -43,14 +43,15 @@ namespace SivUI.Clientes
             if (cliente == null) return;
 
             var nuevoNombre = nuevo_nombre_tb.Text.Trim();
-            var nuevoNumero = nuevo_numero_tb.Text.Trim();
-            var nuevoApellido = nuevo_apellido_tb.Text.Trim();
 
-            if (string.IsNullOrEmpty(nuevoNombre))
+            if (string.IsNullOrWhiteSpace(nuevoNombre))
             {
                 MessageBox.Show("El nuevo nombre no puede estar en blanco.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            var nuevoNumero = nuevo_numero_tb.Text.Trim();
+            var nuevoApellido = nuevo_apellido_tb.Text.Trim();
 
             cliente.Nombre = nuevoNombre;
             cliente.Apellido = nuevoApellido;
@@ -60,7 +61,7 @@ namespace SivUI.Clientes
             {
                 ConfigGlobal.conexion.EditarCliente(cliente);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

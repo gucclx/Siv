@@ -90,30 +90,28 @@ namespace SivUI.Ventas
         private async void cargar_reporte_button_Click(object sender, EventArgs e)
         {
             cargar_reporte_button.Enabled = false;
+
             LimpiarResultados();
             ConfigTareaLabel(mensaje: "Extrayendo información de la base de datos...", visible: true);
 
             try
             {
-                //var reportes = await Task.Run(() =>
-                //    ConfigGlobal.conexion.CargarReporteVentas(reporteFiltro, limiteFilas: LimiteFilas)
-                //);
-
                 var reportes = await Task.Run(
                     () => ConfigGlobal.conexion.CargarReporte<ReporteVentaModelo>(filtro: reporteFiltro, limiteFilas: LimiteFilas)
                 );
 
                 resultados = new BindingSource();
                 resultados.DataSource = reportes;
-                resultados_dtgv.DataSource = resultados;                
+                resultados_dtgv.DataSource = resultados;
+                
                 CalcularResumenReporte();
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cargar_reporte_button.Enabled = true;
-                return;
             }
+
+            cargar_reporte_button.Enabled = true;
             cargar_reporte_button.Enabled = true;
             ConfigTareaLabel(visible: false);
         }
@@ -145,7 +143,7 @@ namespace SivUI.Ventas
         }
 
         /// <summary>
-        ///     Calcula los campos inversion total, ingreso total y ganancia total.
+        /// Calcula los campos inversion total, ingreso total y ganancia total.
         /// </summary>
         private void CalcularResumenReporte()
         {
@@ -203,16 +201,16 @@ namespace SivUI.Ventas
 
             var reportes = resultados.List.Cast<ReporteVentaModelo>();
 
-            try 
+            try
             {
 
                 var destino = ExportarDialogo.Mostrar();
 
-                if (destino == null) return;
-
-                await Exportar.ExportarReportes<ReporteVentaModelo>(destino, reportes);
-
-                MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (destino != null)
+                {
+                    await Exportar.ExportarReportes<ReporteVentaModelo>(destino, reportes);
+                    MessageBox.Show("Tarea completada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (IOException ex)
             {

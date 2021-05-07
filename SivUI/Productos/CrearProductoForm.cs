@@ -113,6 +113,8 @@ namespace SivUI.Productos
 
         public void CategoriasListas(List<CategoriaModelo> categorias)
         {
+            if (categorias == null) return;
+
             foreach (var categoria in categorias)
             {
                 if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;

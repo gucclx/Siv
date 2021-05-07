@@ -24,9 +24,6 @@ namespace SivUI.Categorias
             this.solicitante = solicitante;
         }
 
-        /// <summary>
-        ///     Actualiza la lista de resultados.
-        /// </summary>
         private void ActualizarResultados()
         {
             resultados_listbox.DataSource = null;
@@ -35,9 +32,6 @@ namespace SivUI.Categorias
             resultados_listbox.ClearSelected();
         }
 
-        /// <summary>
-        ///     Actualiza la lista de categorias seleccionadas.
-        /// </summary>
         private void ActualizarCategorias()
         {
             categorias_seleccionadas_listbox.DataSource = null;
@@ -45,10 +39,12 @@ namespace SivUI.Categorias
             categorias_seleccionadas_listbox.DisplayMember = nameof(CategoriaModelo.Nombre);
             categorias_seleccionadas_listbox.ClearSelected();
         }
+
         private async void buscar_button_Click(object sender, EventArgs e)
         {
             var nombreCategoria = nombre_categoria_tb.Text.Trim();
-            if (string.IsNullOrEmpty(nombreCategoria)) return;
+
+            if (string.IsNullOrWhiteSpace(nombreCategoria)) return;
 
             buscar_button.Enabled = false;
             ConfigTareaLabel(mensaje: "Buscando categoria...", visible: true);
@@ -58,13 +54,12 @@ namespace SivUI.Categorias
                 resultados = await Task.Run(() => ConfigGlobal.conexion.BuscarModelo_PorNombre<CategoriaModelo>(nombreCategoria));
                 ActualizarResultados();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                buscar_button.Enabled = true;
-                return;
             }
-            
+
+            buscar_button.Enabled = true;
             ConfigTareaLabel(visible: false);
             buscar_button.Enabled = true;
         }
@@ -74,7 +69,7 @@ namespace SivUI.Categorias
 
             foreach (var categoria in seleccion)
             {
-                if (categoriasSeleccionadas.Count > 0 && categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
+                if (categoriasSeleccionadas.Find(c => c.Id == categoria.Id) != null) continue;
                 categoriasSeleccionadas.Add(categoria);
                 resultados.Remove(categoria);
             }
