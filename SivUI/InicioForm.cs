@@ -25,6 +25,11 @@ namespace SivUI
             InitializeComponent();
         }
 
+        private async Task RevisarActualizacion()
+        {
+            using var manager = new UpdateManager();
+        }
+
         private void agregar_inventario_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new InventarioAgregarForm();

@@ -479,35 +479,6 @@ namespace SivBiblioteca.AccesoDatos
             conexion.Execute(q, parametros);
         }
 
-        // todo - eliminar
-        public void populate()
-        {
-            SQLiteConnection con = new SQLiteConnection(stringConexion);
-
-            SQLiteCommand cmd1 = new SQLiteCommand(@"insert into lotes(productoId, UnidadesDisponibles, UnidadesCompradas, FechaCreacion, inversion) 
-                                                    values(1, 1, 1, 1, 9223372036854775807)", con);
-
-            con.Open();
-            var trans = con.BeginTransaction();
-
-            for (int i = 0; i < 10000; i++)
-            {
-
-                SQLiteCommand cmd2 = new SQLiteCommand($@"insert into productos (nombre, fechaCreacion) values ('producto{i}', 1) ", con);
-                cmd2.ExecuteNonQuery();
-
-                cmd1.ExecuteNonQuery();
-                //SQLiteCommand cmd3 = new SQLiteCommand($@"insert into categorias (nombre) values ('categoria{i}') ", con);
-                //cmd3.ExecuteNonQuery();
-
-                SQLiteCommand cmd4 = new SQLiteCommand($@"insert into ventas (loteId, unidades, precioVentaUnidad, fecha) values ({9 + i}, 1, 1, 1)", con);
-                cmd4.ExecuteNonQuery();
-            }
-
-            trans.Commit();
-            con.Close();
-        }
-
         /// <summary>
         /// Carga una lista de reportes de ventas, lotes, o inventario.
         /// </summary>
