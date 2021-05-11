@@ -4,8 +4,8 @@ Bubblegum es un programa que permite registrar la adquisicion y venta de product
 
 ## Bubblegum permite crear:
 
-* Crear productos.
-* Crear categorias para los productos.
+* Productos.
+* Categorias para los productos.
 
 ## Bubblegum permite:
 
@@ -15,10 +15,15 @@ Bubblegum es un programa que permite registrar la adquisicion y venta de product
 
 ## Bubblegum genera y presenta:
 
-* Una lista de las adquisiciones de los lotes.
-* Una lista de las ventas de las unidades de los productos.
-* Una lista de los productos en el inventario con pertinente.
-* 
+* Una tabla de las adquisiciones de los lotes con informacion pertinente.
+* Una tabla de las ventas de las unidades de los productos con informacion pertinente.
+* Una tabla de los productos en el inventario con pertinente con informacion pertinente.
+
+## Bubblegum y filtros
+
+Bubblegum permite filtrar las tablas generadas a traves de parametros como tipo de producto,
+fechas, clientes o categorias.
+
 ## Bubblegum permite exportar:
 
 * Datos de las listas generadas a archivos .CSV.
