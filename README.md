@@ -57,7 +57,7 @@ A la hora de vender, el id del lote es ingresado, junto con la cantidad de unida
 
 Bubblegum limita el numero de filas en las tablas presentadas al usuario.
 El limite es 1000 filas. Si el usuario desea acceder a un mayor numero de filas,
-este puede exportar los datos a traves de la seccion 'exportar'.
+este puede exportar los datos a traves del apartado 'exportar'.
 
 # Link de descarga
 
