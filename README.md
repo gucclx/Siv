@@ -28,6 +28,9 @@ fechas, clientes o categorías.
 ## Bubblegum permite exportar:
 
 * Datos de las tablas generadas a archivos .CSV.
+* Historial de adquisición de lotes.
+* Historial de ventas.
+* Información del inventario.
 
 ## Bubblegum permite editar:
 
