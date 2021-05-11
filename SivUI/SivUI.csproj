@@ -11,6 +11,10 @@
 		<ApplicationIcon>logo.ico</ApplicationIcon>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
 	<ItemGroup>
 	  <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />
 	  <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.2.0" />
@@ -19,5 +23,42 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SivBiblioteca\SivBiblioteca.csproj">
 		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+	<!-- Se hacen referencia a los archivos del proyecto SivBiblioteca aqui
+		porque clickonce es una basura y no los copia a la carpeta publish
+		si no se hace referencia.
+	-->
+	<ItemGroup>
+	  <Folder Include="datafiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" Link="datafiles\idx_Lotes_FechaCreacion.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_ProductoId.sql" Link="datafiles\idx_Lotes_ProductoId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" Link="datafiles\idx_ProductoCategoria_CategoriaId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_Fecha.sql" Link="datafiles\idx_Ventas_Fecha.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_LoteId.sql" Link="datafiles\idx_Ventas_LoteId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Categorias.sql" Link="datafiles\Categorias.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Clientes.sql" Link="datafiles\Clientes.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Lotes.sql" Link="datafiles\Lotes.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\ProductoCategoria.sql" Link="datafiles\ProductoCategoria.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Productos.sql" Link="datafiles\Productos.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Ventas.sql" Link="datafiles\Ventas.sql" />
 	</ItemGroup>
 </Project>

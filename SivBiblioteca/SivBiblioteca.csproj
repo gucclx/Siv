@@ -10,20 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" />
-	  <None Remove="SqliteConfig\Indices\idx_Lotes_ProductoId.sql" />
-	  <None Remove="SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" />
-	  <None Remove="SqliteConfig\Indices\idx_Ventas_Fecha.sql" />
-	  <None Remove="SqliteConfig\Indices\idx_Ventas_LoteId.sql" />
-	  <None Remove="SqliteConfig\Tablas\Categorias.sql" />
-	  <None Remove="SqliteConfig\Tablas\Clientes.sql" />
-	  <None Remove="SqliteConfig\Tablas\Lotes.sql" />
-	  <None Remove="SqliteConfig\Tablas\ProductoCategoria.sql" />
-	  <None Remove="SqliteConfig\Tablas\Productos.sql" />
-	  <None Remove="SqliteConfig\Tablas\Ventas.sql" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Content Include="SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
