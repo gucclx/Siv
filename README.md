@@ -61,4 +61,4 @@ este puede exportar los datos a traves de la seccion 'exportar'.
 
 # Link de descarga
 
-[Haga click aquí](https://github.com/gucclx/Siv/tree/master/publish/setup.exe?raw=true)
+[Haga click aquí](https://github.com/gucclx/Siv/raw/master/publish/setup.exe)
