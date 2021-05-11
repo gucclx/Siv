@@ -8,17 +8,8 @@
 
 		<RootNamespace>SivUI</RootNamespace>
 		<AssemblyName>SivUI</AssemblyName>
+		<ApplicationIcon>logo.ico</ApplicationIcon>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Remove="SivBd.db" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="SivBd.db">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />

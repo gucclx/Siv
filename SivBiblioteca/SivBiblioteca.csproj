@@ -10,6 +10,56 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" />
+	  <None Remove="SqliteConfig\Indices\idx_Lotes_ProductoId.sql" />
+	  <None Remove="SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" />
+	  <None Remove="SqliteConfig\Indices\idx_Ventas_Fecha.sql" />
+	  <None Remove="SqliteConfig\Indices\idx_Ventas_LoteId.sql" />
+	  <None Remove="SqliteConfig\Tablas\Categorias.sql" />
+	  <None Remove="SqliteConfig\Tablas\Clientes.sql" />
+	  <None Remove="SqliteConfig\Tablas\Lotes.sql" />
+	  <None Remove="SqliteConfig\Tablas\ProductoCategoria.sql" />
+	  <None Remove="SqliteConfig\Tablas\Productos.sql" />
+	  <None Remove="SqliteConfig\Tablas\Ventas.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Indices\idx_Lotes_ProductoId.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Indices\idx_Ventas_Fecha.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Indices\idx_Ventas_LoteId.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\Categorias.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\Clientes.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\Lotes.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\ProductoCategoria.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\Productos.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="SqliteConfig\Tablas\Ventas.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CsvHelper">
 			<Version>27.0.2</Version>
 		</PackageReference>

@@ -1,0 +1,7 @@
+CREATE TABLE "Productos" (
+	"Id"	INTEGER NOT NULL UNIQUE,
+	"Descripcion"	TEXT,
+	"FechaCreacion"	INTEGER NOT NULL,
+	"Nombre"	TEXT NOT NULL,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+)

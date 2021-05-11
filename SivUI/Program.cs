@@ -1,8 +1,8 @@
 ﻿using SivBiblioteca;
+using SivBiblioteca.SqliteConfig;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+
 
 namespace SivUI
 {
@@ -16,7 +16,10 @@ namespace SivUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ConfigGlobal.InicializarConexion();
+
+            SqliteCreacion.SituarBd_EnDirectorioLocal();
+            ConfigGlobal.InicializarConexion(ConfigGlobal.TipoConexion.Sqlite);
+
             Application.Run(new InicioForm());
         }
     }

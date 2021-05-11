@@ -1,26 +1,42 @@
 ﻿using SivBiblioteca.AccesoDatos;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SivBiblioteca.Interfaces;
+using System;
 
 namespace SivBiblioteca
 {
     public static class ConfigGlobal
     {
-        public static IConexionDatos conexion;
-
-        public static void InicializarConexion()
+        public enum TipoConexion
         {
-            conexion = new SqliteConexion();
+            Sqlite
         }
 
-        public static string ConseguirStringConexion(string id)
+        public static IConexionDatos conexion;
+
+        public static void InicializarConexion(TipoConexion t)
         {
-            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+            switch (t)
+            {
+                case TipoConexion.Sqlite:
+                    conexion = new SqliteConexion();
+                    break;
+
+                default:
+                    throw new ArgumentException("Tipo de conexion no valida");
+            }
+        }
+
+        public static string StringConexion(TipoConexion t)
+        {
+            switch (t)
+            {
+                case TipoConexion.Sqlite: 
+                    return ConfigurationManager.ConnectionStrings["Sqlite"].ConnectionString;
+
+                default:
+                    throw new ArgumentException("Tipo de conexion no valida");
+            }
         }
     }
 }

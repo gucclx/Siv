@@ -56,7 +56,7 @@
             // barra_formularios_menuStrip
             // 
             this.barra_formularios_menuStrip.BackColor = System.Drawing.Color.White;
-            this.barra_formularios_menuStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.barra_formularios_menuStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.barra_formularios_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.productosToolStripMenuItem,
             this.inventarioToolStripMenuItem,
@@ -83,14 +83,14 @@
             // crear_producto_ToolStripMenuItem
             // 
             this.crear_producto_ToolStripMenuItem.Name = "crear_producto_ToolStripMenuItem";
-            this.crear_producto_ToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.crear_producto_ToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
             this.crear_producto_ToolStripMenuItem.Text = "Crear";
             this.crear_producto_ToolStripMenuItem.Click += new System.EventHandler(this.crear_producto_ToolStripMenuItem_Click);
             // 
             // editar_producto_ToolStripMenuItem
             // 
             this.editar_producto_ToolStripMenuItem.Name = "editar_producto_ToolStripMenuItem";
-            this.editar_producto_ToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.editar_producto_ToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
             this.editar_producto_ToolStripMenuItem.Text = "Editar";
             this.editar_producto_ToolStripMenuItem.Click += new System.EventHandler(this.editar_producto_ToolStripMenuItem_Click);
             // 
@@ -231,7 +231,7 @@
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(584, 361);
             this.Controls.Add(this.barra_formularios_menuStrip);
-            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

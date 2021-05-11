@@ -8,6 +8,7 @@ using System.Data.SQLite;
 using System.Linq;
 using SivBiblioteca.Interfaces;
 using SivBiblioteca.Validacion;
+using SivBiblioteca.SqliteConfig;
 
 namespace SivBiblioteca.AccesoDatos
 {
@@ -50,7 +51,7 @@ namespace SivBiblioteca.AccesoDatos
 
     public class SqliteConexion : IConexionDatos
     {
-        readonly string stringConexion = ConfigGlobal.ConseguirStringConexion(id: "SqliteBd");
+        readonly string stringConexion = ConfigGlobal.StringConexion(ConfigGlobal.TipoConexion.Sqlite);
 
         /// <summary>
         /// Busca un producto, categoria, o cliente por su nombre.
