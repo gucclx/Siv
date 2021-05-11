@@ -45,20 +45,21 @@
 		si no se hace referencia.
 	-->
 	<ItemGroup>
-	  <Folder Include="datafiles\" />
+	  <Folder Include="SqliteConfig\Indices\" />
+	  <Folder Include="SqliteConfig\Tablas\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" Link="datafiles\idx_Lotes_FechaCreacion.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_ProductoId.sql" Link="datafiles\idx_Lotes_ProductoId.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" Link="datafiles\idx_ProductoCategoria_CategoriaId.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_Fecha.sql" Link="datafiles\idx_Ventas_Fecha.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_LoteId.sql" Link="datafiles\idx_Ventas_LoteId.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Categorias.sql" Link="datafiles\Categorias.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Clientes.sql" Link="datafiles\Clientes.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Lotes.sql" Link="datafiles\Lotes.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\ProductoCategoria.sql" Link="datafiles\ProductoCategoria.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Productos.sql" Link="datafiles\Productos.sql" />
-	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Ventas.sql" Link="datafiles\Ventas.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" Link="SqliteConfig\Indices\idx_Lotes_FechaCreacion.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Lotes_ProductoId.sql" Link="SqliteConfig\Indices\idx_Lotes_ProductoId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" Link="SqliteConfig\Indices\idx_ProductoCategoria_CategoriaId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_Fecha.sql" Link="SqliteConfig\Indices\idx_Ventas_Fecha.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Indices\idx_Ventas_LoteId.sql" Link="SqliteConfig\Indices\idx_Ventas_LoteId.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Categorias.sql" Link="SqliteConfig\Tablas\Categorias.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Clientes.sql" Link="SqliteConfig\Tablas\Clientes.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Lotes.sql" Link="SqliteConfig\Tablas\Lotes.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\ProductoCategoria.sql" Link="SqliteConfig\Tablas\ProductoCategoria.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Productos.sql" Link="SqliteConfig\Tablas\Productos.sql" />
+	  <Content Include="..\SivBiblioteca\SqliteConfig\Tablas\Ventas.sql" Link="SqliteConfig\Tablas\Ventas.sql" />
 	</ItemGroup>
 </Project>
